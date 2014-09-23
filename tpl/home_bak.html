@@ -1,0 +1,116 @@
+  <script src = "http://s2.open.126.net/ocb/js/opencoure.min.js"  type="text/javascript" charset="UTF-8"></script>
+    
+	
+    <script>document.domain="qianlushuyuan.cn";</script>
+    <!-- 图片轮播 -->
+    <script type="text/javascript">
+        // 轮播数据
+        window.SLIDEDATA = [
+            // tab不提供则隐藏
+            {'marginleft':0, 'left':15},
+            {'marginleft':32, 'left':113},
+            {'marginleft':34, 'left':210}
+        ];
+        
+    </script>
+    <div  class="mainslideData" id="j-mainslide-data">
+        
+        <p>
+            <span>#</span>
+            <span>/img/slide1.jpg</span>
+            <span>/img/slide1_nav.jpg</span>
+            <span>/img/little.png</span>
+            <span>#ab8a5b</span>
+        </p>
+        <p>
+            <span>#</span>
+            <span>/img/slide2.jpg</span>
+            <span>/img/slide2_nav.jpg</span>
+            <span>/img/little.png</span>
+            <span>#80b1e5</span>
+        </p>
+                <p>
+            <span>#</span>
+            <span>/img/slide3.jpg</span>
+            <span>/img/slide3_nav.jpg</span>
+            <span>/img/little.png</span>
+            <span>#82362e</span>
+        </p>
+                <p>
+            <span>#</span>
+            <span>/img/slide4.jpg</span>
+            <span>/img/slide4_nav.jpg</span>
+            <span>/img/little.png</span>
+            <span>#ad7a4c</span>
+        </p>
+                <p>
+            <span>#</span>
+            <span>/img/slide5.jpg</span>
+            <span>/img/slide5_nav.png</span>
+            <span>/img/little.png</span>
+            <span>#110d0e</span>
+        </p>
+                <p>
+            <span>#</span>
+            <span>/img/slide6.jpg</span>
+            <span>/img/slide6_nav.jpg</span>
+            <span>/img/little.png</span>
+            <span>#28190b</span>
+        </p>
+                <p>
+            <span>#</span>
+            <span>/img/slide7.jpg</span>
+            <span>/img/slide7_nav.jpg</span>
+            <span>/img/little.png</span>
+            <span>#186ab3</span>
+        </p>
+            </div>
+    <div class="m-slidebox rel">
+        <div class="u-loading f-pa" id="j-mainslide-loading"><div class="loadingIcon"></div></div>
+        <div class="g-wrap f-pr" id="j-mainslide-imgs">
+            <!-- 多个imgItem -->
+        </div>
+        <div class="g-container f-pr">
+            <!-- 缩略图 -->
+            <div class="slwrap f-pa" id="j-mainslide-items">
+            </div>
+            
+            <!-- 右侧3个Tab -->
+            <div class="tabwrap f-pa" id="j-mainslide-tabs">
+                <div class="bg"></div>
+                <div class="con f-pa">
+                    <div class="tabtop"></div>
+                    <div class="tabs f-pa">
+                        <ul class="tabsul clear f-f0">
+                            <li class="j-tab tab f-fl tabpos">热门排行</li>
+                            <li class="j-tab tab f-fl">最新课程</li>
+                        </ul>
+                        <div class="tabline f-pa j-tabline"></div>
+                    </div>
+                    <div class="tabcon f-pr">
+                        <!-- 排行榜tab -->
+                        <div class="tabbox f-pa j-mainslide-tabcon">
+		<div class="listwrap">
+		<ul class="list" ng-repeat="item in videosetting.hotest">
+		  <li><a href="#/video/{{item}}" class="item"><i class="icon" ng-class="{icon2:$index<3}">{{$index + 1}}</i><span class="ltxt f-ib f-thide">{{item}}<span class="subtxt"></span></span></a></li>
+		</ul>
+        		</div>
+                        </div>
+                        <!-- 排行榜tab end -->
+                        <!-- 最新课程tab -->
+                        <div class="tabbox f-pa j-mainslide-tabcon">
+                            <div class="listwrap">
+                                <ul class="list" ng-repeat="item in videosetting.newest">
+                                    <li><a href="#/video/{{item}}" class="item"><i class="noicon"></i><span class="ltxt f-ib f-thide">{{item}}<span class="subtxt"></span></span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- 最新课程tab end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /图片轮播 -->
+    
+

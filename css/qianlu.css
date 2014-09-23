@@ -1,0 +1,12 @@
+.m-topnav, .m-smnav {height: 36px;background: #ebebeb;border-bottom: 1px solid #ddd;}
+.navbar-brand {
+float: left;
+height: 36px;
+padding: 8px 15px;
+font-size: 18px;
+line-height: 20px;
+}
+.navbar-nav > li > a {
+padding-top: 8px;
+padding-bottom: 15px;
+}
