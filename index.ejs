@@ -62,56 +62,35 @@
  
 
     <!-- 正文内容 -->
+<% var n = 0; %>    
+<% for(var key in cats) {%>
 <div class="m-cate m-cate1" id="normal">
 <div class="g-container">
 <div class="g-row g-limitrow j-row" data-limit="12">
     <div class="g-cell1 g-card1">
         <div class="u-tag2">
-            <h2>钱路学</h2>
+            <h2><%= key.substr(0,2) %></h2>
             <div class="b-10"></div>
-            <span>公开课</span>
+            <span><%= key.substr(2) %></span>
         </div>
     </div>
-    <% for(var i=0; i<normallst.length; i++) {%>
+    <% for(var i=0; i<cats[key].length; i++) {%>
     <div class="g-cell1 g-card1">
-        <a href="#/video/<%= normallst[i].video %>" class="u-cover">
+        <a href="#/cat/<%= cats[key][i] %>" class="u-cover">
             <div class="shadow rel">
-                <img src="/img/<%= i %>.jpg" class="lazy" alt="<%= normallst[i].video %>" height="100px" width="180px">
+                <img src="/img/<%= n++ %>.jpg" class="lazy" alt="<%= cats[key][i] %>" height="100px" width="180px">
                 <div class="mask abs"></div>
                 <div class="abs hide new">new</div>
             </div>
         </a>
-        <a href="#/video/<%= normallst[i].video %>"><h5 class="f-c3 ng-binding"><%= normallst[i].video %></h5></a>
+        <a href="#/cat/<%= cats[key][i] %>"><h5 class="f-c3 ng-binding"><%= cats[key][i] %></h5></a>
     </div>
     <% } %>
 </div>
 </div>
 </div>
-<div class="m-cate m-cate1" id="vip">
-<div class="g-container">
-<div class="g-row g-limitrow j-row" data-limit="12">
-    <div class="g-cell1 g-card1">
-        <div class="u-tag2">
-            <h2>钱路学</h2>
-            <div class="b-10"></div>
-            <span>VIP课程</span>
-        </div>
-    </div>
-    <% for(var i=0; i<viplst.length; i++) {%>
-    <div class="g-cell1 g-card1">
-        <a href="#/video/<%= viplst[i].video %>" class="u-cover">
-            <div class="shadow rel">
-                <img src="/img/<%= i %>.jpg" class="lazy" alt="<%= viplst[i].video %>" height="100px" width="180px">
-                <div class="mask abs"></div>
-                <div class="abs hide new">new</div>
-            </div>
-        </a>
-        <a href="#/video/<%= viplst[i].video %>"><h5 class="f-c3"><%= viplst[i].video %></h5></a>
-    </div>
-    <% } %>
-</div>
-</div>
-</div>
+<%}%>
+
 
     <!-- /正文内容 -->
 

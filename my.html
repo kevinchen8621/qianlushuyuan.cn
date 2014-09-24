@@ -329,12 +329,57 @@
 
 		}])
 		.controller("ManagerCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
+			$scope.cats = {
+				"未分类":[],
+				"认识钱路学":["什么是钱路","什么是钱路学","钱路学的作用","何谓“为心路走钱路”]"],
+				"钱路学思维":["钱路基本法","中医式思维","国学钱路应用"],
+				"钱路基本功":["解码什么是钱","解码钱路藏宝图","解码钱路导图","解码企业","解码钱路上的金融机构","基本钱路"],
+				"商业钱路":["揭秘商业钱路","产品家","成交家","引客户","再成交","商业钱路系统化","商业钱路优化","商业钱路案例剖析"],
+				"融资钱路":["融资心法","借—债权融资钱路","融—股权融资钱路","拿---政府资金钱路","银行融资钱路"],
+				"政府资金钱路":["认识政府资金","认识有政府资金的各部委","各部委的各项政府专项资金","从企业成立到上市各个环节的政府补助资金","获得政府资金资助的策略与技巧"],
+				"资本财技":["真资本","IPO上市钱路","借壳上市钱路","一二级市场联动钱路","市值管理钱路","资本套利"],
+			};
+			$scope.catkeys = $window._.keys($scope.cats);
+			$scope.curCat = "未分类"; $scope.curTag = "";
+			$scope.selCat = function(cat){
+				$scope.curCat = cat;
+				if(cat == "未分类"){
+					$scope.curTag = "";	
+				}else{
+					$scope.curTag = $scope.cats[cat][0];
+				}
+			}
+			$scope.selTag = function(tag){
+				$scope.curTag = tag;
+			}
+			$scope.setCat = function(video, cat){
+				$scope.videolst.forEach(function(item){
+					if(item.video == video){
+						item.cat = cat;
+						item.tag = $scope.cats[cat][0];
+					}
+				});
+			}
+			$scope.setTag = function(video, tag){
+				$scope.videolst.forEach(function(item){
+					if(item.video == video){
+						item.tag = tag;
+					}
+				});
+			}
     			$http.get('/api/videos').success(function(data){
-    				$scope.videos = data;
+    				$scope.videolst = data;
     			});
-    			$scope.save = function(){
-	    			$http.post('/api/videos', {videolst: $scope.videos}).success(function(){
-	    				$scope.msg = "变动已提交！";
+    			$scope.submit = function(){
+    				if($scope.videolst){
+		    			$http.post('/api/videos', {videolst: $scope.videolst}).success(function(){
+		    				$scope.msg = "变动已提交！";
+		    			});
+    				}
+    			}
+    			$scope.reset = function(){
+	    			$http.get('/api/videos').success(function(data){
+	    				$scope.videolst = data;
 	    			});
     			}
 		}])

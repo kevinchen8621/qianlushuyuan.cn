@@ -92,8 +92,8 @@
                         <div class="tabbox f-pa j-mainslide-tabcon">
 		<div class="listwrap">
 		<ul class="list">
-                            <% for(var i=0; i<hotestlst.length; i++) {%>
-		  <li><a href="#/video/<%= hotestlst[i].video %>" class="item"><i class="icon" <%if(i<3){%>class="icon2"<%}%>><%= i + 1%></i><span class="ltxt f-ib f-thide"><%= hotestlst[i].video %><span class="subtxt"></span></span></a></li>
+                            <% for(var i=0; i<hotest.length; i++) {%>
+		  <li><a href="#/video/<%= hotest[i] %>" class="item"><i class="icon" <%if(i<3){%>class="icon2"<%}%>><%= i + 1%></i><span class="ltxt f-ib f-thide"><%= hotest[i] %><span class="subtxt"></span></span></a></li>
                             <% } %>
 		</ul>
         		</div>
@@ -103,8 +103,8 @@
                         <div class="tabbox f-pa j-mainslide-tabcon">
                             <div class="listwrap">
                                 <ul class="list">
-                                    <% for(var i=0;i<latestlst.length;i++){%>
-                                    <li><a href="#/video/<%= latestlst[i].video %>" class="item"><i class="noicon"></i><span class="ltxt f-ib f-thide"><%= latestlst[i].video %><span class="subtxt"></span></span></a></li>
+                                    <% for(var i=0;i<latest.length;i++){%>
+                                    <li><a href="#/video/<%= latest[i] %>" class="item"><i class="noicon"></i><span class="ltxt f-ib f-thide"><%= latest[i] %><span class="subtxt"></span></span></a></li>
                                     <%}%>
                                 </ul>
                             </div>

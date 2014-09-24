@@ -10,36 +10,81 @@
 	<button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
 	<i class="icon-ok green"></i>{{msg}} {{Date.now | date:"yyyy-MM-dd hh:mm:ss"}}
 </div>
-<div class="table-responsive">
-	<table id="sample-table-1" class="table table-striped table-bordered table-hover">
-		<thead>
-			<tr>
-				<th>序号</th>
-				<th>课程</th>
-				<th>优先级</th>
-				<th>是否VIP</th>
-				<th>是否最新</th>
-				<th>是否最热</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="item in videos | orderBy:'-priority'">
-				<td>{{$index}}</td>
-				<td>{{item.video}}</td>
-				<td class="center"><label><input type="number" class="ace" ng-model="item.priority"><span class="lbl"></span></label></td>
-				<td class="center"><label><input type="checkbox" class="ace" ng-model="item.isvip"><span class="lbl"></span></label></td>
-				<td class="center"><label><input type="checkbox" class="ace" ng-model="item.islatest"><span class="lbl"></span></label></td>
-				<td class="center"><label><input type="checkbox" class="ace" ng-model="item.ishotest"><span class="lbl"></span></label></td>
-			</tr>
+<div class="widget-box" style="opacity: 1; z-index: 0;">
+	<div class="widget-header header-color-green">
+		<h5>{{curCat}}</h5>
+		<div class="widget-toolbar no-border">
+			<button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown">{{curCat}}<i class="icon-chevron-down icon-on-right"></i></button>
+			<ul class="dropdown-menu dropdown-yellow pull-right dropdown-caret dropdown-close">
+				<li  ng-repeat="item in catkeys"><a ng-click="selCat(item)">{{item}}</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="widget-body">
+		<div class="widget-toolbox">
+			<div class="btn-toolbar">
+				<div class="btn-group">
+					<button class="btn btn-sm btn-success" ng-repeat="item in cats[curCat]" ng-click="selTag(item)"><i class="icon-ok bigger-110"></i>{{item}}</button>
+				</div>
+			</div>
+		</div>
+		<div class="widget-main">
+			<div class="table-responsive">
+				<table id="sample-table-1" class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>序号</th>
+							<th>课程</th>
+							<th>优先级</th>
+							<th>是否VIP</th>
+							<th>一级分类</th>
+							<th>二级分类</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in videolst | filter: {cat: curCat, tag: curTag} | orderBy: '-priority'">
+							<td>{{$index}}</td>
+							<td>{{item.video}}</td>
+							<td class="center"><label><input type="number" class="ace" ng-model="item.priority"><span class="lbl"></span></label></td>
+							<td class="center"><label><input type="checkbox" class="ace" ng-model="item.isvip"><span class="lbl"></span></label></td>
+							<td class="center">
+								<label>
+								<div class="btn-group">
+									<button class="btn btn-sm btn-success">{{item.cat}}</button>
+									<button data-toggle="dropdown" class="btn btn-sm btn-success dropdown-toggle"><span class="icon-caret-down icon-only"></span></button>
+									<ul class="dropdown-menu dropdown-success">
+										<li ng-repeat="cat in catkeys"><a ng-click="setCat(item.video,cat)">{{cat}}</a></li>
+									</ul>
+								</div>
+								</label>
+							</td>
+							<td class="center">
+								<label ng-show="curTag">
+								<div class="btn-group">
+									<button class="btn btn-sm btn-success">{{item.tag}}</button>
+									<button data-toggle="dropdown" class="btn btn-sm btn-success dropdown-toggle"><span class="icon-caret-down icon-only"></span></button>
+									<ul class="dropdown-menu dropdown-success">
+										<li ng-repeat="tag in cats[item.cat]"><a ng-click="setTag(item.video,tag)">{{tag}}</a></li>
+									</ul>
+								</div>
+								</label>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 
-		</tbody>
-	</table>
+		<div class="widget-toolbox padding-8 clearfix">
+			<button class="btn btn-xs btn-danger pull-left" ng-click="reset()">
+				<i class="icon-remove"></i>
+				<span class="bigger-110">撤销所有变更</span>
+			</button>
+
+			<button class="btn btn-xs btn-success pull-right" ng-click="submit()">
+				<span class="bigger-110">提交所有变更</span>
+				<i class="icon-arrow-right icon-on-right"></i>
+			</button>
+		</div>
+	</div>
 </div>
-<h3 class="row-fluid header smaller lighter purple">
-	<span class="span5"> </span><!-- /span -->
-	<span class="span7">
-		<label class="pull-right inline">
-			<button class="btn btn-primary" ng-click="save()">提交变更</button>
-		</label>
-	</span><!-- /span -->
-</h3>
