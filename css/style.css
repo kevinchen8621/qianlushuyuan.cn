@@ -737,7 +737,7 @@ a .f-c0:hover,a.f-c0:hover,a .f-c3:hover,a.f-c3:hover,a .f-c6:hover,a.f-c6:hover
 @media screen and (min-width: 1200px){.m-special{width:310px}
 .m-special2{width:380px}
 }
-.m-cate{overflow:hidden;padding:50px 0 30px 0;background-color:#fafafa}
+.m-cate{overflow:hidden;padding:50px 0 0 0;background-color:#fafafa}
 .m-recommend .rec,.m-cate .rec{border:1px solid #09924b;border-radius:4px;color:#09924b;padding:2px 3px 1px 3px;font-size:12px;margin-left:3px;white-space:nowrap}
 .m-cate1{background-color:#f0f0f0}
 .m-ted,.m-coursera,.m-kahan,.m-zggkk,.m-gjgkk{margin-bottom:25px;cursor:pointer;height:90px;padding:30px 20px;background-color:#970700;color:#fff;-webkit-transition:background 0.1s ease-in 0s;-moz-transition:background 0.1s ease-in 0s;transition:background 0.1s ease-in 0s}

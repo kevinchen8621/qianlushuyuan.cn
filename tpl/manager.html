@@ -1,10 +1,5 @@
 <h3 class="row-fluid header smaller lighter purple">
 	<span class="span7"> <i class="icon-list"></i>全部教程 </span><!-- /span -->
-	<span class="span5">
-		<label class="pull-right inline">
-			<button class="btn btn-primary" ng-click="save()">提交变更</button>
-		</label>
-	</span><!-- /span -->
 </h3>
 <div ng-show="msg" class="alert alert-block alert-success">
 	<button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
@@ -12,11 +7,12 @@
 </div>
 <div class="widget-box" style="opacity: 1; z-index: 0;">
 	<div class="widget-header header-color-green">
-		<h5>{{curCat}}</h5>
+		<h5>{{curCat || "未分类"}}</h5>
 		<div class="widget-toolbar no-border">
-			<button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown">{{curCat}}<i class="icon-chevron-down icon-on-right"></i></button>
+			<button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown">{{curCat || "未分类"}}<i class="icon-chevron-down icon-on-right"></i></button>
 			<ul class="dropdown-menu dropdown-yellow pull-right dropdown-caret dropdown-close">
-				<li  ng-repeat="item in catkeys"><a ng-click="selCat(item)">{{item}}</a></li>
+				<li><a ng-click="selCat('')">未分类</a></li>
+				<li  ng-repeat="(item,subs) in site.cats"><a ng-click="selCat(item)">{{item}}</a></li>
 			</ul>
 		</div>
 	</div>
@@ -24,7 +20,7 @@
 		<div class="widget-toolbox">
 			<div class="btn-toolbar">
 				<div class="btn-group">
-					<button class="btn btn-sm btn-success" ng-repeat="item in cats[curCat]" ng-click="selTag(item)"><i class="icon-ok bigger-110"></i>{{item}}</button>
+					<button class="btn btn-sm btn-success" ng-repeat="item in site.cats[curCat]" ng-click="selTag(item)"><i class="icon-ok bigger-110"></i>{{item}}</button>
 				</div>
 			</div>
 		</div>
@@ -33,38 +29,27 @@
 				<table id="sample-table-1" class="table table-striped table-bordered table-hover">
 					<thead>
 						<tr>
-							<th>序号</th>
+							<th>&nbsp;</th>
 							<th>课程</th>
+							<th>分类</th>
 							<th>优先级</th>
-							<th>是否VIP</th>
-							<th>一级分类</th>
-							<th>二级分类</th>
+							<th>VIP</th>
+							<th>操作</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="item in videolst | filter: {cat: curCat, tag: curTag} | orderBy: '-priority'">
-							<td>{{$index}}</td>
+						<tr ng-repeat="item in site.videolst | filterProp : {cat: curCat, tag: curTag} | orderBy: '-priority'">
+							<td><input id="{{item.video}}" type="checkbox" value="{{item.video}}" ng-checked="selection.indexOf(item.video) > -1" ng-click="toggleSelection(item.video)" /></td>
 							<td>{{item.video}}</td>
+							<td>{{item.props | stringfyProps}}</td>
 							<td class="center"><label><input type="number" class="ace" ng-model="item.priority"><span class="lbl"></span></label></td>
 							<td class="center"><label><input type="checkbox" class="ace" ng-model="item.isvip"><span class="lbl"></span></label></td>
 							<td class="center">
 								<label>
 								<div class="btn-group">
-									<button class="btn btn-sm btn-success">{{item.cat}}</button>
-									<button data-toggle="dropdown" class="btn btn-sm btn-success dropdown-toggle"><span class="icon-caret-down icon-only"></span></button>
+									<button data-toggle="dropdown" class="btn btn-sm btn-success dropdown-toggle">注销分类<span class="icon-caret-down icon-only"></span></button>
 									<ul class="dropdown-menu dropdown-success">
-										<li ng-repeat="cat in catkeys"><a ng-click="setCat(item.video,cat)">{{cat}}</a></li>
-									</ul>
-								</div>
-								</label>
-							</td>
-							<td class="center">
-								<label ng-show="curTag">
-								<div class="btn-group">
-									<button class="btn btn-sm btn-success">{{item.tag}}</button>
-									<button data-toggle="dropdown" class="btn btn-sm btn-success dropdown-toggle"><span class="icon-caret-down icon-only"></span></button>
-									<ul class="dropdown-menu dropdown-success">
-										<li ng-repeat="tag in cats[item.cat]"><a ng-click="setTag(item.video,tag)">{{tag}}</a></li>
+										<li ng-repeat="prop in item.props"><a ng-click="removeProp(item, prop)">{{prop.cat}}-{{prop.tag}}</a></li>
 									</ul>
 								</div>
 								</label>
@@ -76,11 +61,23 @@
 		</div>
 
 		<div class="widget-toolbox padding-8 clearfix">
-			<button class="btn btn-xs btn-danger pull-left" ng-click="reset()">
+			<div class="pull-left">
+				<select ng-model="moveCat" ng-options="cat for (cat,subs) in site.cats">
+    					<option value="">-- 请选择 --</option>
+				</select>
+				<select ng-model="moveTag" ng-options="tag for tag in cats[moveCat]">
+    					<option value="">-- 请选择 --</option>
+				</select>
+				<button class="btn btn-xs btn-info" ng-click="move()">
+					<i class="icon-ok"></i><span class="bigger-110">所选项添加分类属性</span>
+				</button>
+			</div>
+
+
+			<button class="btn btn-xs btn-danger pull-right" ng-click="reset()">
 				<i class="icon-remove"></i>
 				<span class="bigger-110">撤销所有变更</span>
 			</button>
-
 			<button class="btn btn-xs btn-success pull-right" ng-click="submit()">
 				<span class="bigger-110">提交所有变更</span>
 				<i class="icon-arrow-right icon-on-right"></i>
