@@ -9,90 +9,9 @@
     <meta name="description" content="教育">
 </head>
 <body ng-app="app">
-    <!-- @NAV -->
-    <!-- 通用头部 -->
-<style>.m-botnav .mainnav .link{padding:0 13px;}</style>
-    <div class="g-wrap">
-        <div class="m-topnav rel">
-            <div class="g-container clear">
-                <span class="u-nav u-beforelogin j-beforelogin right">
-                    <span class="f-c6 li">欢迎来到钱路书院!</span>
-                    <a class="f-c6 li j-loginBtn" href="/sign">登录/注册</a>
-                </span>
-            </div>
-        </div>
-        <div class="m-midnav rel">
-            <div class="g-container clear">
-                <a href="/"><h1 class="logo left notxt">钱路书院</h1></a>
-                <form accept-charset="utf-8" id="j-SearchForm" action="/search">
-                    <div class="search right rel j-input">
-                        <label class="phold f-c9" for="j-search">搜索钱路书院课程、视频</label>
-                        <input autocomplete="off" type="text" name="query" class="inputxt j-txt" id="j-search" />
-                        <input type="submit" class="subbtn f-icon" value="" />
-                            <input type="hidden" name="enc" value="&#153;">
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="m-botnav rel">
-            <div class="main">
-                <div class="g-container clear">
-                    <ul>
-                        <li class="mainnav left rel"><a class="link f-f0 nowrp f-cf" href="#" target="_self">首页</a></li>
-                        <li class="mainnav left rel"><a class="link f-f0 nowrp f-cf" href="#" target="_self">认识钱路学</a></li>
-                        <li class="mainnav left rel"><a class="link f-f0 nowrp f-cf" href="#" target="_self">钱路学思维</a></li>
-                        <li class="mainnav left rel"><a class="link f-f0 nowrp f-cf" href="#" target="_self">钱路基本功</a></li>
-                        <li class="mainnav left rel"><a class="link f-f0 nowrp f-cf" href="#" target="_self">商业钱路</a></li>
-                        <li class="mainnav left rel"><a class="link f-f0 nowrp f-cf" href="#" target="_self">融资钱路</a></li>
-                        <li class="mainnav left rel"><a class="link f-f0 nowrp f-cf" href="#" target="_self">政府资金钱路</a></li>
-                        <li class="mainnav left rel"><a class="link f-f0 nowrp f-cf" href="#" target="_self">资本财技</a></li>
-                        <li class="mainnav right rel"><a class="link f-f0 nowrp f-cyellow" href="/sign">登录/注册</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-<style>input[type="submit"]{-webkit-appearance:none;}</style>
-    <script>document.domain="qianlushuyuan.cn";</script>
-    <!-- 通用头部 -->
-    <!-- /@NAV -->
+
 
     <section ui-view></section>
-
- 
-
-    <!-- 正文内容 -->
-<% var n = 0; %>    
-<% for(var key in cats) {%>
-<div class="m-cate m-cate1" id="normal">
-<div class="g-container">
-<div class="g-row g-limitrow j-row" data-limit="12">
-    <div class="g-cell1 g-card1">
-        <div class="u-tag2">
-            <h2><%= key.substr(0,2) %></h2>
-            <div class="b-10"></div>
-            <span><%= key.substr(2) %></span>
-        </div>
-    </div>
-    <% for(var i=0; i<cats[key].length; i++) {%>
-    <div class="g-cell1 g-card1">
-        <a href="#/cat/<%= cats[key][i] %>" class="u-cover">
-            <div class="shadow rel">
-                <img src="/img/<%= n++ %>.jpg" class="lazy" alt="<%= cats[key][i] %>" height="100px" width="180px">
-                <div class="mask abs"></div>
-                <div class="abs hide new">new</div>
-            </div>
-        </a>
-        <a href="#/cat/<%= cats[key][i] %>"><h5 class="f-c3 ng-binding"><%= cats[key][i] %></h5></a>
-    </div>
-    <% } %>
-</div>
-</div>
-</div>
-<%}%>
-
-
-    <!-- /正文内容 -->
 
 
     <!-- 所有页面通用footer -->

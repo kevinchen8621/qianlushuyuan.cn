@@ -396,13 +396,13 @@
 			}
     			$scope.submit = function(){
     				if($rootScope.site.videolst){
-		    			$http.post('/api/videos', {videolst: $rootScope.site.videolst}).success(function(){
+		    			$http.post('/api/site', {videolst: $rootScope.site.videolst}).success(function(){
 		    				$scope.msg = "变动已提交！";
 		    			});
     				}
     			}
     			$scope.reset = function(){
-	    			$http.get('/api/videos').success(function(data){
+	    			$http.get('/api/site').success(function(data){
 	    				$rootScope.site = data;
 	    				$rootScope.catkeys = $window._.keys($rootScope.site.cats);
 	    			});

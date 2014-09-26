@@ -1,69 +1,48 @@
-  <script src = "http://s2.open.126.net/ocb/js/opencoure.min.js"  type="text/javascript" charset="UTF-8"></script>
-    
-	
+<style>.m-botnav .mainnav .link{padding:0 13px;}</style>
+<script src = "http://s2.open.126.net/ocb/js/opencoure.min.js"  type="text/javascript" charset="UTF-8"></script>
+<div class="g-wrap">
+    <div class="m-topnav rel">
+        <div class="g-container clear">
+            <span class="u-nav u-beforelogin j-beforelogin right">
+                <span class="f-c6 li">欢迎来到钱路书院!</span>
+                <a class="f-c6 li j-loginBtn" href="/sign">登录/注册</a>
+            </span>
+        </div>
+    </div>
+    <div class="m-midnav rel">
+        <div class="g-container clear">
+            <a href="/"><h1 class="logo left notxt">钱路书院</h1></a>
+            <form accept-charset="utf-8" id="j-SearchForm" action="/search">
+                <div class="search right rel j-input">
+                    <label class="phold f-c9" for="j-search">搜索钱路书院课程、视频</label>
+                    <input autocomplete="off" type="text" name="query" class="inputxt j-txt" id="j-search" />
+                    <input type="submit" class="subbtn f-icon" value="" />
+                        <input type="hidden" name="enc" value="&#153;">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="m-botnav rel">
+        <div class="main">
+            <div class="g-container clear">
+                <ul>
+                    <li class="mainnav left rel"><a class="link f-f0 nowrp f-cf" href="#" target="_self">首页</a></li>
+                    <% for(var key in cats) {%>
+                    <li class="mainnav left rel"><a class="link f-f0 nowrp f-cf" href="#/cat/<%= cats[key][0] %>"><%= key %></a></li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<style>input[type="submit"]{-webkit-appearance:none;}</style>
     <script>document.domain="qianlushuyuan.cn";</script>
     <!-- 图片轮播 -->
-    <script type="text/javascript">
-        // 轮播数据
-        window.SLIDEDATA = [
-            // tab不提供则隐藏
-            {'marginleft':0, 'left':15},
-            {'marginleft':32, 'left':113},
-            {'marginleft':34, 'left':210}
-        ];
-        
-    </script>
-    <div  class="mainslideData" id="j-mainslide-data">
-        
-        <p>
-            <span>#</span>
-            <span>/img/slide1.jpg</span>
-            <span>/img/slide1_nav.jpg</span>
-            <span>/img/little.png</span>
-            <span>#EBE2D3</span>
-        </p>
-        <p>
-            <span>#</span>
-            <span>/img/slide2.jpg</span>
-            <span>/img/slide2_nav.jpg</span>
-            <span>/img/little.png</span>
-            <span>#F0F0EE</span>
-        </p>
-                <p>
-            <span>#</span>
-            <span>/img/slide3.jpg</span>
-            <span>/img/slide3_nav.jpg</span>
-            <span>/img/little.png</span>
-            <span>#E05400</span>
-        </p>
-                <p>
-            <span>#</span>
-            <span>/img/slide4.jpg</span>
-            <span>/img/slide4_nav.jpg</span>
-            <span>/img/little.png</span>
-            <span>#99AABA</span>
-        </p>
-                <p>
-            <span>#</span>
-            <span>/img/slide5.jpg</span>
-            <span>/img/slide5_nav.jpg</span>
-            <span>/img/little.png</span>
-            <span>#003442</span>
-        </p>
-                <p>
-            <span>#</span>
-            <span>/img/slide6.jpg</span>
-            <span>/img/slide6_nav.jpg</span>
-            <span>/img/little.png</span>
-            <span>#28525E</span>
-        </p>
-                <p>
-            <span>#</span>
-            <span>/img/slide7.jpg</span>
-            <span>/img/slide7_nav.jpg</span>
-            <span>/img/little.png</span>
-            <span>#0F0B1A</span>
-        </p>
+    <script type="text/javascript">window.SLIDEDATA = [{'marginleft':0, 'left':15},{'marginleft':32, 'left':113},{'marginleft':34, 'left':210}];</script>
+    <div  class="mainslideData" id="j-mainslide-data">        
+        <% for(var item in site.slides) {%>
+        <p><span><%= item.url %></span><span><%= item.slide %></span><span><%= item.slide_nav %></span><span><%= item.slide_little %></span><span><%= item.color %></span></p>
+        <%}%>
             </div>
     <div class="m-slidebox rel">
         <div class="u-loading f-pa" id="j-mainslide-loading"><div class="loadingIcon"></div></div>
@@ -90,13 +69,13 @@
                     <div class="tabcon f-pr">
                         <!-- 排行榜tab -->
                         <div class="tabbox f-pa j-mainslide-tabcon">
-		<div class="listwrap">
-		<ul class="list">
+        <div class="listwrap">
+        <ul class="list">
                             <% for(var i=0; i<hotest.length; i++) {%>
-		  <li><a href="#/video/<%= hotest[i] %>" class="item"><i class="icon" <%if(i<3){%>class="icon2"<%}%>><%= i + 1%></i><span class="ltxt f-ib f-thide"><%= hotest[i] %><span class="subtxt"></span></span></a></li>
+          <li><a href="#/video/<%= hotest[i] %>" class="item"><i class="icon" <%if(i<3){%>class="icon2"<%}%>><%= i + 1%></i><span class="ltxt f-ib f-thide"><%= hotest[i] %><span class="subtxt"></span></span></a></li>
                             <% } %>
-		</ul>
-        		</div>
+        </ul>
+                </div>
                         </div>
                         <!-- 排行榜tab end -->
                         <!-- 最新课程tab -->
@@ -116,5 +95,40 @@
         </div>
     </div>
     <!-- /图片轮播 -->
+
+ 
+
+    <!-- 正文内容 -->
+<% var n = 0; %>    
+<% for(var key in cats) {%>
+<div class="m-cate m-cate1" id="normal">
+<div class="g-container">
+<div class="g-row g-limitrow j-row" data-limit="12">
+    <div class="g-cell1 g-card1">
+        <div class="u-tag2">
+            <h2><%= key.substr(0,2) %></h2>
+            <div class="b-10"></div>
+            <span><%= key.substr(2) %></span>
+        </div>
+    </div>
+    <% for(var i=0; i<cats[key].length; i++) {%>
+    <div class="g-cell1 g-card1">
+        <a href="#/cat/<%= cats[key][i] %>" class="u-cover">
+            <div class="shadow rel">
+                <img src="/img/<%= n++ %>.jpg" class="lazy" alt="<%= cats[key][i] %>" height="100px" width="180px">
+                <div class="mask abs"></div>
+                <div class="abs hide new">new</div>
+            </div>
+        </a>
+        <a href="#/cat/<%= cats[key][i] %>"><h5 class="f-c3 ng-binding"><%= cats[key][i] %></h5></a>
+    </div>
+    <% } %>
+</div>
+</div>
+</div>
+<%}%>
+    <!-- /正文内容 -->
+
+
     
 
