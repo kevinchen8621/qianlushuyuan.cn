@@ -7,23 +7,16 @@
 </div>
 <div class="widget-box" style="opacity: 1; z-index: 0;">
 	<div class="widget-header header-color-green">
-		<h5>{{curCat || "未分类"}}</h5>
+		<h5>{{getCatTitle(curCat)}}</h5>
 		<div class="widget-toolbar no-border">
-			<button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown">{{curCat || "未分类"}}<i class="icon-chevron-down icon-on-right"></i></button>
+			<button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown">{{getCatTitle(curCat)}}<i class="icon-chevron-down icon-on-right"></i></button>
 			<ul class="dropdown-menu dropdown-yellow pull-right dropdown-caret dropdown-close">
 				<li><a ng-click="selCat('')">未分类</a></li>
-				<li  ng-repeat="(item,subs) in site.cats"><a ng-click="selCat(item)">{{item}}</a></li>
+				<li  ng-repeat="cat in cats | orderBy: 'key'"><a ng-click="selCat(cat.key)">{{getCatIndent(cat)}} {{cat.title}}</a></li>
 			</ul>
 		</div>
 	</div>
 	<div class="widget-body">
-		<div class="widget-toolbox">
-			<div class="btn-toolbar">
-				<div class="btn-group">
-					<button class="btn btn-sm btn-success" ng-repeat="item in site.cats[curCat]" ng-click="selTag(item)"><i class="icon-ok bigger-110"></i>{{item}}</button>
-				</div>
-			</div>
-		</div>
 		<div class="widget-main">
 			<div class="table-responsive">
 				<table id="sample-table-1" class="table table-striped table-bordered table-hover">
@@ -38,22 +31,13 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="item in site.videolst | filterProp : {cat: curCat, tag: curTag} | orderBy: '-priority'">
-							<td><input id="{{item.video}}" type="checkbox" value="{{item.video}}" ng-checked="selection.indexOf(item.video) > -1" ng-click="toggleSelection(item.video)" /></td>
-							<td>{{item.video}}</td>
-							<td>{{item.props | stringfyProps}}</td>
+						<tr ng-repeat="item in videos | filterVideos : curCat | orderBy: '-priority'">
+							<td><input type="checkbox" ng-checked="item.selected" ng-click="toggleSelection(item)" /></td>
+							<td>{{item.name}}</td>
+							<td><label ng-repeat="cat in item.cats">[{{getCatTitle(cat)}}]</label></td>
 							<td class="center"><label><input type="number" class="ace" ng-model="item.priority"><span class="lbl"></span></label></td>
-							<td class="center"><label><input type="checkbox" class="ace" ng-model="item.isvip"><span class="lbl"></span></label></td>
-							<td class="center">
-								<label>
-								<div class="btn-group">
-									<button data-toggle="dropdown" class="btn btn-sm btn-success dropdown-toggle">注销分类<span class="icon-caret-down icon-only"></span></button>
-									<ul class="dropdown-menu dropdown-success">
-										<li ng-repeat="prop in item.props"><a ng-click="removeProp(item, prop)">{{prop.cat}}-{{prop.tag}}</a></li>
-									</ul>
-								</div>
-								</label>
-							</td>
+							<td class="center"><label><input type="checkbox" class="ace" ng-model="item.properties.isvip"><span class="lbl"></span></label></td>
+							<td class="center"><label><button class="btn btn-sm btn-success">重新分类</button></label></td>
 						</tr>
 					</tbody>
 				</table>
@@ -61,22 +45,19 @@
 		</div>
 
 		<div class="widget-toolbox padding-8 clearfix">
-			<div class="pull-left">
-				<select ng-model="moveCat" ng-options="cat for (cat,subs) in site.cats">
-    					<option value="">-- 请选择 --</option>
-				</select>
-				<select ng-model="moveTag" ng-options="tag for tag in cats[moveCat]">
-    					<option value="">-- 请选择 --</option>
-				</select>
-				<button class="btn btn-xs btn-info" ng-click="move()">
-					<i class="icon-ok"></i><span class="bigger-110">所选项添加分类属性</span>
-				</button>
-			</div>
+			<div class="btn-group">
+				<button data-toggle="dropdown" class="btn btn-sm btn-success dropdown-toggle">所选添加类别<span class="icon-caret-down icon-only"></span></button>
+				<ul class="dropdown-menu dropdown-success">
+					<li ng-repeat="cat in cats | orderBy: 'key' ">
+						<a ng-click="setCat(cat)">{{getCatIndent(cat)}}</span> {{cat.title}}</a>
+					</li>
+				</ul>
+			</div>	
 
 
-			<button class="btn btn-xs btn-danger pull-right" ng-click="reset()">
-				<i class="icon-remove"></i>
-				<span class="bigger-110">撤销所有变更</span>
+			<button class="btn btn-xs btn-info" ng-click="reset()">
+				<span class="bigger-110">撤销变更</span>
+				<i class="icon-arrow-left icon-on-right"></i>
 			</button>
 			<button class="btn btn-xs btn-success pull-right" ng-click="submit()">
 				<span class="bigger-110">提交所有变更</span>

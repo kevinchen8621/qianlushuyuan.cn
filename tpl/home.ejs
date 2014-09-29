@@ -4,17 +4,17 @@
     <div class="m-topnav rel">
         <div class="g-container clear">
             <span class="u-nav u-beforelogin j-beforelogin right">
-                <span class="f-c6 li">欢迎来到钱路书院!</span>
+                <span class="f-c6 li">欢迎来到<%=site.title%>!</span>
                 <a class="f-c6 li j-loginBtn" href="/sign">登录/注册</a>
             </span>
         </div>
     </div>
     <div class="m-midnav rel">
         <div class="g-container clear">
-            <a href="/"><h1 class="logo left notxt">钱路书院</h1></a>
+            <a href="/"><h1 class="logo left notxt"><%=site.title%></h1></a>
             <form accept-charset="utf-8" id="j-SearchForm" action="/search">
                 <div class="search right rel j-input">
-                    <label class="phold f-c9" for="j-search">搜索钱路书院课程、视频</label>
+                    <label class="phold f-c9" for="j-search">搜索<%=site.title%>课程、视频</label>
                     <input autocomplete="off" type="text" name="query" class="inputxt j-txt" id="j-search" />
                     <input type="submit" class="subbtn f-icon" value="" />
                         <input type="hidden" name="enc" value="&#153;">
@@ -27,8 +27,10 @@
             <div class="g-container clear">
                 <ul>
                     <li class="mainnav left rel"><a class="link f-f0 nowrp f-cf" href="#" target="_self">首页</a></li>
-                    <% for(var key in cats) {%>
-                    <li class="mainnav left rel"><a class="link f-f0 nowrp f-cf" href="#/cat/<%= cats[key][0] %>"><%= key %></a></li>
+                    <% for(var i=0; i<cats.length; i++) {%>
+                    <% if(cats[i].parent == '') {%>
+                    <li class="mainnav left rel"><a class="link f-f0 nowrp f-cf" href="#/cat/<%= cats[i].key %>"><%= cats[i].title %></a></li>
+                    <% } %>
                     <% } %>
                 </ul>
             </div>
@@ -40,10 +42,10 @@
     <!-- 图片轮播 -->
     <script type="text/javascript">window.SLIDEDATA = [{'marginleft':0, 'left':15},{'marginleft':32, 'left':113},{'marginleft':34, 'left':210}];</script>
     <div  class="mainslideData" id="j-mainslide-data">        
-        <% for(var item in site.slides) {%>
-        <p><span><%= item.url %></span><span><%= item.slide %></span><span><%= item.slide_nav %></span><span><%= item.slide_little %></span><span><%= item.color %></span></p>
+        <% for(var i=0; i < slides.length; i++) {%>
+        <p><span><%= slides[i].url %></span><span><%= slides[i].slide %></span><span><%= slides[i].slide_nav %></span><span><%= slides[i].slide_little %></span><span><%= slides[i].bgcolor %></span></p>
         <%}%>
-            </div>
+    </div>
     <div class="m-slidebox rel">
         <div class="u-loading f-pa" id="j-mainslide-loading"><div class="loadingIcon"></div></div>
         <div class="g-wrap f-pr" id="j-mainslide-imgs">
@@ -72,7 +74,7 @@
         <div class="listwrap">
         <ul class="list">
                             <% for(var i=0; i<hotest.length; i++) {%>
-          <li><a href="#/video/<%= hotest[i] %>" class="item"><i class="icon" <%if(i<3){%>class="icon2"<%}%>><%= i + 1%></i><span class="ltxt f-ib f-thide"><%= hotest[i] %><span class="subtxt"></span></span></a></li>
+          <li><a href="#/video/<%= hotest[i]._id %>" class="item"><i class="icon" <%if(i<3){%>class="icon2"<%}%>><%= i + 1%></i><span class="ltxt f-ib f-thide"><%= hotest[i].title %><span class="subtxt"></span></span></a></li>
                             <% } %>
         </ul>
                 </div>
@@ -83,7 +85,7 @@
                             <div class="listwrap">
                                 <ul class="list">
                                     <% for(var i=0;i<latest.length;i++){%>
-                                    <li><a href="#/video/<%= latest[i] %>" class="item"><i class="noicon"></i><span class="ltxt f-ib f-thide"><%= latest[i] %><span class="subtxt"></span></span></a></li>
+                                    <li><a href="#/video/<%= latest[i]._id %>" class="item"><i class="noicon"></i><span class="ltxt f-ib f-thide"><%= latest[i].title %><span class="subtxt"></span></span></a></li>
                                     <%}%>
                                 </ul>
                             </div>
@@ -100,32 +102,36 @@
 
     <!-- 正文内容 -->
 <% var n = 0; %>    
-<% for(var key in cats) {%>
+<% for(var i= 0; i<cats.length; i++) {%>
+<% if(cats[i].parent == ''){%>
 <div class="m-cate m-cate1" id="normal">
 <div class="g-container">
 <div class="g-row g-limitrow j-row" data-limit="12">
     <div class="g-cell1 g-card1">
         <div class="u-tag2">
-            <h2><%= key.substr(0,2) %></h2>
+            <h2><%= cats[i].title.substr(0,2) %></h2>
             <div class="b-10"></div>
-            <span><%= key.substr(2) %></span>
+            <span><%= cats[i].title.substr(2) %></span>
         </div>
     </div>
-    <% for(var i=0; i<cats[key].length; i++) {%>
+    <% for(var j=0; j<cats.length; j++) {%>
+    <% if(cats[j].parent == cats[i].key){%>
     <div class="g-cell1 g-card1">
-        <a href="#/cat/<%= cats[key][i] %>" class="u-cover">
+        <a href="#/cat/<%= cats[j].key %>" class="u-cover">
             <div class="shadow rel">
-                <img src="/img/<%= n++ %>.jpg" class="lazy" alt="<%= cats[key][i] %>" height="100px" width="180px">
+                <img src="<%=cats[j].face%>" class="lazy" alt="<%= cats[j].title %>" height="100px" width="180px">
                 <div class="mask abs"></div>
                 <div class="abs hide new">new</div>
             </div>
         </a>
-        <a href="#/cat/<%= cats[key][i] %>"><h5 class="f-c3 ng-binding"><%= cats[key][i] %></h5></a>
+        <a href="#/cat/<%= cats[j].key %>"><h5 class="f-c3 ng-binding"><%= cats[j].title %></h5></a>
     </div>
+    <%}%>
     <% } %>
 </div>
 </div>
 </div>
+<%}%>
 <%}%>
     <!-- /正文内容 -->
 

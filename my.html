@@ -291,23 +291,24 @@
 		    		}
 		  	};
 		}])
-		.filter("filterProp", ["$window",function($window) {
-		    	return function(items, opt) {
-		    		if(opt.tag == "" && opt.cat == ""){
-		    			return items;
-		    		}else if(opt.tag == ""){
-		    			return $window._.filter(items, function(item){ return $window._.find(item.props, function(prop){ return prop.cat == opt.cat;}); });	
+		.filter("filterVideos", ["$window",function($window) {
+		    	return function(items, cat) {
+		    		if(cat == ""){
+		    			return $window._.filter(items, function(item){ return item.cats.length == 0; });
 		    		}else{
-		    			$window._.filter(items, function(item){ return $window._.find(item.props, function(prop){ return prop.cat == opt.cat && prop.tag == opt.tag; }); });
+		    			return $window._.filter(items, function(item){ return item.cats.indexOf(cat) > -1; });
 		    		}
 		    	};
 		}])
-		.filter("stringfyProps", ["$window",function($window) {
+		.filter("filterSubCats", ["$window",function($window) {
+		    	return function(items, pid) {
+		    		var result = $window._.filter(items, function(item){return item.parent == pid;});
+		    		return result;
+		    	};
+		}])
+		.filter("subCats", ["$window",function($window) {
 		    	return function(items) {
-		    		var result = "";
-		    		angular.forEach(items, function(item){
-		    			result += " ["+item.cat + " - " + item.tag + "] ";
-		    		});
+		    		var result = $window._.filter(items, function(item){return item.parent == "";});
 		    		return result;
 		    	};
 		}])
@@ -350,61 +351,49 @@
 		}])
 		.controller("ManagerCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
 			$scope.selection = [ ];
-			$scope.toggleSelection = function toggleSelection(video) {
-				var idx = $scope.selection.indexOf(video);
-			  	if (idx > -1) {$scope.selection.splice(idx, 1);}else{$scope.selection.push(video);}
+			$scope.toggleSelection = function toggleSelection(item) {
+				item.selected = item.selected ? false : true;
 			};
-			$scope.move = function(){
-				console.log($scope.selection);
-				$rootScope.site.videolst.forEach(function(item){
-					if($window._.indexOf($scope.selection, item.video)>-1){
-						item.props = $window._.union(item.props, [{cat:$scope.moveCat, tag: $scope.moveTag}]);
+			$scope.setCat = function(cat){
+				var addIds = [ ], delIds = [ ];
+				$rootScope.videos.forEach(function(item){
+					if(item.selected){
+						var idx = item.cats.indexOf(cat.key);
+					  	if (idx > -1) {
+					  		item.cats.splice(idx, 1);
+					  		delIds.push(item._id);
+					  	}else{
+					  		item.cats.push(cat.key);
+					  		addIds.push(item._id);
+					  	}
+					  	item.selected = false;
 					}
 				});				
 			};
-			$scope.removeProp = function(item, prop){
-				$rootScope.site.videolst.forEach(function(item){
-					item.props = $window._.remove(item.props, function(p){ return p.cat == prop.cat && p.tag == prop.tag; });
-				});
-			};	
-			$scope.curCat = ""; $scope.curTag = "";
+			$scope.curCat = "";
 			$scope.selCat = function(cat){
 				$scope.curCat = cat;
-				if(cat == ""){
-					$scope.curTag = "";	
-				}else{
-					$scope.curTag = $rootScope.site.cats[cat][0];
+			}
+			$scope.getCatTitle = function(key){
+				if(key == ""){ return "未分类";}
+				for(var i = 0;i < $rootScope.cats.length;i++){
+					if($rootScope.cats[i].key == key){
+						return $rootScope.cats[i].title;
+						break;
+					}
 				}
 			}
-			$scope.selTag = function(tag){
-				$scope.curTag = tag;
-			}
-			$scope.setCat = function(video, cat){
-				$rootScope.site.videolst.forEach(function(item){
-					if(item.video == video){
-						item.cat = cat;
-						item.tag = $rootScope.site.cats[cat][0];
-					}
-				});
-			}
-			$scope.setTag = function(video, tag){
-				$rootScope.site.videolst.forEach(function(item){
-					if(item.video == video){
-						item.tag = tag;
-					}
-				});
-			}
     			$scope.submit = function(){
-    				if($rootScope.site.videolst){
-		    			$http.post('/api/site', {videolst: $rootScope.site.videolst}).success(function(){
+    				if($rootScope.videos){
+		    			$http.post('/api/videos', {videos: $rootScope.videos}).success(function(){
 		    				$scope.msg = "变动已提交！";
 		    			});
     				}
     			}
     			$scope.reset = function(){
-	    			$http.get('/api/site').success(function(data){
+	    			$http.get('/api/videos').success(function(data){
 	    				$rootScope.site = data;
-	    				$rootScope.catkeys = $window._.keys($rootScope.site.cats);
+	    				$rootScope.catkeys = $window._.keys($rootScope.cats);
 	    			});
     			}
 		}])
@@ -416,10 +405,10 @@
 			$scope.resetCatInfo();
 			$scope.saveCatInfo = function(){
 				var tags = $scope.newSub.replace(/[\s\n\t\r]+/g,"").replace(/，/g,",").split(',');
-				$rootScope.site.cats[$scope.newCat] = tags;
+				$rootScope.cats[$scope.newCat] = tags;
 			}
 			$scope.removeCat = function(cat){
-				delete $rootScope.site.cats[cat];
+				delete $rootScope.cats[cat];
 				Angular.forEach($scope.site.videolst, function(item){
 					item.props = $window._.filter(item.props, function(p){ return p.cat !==  cat; });
 				});
@@ -436,9 +425,12 @@
 						$window.location.href = "/sign";
 					}else{
 						$rootScope.user = data;
-			    			$http.get('/api/site').success(function(data){
-			    				$rootScope.site = data;
-			    				$rootScope.catkeys = $window._.keys($rootScope.site.cats);
+			    			$http.get('/api/site?attachments=slides,cats,videos').success(function(data){
+			    				$rootScope.site = data.site;
+			    				$rootScope.slides = data.slides;
+			    				$rootScope.cats = data.cats;
+			    				$rootScope.videos = data.videos;
+			    				console.log($rootScope.videos);
 			    			});
 					}
 				}).error(function(){
@@ -448,6 +440,11 @@
 			}else{
 				$window.location.href = "/sign";
 			}
+
+			$rootScope.getCatIndent = function(cat){
+				return cat.parent.replace(/\d/g,'-');
+			}
+
 		}]);
 		
 
