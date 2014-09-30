@@ -1,0 +1,123 @@
+    <link type="text/css" rel="stylesheet" href="http://v.163.com/special/008565K3/style.css">
+  <link type="text/css" rel="stylesheet" href="http://s2.open.126.net/ocb/css/style.css">
+  <link rel="stylesheet" href="http://v.163.com/special/008565K3/coursecss0628.css" />
+  <script type="text/javascript" src="http://img1.cache.netease.com/cnews/js/ntes_jslib_1.x.js"></script>
+<style>
+  .g-container{width: 960px;}
+  .m-footer{text-align: center;}
+  .g-mn{float: left;width: 650px;}
+  .g-sd{width: 275px; margin-left: 0;}
+</style>
+<!-- head part -->
+<!-- @SMNAV -->
+  <!-- 通用小导航 -->
+  <div class="g-wrap">
+    <div class="m-smnav rel">
+      <div class="g-container clear">
+        <a href="http://open.163.com" target="_blank">
+          <div tit="<%=site.title%>" class="f-fl img"></div>
+        </a>
+        <form accept-charset="utf-8" id="j-SearchForm" target="_blank" action="#">
+          <div class="search left rel j-input">
+            <label class="phold f-c9" for="j-search" style="display: block;">搜索课程、视频</label>
+            <input autocomplete="off" type="text" name="query" class="inputxt j-txt" id="j-search">
+            <input type="submit" class="subbtn f-icon" value="">
+            <input type="hidden" name="enc" value="&#153;">
+          </div>
+        </form>
+        <div class="u-nav u-login j-login right hide">
+          <span class="li f-c6 j-username">opencourse@163.com</span>
+        </div>
+        <span class="u-nav u-beforelogin j-beforelogin right">
+            <span class="f-c6 li">欢迎来到<%=site.title%>!</span>
+            <a class="f-c6 li j-loginBtn" href="/sign">登录/注册</a>
+        </span>
+      </div>
+    </div>
+  </div>
+  <script>document.domain = "qianlushuyuan.cn";</script>
+  <!-- /通用小导航 -->
+  <!-- /@SMNAV -->
+<div class="u-breadnav">
+    <div class="g-container">
+        <a href="                  http://open.163.com/khan/
+                " target="_blank" class="link f-c9"><%=site.title%></a>
+        <span class="f-icon sp"></span>
+        <span class="pos f-f0 f-c3"><%=cat.title%></span>
+    </div>
+</div>
+<!-- /head part -->
+<div class="mainwrap">
+  <div class="m-cintro f-cb">
+    <img src="http://img4.cache.netease.com/video/2014/9/23/20140923162100c61d2.jpg" width="380" height="285" alt="这一部分主要介绍了坐标平面，斜率，截距等概念，以及如何画出线性方程和线性不等式的图像来。主要内容包括：坐标平面，坐标点，X、Y截距，直线的斜率，如何根据方程和不等式画出图像等等。<br/></br><p style=&quot;word-break:break-all&quot;>视频由可汗学院免费提供，详见：<a h"/>
+    <div class="m-cdes">
+      <h2><%=cat.title%></h2>
+      <p>本专题共<%=videos.length%>堂课程 敬请关注</p>
+      <span class="blank20"></span>
+      <p>专题介绍</p>
+      <p><%=cat.description%></p> <b></b>
+      <a href="/video/<%=videos[0]._id%>" class="plybtn"></a>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="u-cshare f-cb">
+        <!-- 分享 -->
+        <div id="ckepop">
+          <a href="http://www.jiathis.com/share?uid=1600869" class="jiathis jiathis_txt" target="_blank">
+            <img src="http://img6.cache.netease.com/video/2012/7/4/201207041342229f333.png" border="0" />
+          </a>
+        </div>
+        <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+        <!-- /分享 -->
+        <div class="ckcoll f-hide" id="j-collect">收藏</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="g-doc f-cb">
+<div class="g-mn">
+<div class="m-mn">
+    <div class="m-t-bg f-cb">
+      <div class="m-t-innerbg f-cb">
+        <h2>课程列表</h2>
+          
+              
+      </div>
+    </div>
+    <table class="m-clist" id="list1">
+      <tr><th>名称</th><th>视频观看</th></tr>
+      <tr class="u-odd" ng-repeat="video in videos">
+        <td class="u-ctitle">[第{{$index}}课]<a href="/video/{{video._id}}">{{video.title}}</a></td>
+        <td class="u-cdown"><a class="downbtn" href='/video/{{video._id}}' target="_blank"></a></td>
+      </tr>
+     </table>
+  </div>
+<span class="blank20"></span>
+<div class="m-mnc">
+  <div class="m-tag2 f-cb" id="navbt1"> 
+         <span class="blank12"></span>
+
+  </div>
+</div>
+</div>
+<div class="g-sd" style="width:275px;">
+<div class="m-cteacher">
+  <h3>讲师介绍</h3>
+  <span class="blank9"></span>
+  <div class="rightContent">   <div class="picText">
+ <img src="http://img6.cache.netease.com/video/2012/12/11/201212111535389f63c.jpg" width="120" height="90" style="border:1px  solid #484848">  <span class="blank9"></span>
+ <h6>讲师：<span class="fB cdY">李谦诚</span></h6> 
+ <h6>职业：<span class="fB">钱路学创始人</span></h6> 
+ <h6><span class="fB">SAT数学成绩满分。MIT数学学士；电气工程、计算机科学学士、硕士；哈佛大学工商管理硕士（MBA）。2009年专职于Khan Academy的教学传播事业。</span></h6> 
+ <span class="blank9"></span>
+ <span class="cdblan"></span>
+</div>
+</div>
+</div>
+<div class="m-ccollege">
+  <h3>学院介绍</h3>
+  <span class="blank9"></span>
+  <div class="cContent">钱路书院(Qianlu Academy)，是由孟加拉裔美国人萨尔曼·可汗创立的一家教育性非营利组织，主旨在于利用网络影片进行免费授课，现有关于数学、历史、金融、物理、化学、生物、天文学等科目的内容，教学影片超过2000段，机构的使命是加快各年龄学生的学习速度。</div>
+</div>
+</div>
+</div>
+<!--parea end-->
+</div>
+

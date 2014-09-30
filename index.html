@@ -57,10 +57,15 @@
 		.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 			$urlRouterProvider.otherwise("/");
 			$stateProvider
+				.state("cat", {url:'/cat/:id', templateUrl: 'tpl/cat',controller:'CatCtl'})
 				.state("video", {url:'/video/:id', templateUrl: 'tpl/video',controller:'VideoCtl'})
 				.state("home", {url:'/', templateUrl: 'tpl/home',controller:'HomeCtl'})
 		}])
 		.controller("HomeCtl",["$scope","$rootScope",function($scope,$rootScope){
+		}])
+		.controller("CatCtl",["$scope","$rootScope","$stateParams","$window",function($scope,$rootScope,$stateParams,$window){
+			$scope.catIndex = $window._.findIndex($rootScope.cats, function(cat){return cat.key == $stateParams.id;});
+			$scope.catVideos = $window._.filter($rootScope.videos, function(video){return video.cats.indexOf($stateParams.id) > -1;});
 		}])
 		.controller("VideoCtl",["$scope","$stateParams","$sce", function($scope,$stateParams,$sce){
 		    $scope.vname = $stateParams.id || '';
@@ -107,6 +112,13 @@
 					}
 				})
 			}
+			$http.get('/api/site?attachments=slides,cats,videos').success(function(data){
+    				$rootScope.site = data.site;
+    				$rootScope.slides = data.slides;
+    				$rootScope.cats = data.cats;
+    				$rootScope.videos = data.videos;
+    				console.log($rootScope.videos);
+    			});			
 		}]);
 		
 

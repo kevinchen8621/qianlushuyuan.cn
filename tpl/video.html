@@ -1,8 +1,74 @@
-
-
-
-
+<link type="text/css" rel="stylesheet" href="http://s2.open.126.net/ocb/css/style.css"/>   
+<link rel="stylesheet" href="http://s2.open.126.net/ocb/css/page/play.css" />
+  <!-- @SMNAV -->
+  <!-- 通用小导航 -->
+  <div class="g-wrap">
+    <div class="m-smnav rel">
+      <div class="g-container clear">
+        <a href="http://open.163.com" target="_blank">
+          <div tit="{{site.title}}" class="f-fl img"></div>
+        </a>
+        <form accept-charset="utf-8" id="j-SearchForm" target="_blank" action="http://c.open.163.com/search/search.htm">
+          <div class="search left rel j-input">
+            <label class="phold f-c9" for="j-search" style="display: block;">搜索课程、视频</label>
+            <input autocomplete="off" type="text" name="query" class="inputxt j-txt" id="j-search">
+            <input type="submit" class="subbtn f-icon" value="">
+            <input type="hidden" name="enc" value="&#153;">
+          </div>
+        </form>
+        <div class="u-nav u-login j-login right hide">
+          <span class="li f-c6 j-username">opencourse@163.com</span>
+        </div>
+        <span class="u-nav u-beforelogin j-beforelogin right">
+          <span class="f-c6 li">欢迎来到{{site.title}}!</span>
+          <a class="f-c6 li j-loginBtn">登录/注册</a>
+        </span>
+      </div>
+    </div>
+  </div>
+  <script>document.domain = "qianlushuyuan.cn";</script>
+  <!-- /通用小导航 -->
+  <!-- /@SMNAV -->
+  <!-- 播放导航 -->
+  <div class="m-pt f-pr">
+      <div class="g-container clear">
+          <div class="f-fr cz">
+              <div class="btn f-fr f-pr" id="j-collect-btn">
+                  <span class="f-c9 ic ic-store"></span>
+                  <span class="f-c9 in">投诉或建议</span>  
+              </div>
+              <div class="btn f-fr f-pr" id="j-collect-btn">
+                  <span class="f-c9 ic ic-store"></span>
+                  <span class="f-c9 in">收藏课时</span>  
+              </div>
+              <div class="btn f-fr f-pr" id="j-open-note-btn">
+                  <span class="f-c9 ic ic-note" id="j-note-btn"></span>
+                  <span class="f-c9 in">笔记</span>
+              </div>
+          </div>
+          <div class="f-fl nav">
+            <p class="bread">
+                <a href="/" target="_blank" class="f-c9">{{site.title}}</a>
+                <span class="f-c9 f-icon sp"></span>
+                <a href="#/video/{{video._id}}" target="_blank" class="f-c9">{{video.title}}</a>
+            </p>
+            <h3 class="f-c3 mname">
+                <span class="f-fl">{{video.title}}</span>
+                <span class="f-fl intro f-c6 f-pr j-hoverdown">
+                  [ 课时介绍 ]
+                  <div class="u-itrobox f-pa j-downitem"><em class="f-c3">简介：</em>{{video.description}}</div>
+                </span>
+            </h3>
+          </div>
+      </div>
+  </div>
+  <!-- /播放导航 -->
   <!-- 播放区域 -->
+  <div class="m-stage" id="j-player-bg">
+      <div class="g-container" id="j-player-container">
+        <div class="playerarea f-pr" id="j-player-stage">
+            <div class="playerwrap f-pa" id="j-flashArea">
+<!-- 播放区域 -->
   <div class="m-stage" id="j-player-bg">
       <div class="g-container" id="j-player-container">
         <div class="playerarea f-pr" id="j-player-stage">
@@ -19,7 +85,7 @@
       <vg-buffering></vg-buffering>
       <vg-overlay-play vg-play-icon="config.theme.playIcon"></vg-overlay-play> 
 
-      <vg-controls vg-autohide="config.autoHide" style="height: 50px;">
+      <vg-controls vg-autohide="config.autoHide">
         <vg-play-pause-button vg-play-icon="config.theme.playIcon" vg-pause-icon="config.theme.pauseIcon"></vg-play-pause-button>
         <vg-timeDisplay>{{ currentTime }}</vg-timeDisplay>
         <vg-scrubBar>
@@ -51,3 +117,172 @@
 
 </div><!-- / Container -->
   <!-- /播放区域 -->
+              </div>
+            <!-- 笔记模块 -->
+            <div class="notewrap m-noteArea f-pa f-cb" id="j-noteArea">
+                <ul class="note-tabs f-pr">
+                    <a class="f-ib j-tab cur" data-offset="40" data-tag="0">我的笔记</a>
+                    <a class="f-ib j-tab" data-offset="132" data-tag="1">最优笔记</a>
+                    <a class="f-ib j-tab" data-offset="223" data-tag="2">最新笔记</a>
+                    <div class="line"></div>
+                    <div class="curBar f-pa" style="left: 40px;"></div>
+                </ul>
+                <div class="notesBox f-pa">
+                    <ul class="noteLst"><li class="noteItem f-pr" id="177230"></ul>
+                    <div class="getMore" style="display: none;">查看更多</div>
+                </div>
+                <div class="nonLogin j-beforelogin">
+                    <div class="bigTxt">登录后才能查看我的笔记</div>
+                    <div class="fourBtn j-loginBtn">立即登录</div>
+                </div>
+                <div class="noneNote">
+                    <div class="bigTxt">暂时没有笔记!</div>
+                    <div class="fourBtn">添加笔记</div>
+                </div>
+                <div class="notesEditArea f-pa" id="j-notesEditBox">
+                    <div class="noteBottomBg f-pa"></div>
+                    <div class="notesEditBox">
+                        <div class="anchorTime j-atime"></div>
+                        <div class="defaultTxtBg j-txtbg f-pr">
+                          <div class="f-c6 f-icon defaultTxt j-phold">
+                            <span></span><span>添加笔记</span>
+                          </div>
+                          <div class="j-txt txt">
+                            <textarea name="" id="j-txtarea" class="ta"></textarea>
+                          </div>
+                        </div>
+                        <div class="editOpr f-cb">
+                            <div class="privacy f-ib f-fl">
+                                <input id="privacyCB" name="privacyCB" type="checkbox" class="u-tbi" checked="checked">
+                                <label for="privacyCB" class="u-tbl f-pr">公开笔记</label>
+                            </div>
+                            <div class="editbtns f-ib f-fr">
+                                <a class="cancelBtn">取消</a>
+                                <a class="saveBtn f-ib">保存</a>
+                            </div>
+                            <div class="editFeedback f-ib f-fr"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="delConfirm">
+                    <fieldset>
+                        <div class="delCfmTxt">确定删除笔记？</div>
+                        <div class="delBtns">
+                            <a class="delConfirmBtn f-ib">确定</a>
+                            <a class="delCancel">取消</a>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class='subConfirm hide'>
+                  <div class='txt'>即将播放下一集，</br>请您保存当前的笔记哦！</div>
+                  <div class='btns'>
+                    <a class='cfbtn f-ib'>确定</a>
+                  </div>
+                </div>
+                <div class="m-commun">
+                  <form id="addNoteForm" target="addNoteResult" method="post">
+                      <input type="hidden" name="ursid" value="cn.ronger@yahoo.com.cn">
+                      <input type="hidden" name="mid" value="testmid">
+                      <input type="hidden" name="time" value="1111">
+                      <input type="hidden" name="content" value="1111">
+                      <input type="hidden" name="isOpen">
+                  </form>
+                  <form id="editNoteForm" target="editNoteResult" method="post">
+                      <input type="hidden" name="ursid" value="cn.ronger@yahoo.com.cn">
+                      <input type="hidden" name="noteid" value="1111">
+                      <input type="hidden" name="content" value="1111">
+                      <input type="hidden" name="isOpen">
+                  </form>
+                  <form id="deleteNoteForm" target="delNoteResult" method="post">
+                      <input type="hidden" name="ursid" value="cn.ronger@yahoo.com.cn">
+                      <input type="hidden" name="noteid" value="1111">
+                  </form>
+                  <form id="digNoteForm" target="digNoteResult" method="post">
+                      <input type="hidden" name="noteid" value="111">
+                  </form>
+                  <form id="getMyNoteForm" target="getMyNoteResult" method="post">
+                      <input type="hidden" name="ursid" value="cn.ronger@yahoo.com.cn">
+                      <input type="hidden" name="mid" value="testmid">
+                  </form>
+                  <form id="getBestNoteForm" target="getBestNoteResult" method="post" action="http://so.open.163.com/note/getBestNotes.do">
+                      <input type="hidden" name="ursid" value="">
+                      <input type="hidden" name="mid" value="M9CHUQT1D">
+                      <input type="hidden" name="pageNo" value="1">
+                  </form>
+                  <form id="getRecentNoteForm" target="getRecentNoteResult" method="post" action="http://so.open.163.com/note/getRecentNotes.do">
+                      <input type="hidden" name="ursid" value="">
+                      <input type="hidden" name="mid" value="M9CHUQT1D">
+                      <input type="hidden" name="pageNo" value="1">
+                  </form>
+                  <div class="noteAjaxresult">
+                      <iframe name="addNoteResult" style="display:block;height:0px;"></iframe>
+                      <iframe name="delNoteResult" style="display:block;height:0px;"></iframe>
+                      <iframe name="editNoteResult" style="display:block;height:0px;"></iframe>
+                      <iframe name="digNoteResult" style="display:block;height:0px;"></iframe>
+                      <iframe name="getMyNoteResult" style="display:block;height:0px;"></iframe>
+                      <iframe name="getBestNoteResult" style="display:block;height:0px;"></iframe>
+                      <iframe name="getRecentNoteResult" style="display:block;height:0px;"></iframe>
+                  </div>
+                </div>
+            </div>
+            <!-- 关闭笔记按钮 -->
+            <a   class="f-pa hidebtn" id="j-close-note-btn"></a>
+        </div>
+      </div>
+  </div>
+  <!-- /播放区域 -->
+  <!-- 播放列表 -->
+  <div class="m-plist f-pr" id="j-playlist-wrap">
+      <div class="g-container clear f-pr">
+          <a class="btn next f-fr f-icon"   id="j-playlist-nextbtn"></a>
+          <a class="btn pre f-fl f-icon"   id="j-playlist-prebtn"></a>
+          
+          <div class="u-itrobox f-pa j-downitem" id="j-movieintro-box">
+              <em class="f-c3">简介：</em>
+              <span class="j-introtxt">
+              </span>
+          </div>    
+          <div class="u-cor f-pa"></div>
+          <div class="f-fl u-switch listwrap" id="j-playlist-container">
+              <div class="listrow clear">
+                                                  <div class="item f-pr j-hoverdown" ng-repeat="video in catVideos">
+                      <a target="_self" href="/video/{{video._id}}">
+                        <div class="mask f-pa"></div>
+                        <img src="{{video.face}}">
+                      </a>
+                      <p class="f-thide">
+                          <span class="f-c9">[第{{$index}}课]</span>
+                          <a class="f-c6" target="_self" href="/video/{{video._id}}">{{video.title}}</a>
+                      </p> 
+                      <p class="j-introtxt hide">{{video.description}}</p>             
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <!-- /播放列表 -->
+ 
+  <!-- 边栏 -->
+  <div class="m-sidebar">
+    <div class="btn-group">
+      <a class="btn fbBtn" href="http://v.163.com/special/openadvice/" target="_blank" title="我要反馈"></a>
+      <a class="btn scrollBtn" id="j-scrollBtn" title="回到顶部"></a>
+    </div>
+  </div>
+  <!-- /边栏 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
