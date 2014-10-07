@@ -1,128 +1,740 @@
-<!doctype html>
-<html class="n-home js">
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
 <head>
-    <meta charset="utf-8">
-    <meta name="renderer" content="webkit">
-    <title>钱路书院</title>
-    <link rel="stylesheet" href="/css/style.css"/>       
-    <meta name="keywords" content="教育">
-    <meta name="description" content="教育">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="images/icon.png">
+<title>{{site.title}}</title>
+<!-- Bootstrap -->
+<link href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="http://cdn.bootcss.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+
+<!--[if !IE]> -->
+<script type="text/javascript">
+window.jQuery || document.write("<script src='http://cdn.bootcss.com/jquery/2.1.1/jquery.min.js'>"+"<"+"/script>");
+</script>
+<!-- <![endif]-->
+<!--[if IE]>
+<script type="text/javascript">
+window.jQuery || document.write("<script src='http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+
 </head>
-<body ng-app="app">
+<body ng-controller="AppCtl" scrollOffTop class="{{bodycss}}">
 
+<div ui-view></div>
 
-    <section ui-view></section>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://cdn.bootcss.com/lodash.js/2.4.1/lodash.min.js"></script>
+<script src="http://cdn.bootcss.com/angular.js/1.2.16/angular.min.js"></script>
+<script src="http://cdn.bootcss.com/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>
+<script src="/js/ng-video.min.js"></script>
+<script src="/js/mqttws31.js"></script>
 
+<script type="text/javascript">
+'use strict';
+angular.module("app",["ui.router","ngVideo"])
+.factory('$transition', ['$q', '$timeout', '$rootScope', function($q, $timeout, $rootScope) {
+	var $transition = function(element, trigger, options) {
+		options = options || {};
+		var deferred = $q.defer();
+		var endEventName = $transition[options.animation ? 'animationEndEventName' : 'transitionEndEventName'];
+		var transitionEndHandler = function(event) {
+			$rootScope.$apply(function() {
+				element.unbind(endEventName, transitionEndHandler);
+				deferred.resolve(element);
+			});
+		};
+		if (endEventName) {
+			element.bind(endEventName, transitionEndHandler);
+		}
 
-    <!-- 所有页面通用footer -->
-    <div class="m-footer">
-        <div class="g-container clear">
-          <p class="links">
-            <a href="#/">About US</a><span>-</span>
-            <a href="#/">联系方式</a><span>-</span>
-          </p>
-          <p class="cr">
-            钱路书院视频适用于《中华人民共和国著作权法》<br/>
-            未经书面允许，请勿转播<br/>
-          </p>
-          <div><h1>专注传播世上赚钱策略(钱路)</h1></div>
-        </div>
-    </div>
-    <!-- 所有页面通用footer end -->
-
-    <script src="http://cdn.bootcss.com/lodash.js/2.4.1/lodash.min.js"></script>
-    <script src="http://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
-    <script src="http://cdn.bootcss.com/angular.js/1.2.16/angular.min.js"></script>
-    <script src="http://cdn.bootcss.com/angular.js/1.2.16/angular-animate.min.js"></script>
-    <script src="http://cdn.bootcss.com/angular.js/1.2.16/angular-sanitize.min.js"></script>
-    <script src="http://cdn.bootcss.com/angular.js/1.2.16/angular-resource.min.js"></script>
-
-    <script src="http://cdn.bootcss.com/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>
-
-<script src="js/videogular/videogular.js" type="text/javascript"></script>
-<script src="js/videogular/plugins/controls.js" type="text/javascript"></script>
-<script src="js/videogular/plugins/overlay-play.js" type="text/javascript"></script>
-<script src="js/videogular/plugins/buffering.js" type="text/javascript"></script>
-<script src="js/videogular/plugins/poster.js" type="text/javascript"></script>
-
-	<script type="text/javascript">
-		'use strict';
-		angular.module("app",["ui.router",
-			"com.2fdevs.videogular",
-			  "com.2fdevs.videogular.plugins.controls",
-			  "com.2fdevs.videogular.plugins.overlayplay",
-			  "com.2fdevs.videogular.plugins.buffering",
-			  "com.2fdevs.videogular.plugins.poster"
-		])
-		.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
-			$urlRouterProvider.otherwise("/");
-			$stateProvider
-				.state("cat", {url:'/cat/:id', templateUrl: 'tpl/cat',controller:'CatCtl'})
-				.state("video", {url:'/video/:id', templateUrl: 'tpl/video',controller:'VideoCtl'})
-				.state("home", {url:'/', templateUrl: 'tpl/home',controller:'HomeCtl'})
-		}])
-		.controller("HomeCtl",["$scope","$rootScope",function($scope,$rootScope){
-		}])
-		.controller("CatCtl",["$scope","$rootScope","$stateParams","$window",function($scope,$rootScope,$stateParams,$window){
-			$scope.catIndex = $window._.findIndex($rootScope.cats, function(cat){return cat.key == $stateParams.id;});
-			$scope.catVideos = $window._.filter($rootScope.videos, function(video){return video.cats.indexOf($stateParams.id) > -1;});
-		}])
-		.controller("VideoCtl",["$scope","$stateParams","$sce", function($scope,$stateParams,$sce){
-		    $scope.vname = $stateParams.id || '';
-		 
-		    $scope.stretchModes = [
-		      {label: "None", value: "none"},
-		      {label: "Fit", value: "fit"},
-		      {label: "Fill", value: "fill"}
-		    ];
-
-		    $scope.config = {
-		      width: 740,
-		      height: 380,
-		      autoHide: false,
-		      autoPlay: false,
-		      responsive: true,
-		      stretch: $scope.stretchModes[1],
-		      theme: {
-		        url: "/css/videogular.css",
-		        playIcon: "&#xe000;",
-		        pauseIcon: "&#xe001;",
-		        volumeLevel3Icon: "&#xe002;",
-		        volumeLevel2Icon: "&#xe003;",
-		        volumeLevel1Icon: "&#xe004;",
-		        volumeLevel0Icon: "&#xe005;",
-		        muteIcon: "&#xe006;",
-		        enterFullScreenIcon: "&#xe007;",
-		        exitFullScreenIcon: "&#xe008;"
-		      },
-		     plugins: {
-		        poster: {
-		          url: "/img/videogular.png"
-		        }
-		      }
-		    };
-		}])
-		.run(['$rootScope', '$location', '$window', '$http', function ($rootScope, $location, $window, $http) {
-			$rootScope.token = $window.sessionStorage.token;
-			if($rootScope.token){
-				$http.get('/api/me',{token:$rootScope.token}).success(function(data){
-					if(!data.error){
-						
-						$rootScope.user = data;
-					}
-				})
+		$timeout(function() {
+			if ( angular.isString(trigger) ) {
+				element.addClass(trigger);
+			} else if ( angular.isFunction(trigger) ) {
+				trigger(element);
+			} else if ( angular.isObject(trigger) ) {
+				element.css(trigger);
 			}
-			$http.get('/api/site?attachments=slides,cats,videos').success(function(data){
-    				$rootScope.site = data.site;
-    				$rootScope.slides = data.slides;
-    				$rootScope.cats = data.cats;
-    				$rootScope.videos = data.videos;
-    				console.log($rootScope.videos);
-    			});			
-		}]);
-		
+			if ( !endEventName ) {
+				deferred.resolve(element);
+			}
+		});
+		deferred.promise.cancel = function() {
+			if ( endEventName ) {
+				element.unbind(endEventName, transitionEndHandler);
+			}
+			deferred.reject('Transition cancelled');
+		};
+		return deferred.promise;
+	};
 
-	</script>
+	var transElement = document.createElement('trans');
+	var transitionEndEventNames = {
+		'WebkitTransition': 'webkitTransitionEnd',
+		'MozTransition': 'transitionend',
+		'OTransition': 'oTransitionEnd',
+		'transition': 'transitionend'
+	};
+	var animationEndEventNames = {
+		'WebkitTransition': 'webkitAnimationEnd',
+		'MozTransition': 'animationend',
+		'OTransition': 'oAnimationEnd',
+		'transition': 'animationend'
+	};
+	function findEndEventName(endEventNames) {
+		for (var name in endEventNames){
+			if (transElement.style[name] !== undefined) {
+				return endEventNames[name];
+			}
+		}
+	}
+	$transition.transitionEndEventName = findEndEventName(transitionEndEventNames);
+	$transition.animationEndEventName = findEndEventName(animationEndEventNames);
+	return $transition;
+}])
+.factory('authInterceptor', ["$rootScope", "$q", "$window", function ($rootScope, $q, $window) {
+	return {
+		request: function (config) {
+			config.headers = config.headers || {};
+			if ($window.sessionStorage.token) {
+				config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token;
+			}
+			return config;
+		},
+		response: function (response) {
+			if (response.status === 401) {
+				// handle the case where the user is not authenticated
+			}
+			return response || $q.when(response);
+		}
+	};
+}])
+.factory('Socket', ["$rootScope", "$window", function($rootScope) {
+	var service = {}, client = {};
+	service.connect = function(host, port, mobile, token) {
+		console.log("Try to connect to MQTT Broker " + host);
+		client = mqtt.createClient(parseInt(port),host,{clientId:mobile, token:token});
+		client.subscribe(mobile); 
+
+		client.on('error', function(err) {
+			console.log('error!', err);
+			client.stream.end();
+		});
+
+		client.on('message', function (topic, message) {
+			service.callback(topic,message);
+		});
+	}
+
+	service.publish = function(topic, payload) {
+		client.publish(topic,payload, {retain: true});
+		console.log('publish-Event sent '+ payload + ' with topic: ' + topic + ' ' + client);
+	}
+
+	service.onMessage = function(callback) {
+		service.callback = callback;
+	}
+	return service;
+}])
+.filter("filterSubByKey", ["$window",function($window) {
+	return function(items, pkey) {
+		if(pkey == ""){
+			return $window._.filter(items, function(item){ return item.key.length == 2; });
+		}else{
+			var regex = new RegExp("^" + pkey +"\\d{2}$", "g");
+			console.log(regex);
+			return $window._.filter(items, function(item){ return regex.test(item.key); });
+		}
+	};
+}])
+.filter("filterByCat", ["$window",function($window) {
+	return function(items, cat) {
+		if(cat == ""){
+			return items;
+		}else{
+			return $window._.filter(items, function(item){ return $window._.contains(item.cats, cat); });
+		}
+	};
+}])
+.filter("filterGetValByKey", ["$window",function($window) {
+	return function(item, lst, key, value) {
+		var clct = $window._.find(lst, function(th){ return th[key] == item;});
+		return clct[value];
+	};
+}])
+.filter("filterNestspace",function(){
+	return function(item){
+		return item.substr(2).replace(/\d/g,"--");
+	}
+})
+.filter("filterNestcolor",function(){
+	return function(item){
+		var len = item.length;
+		if(len == 2){return "info";
+		}else if(len == 4){ return "warning";
+		} else { return "";}
+	}
+})
+.directive("collapseNav",["$window",function($window){
+	return{
+		restrict:"A",
+		link:function(scope,ele){
+			var $aRest,$lists;
+			$lists=ele.find("ul").parent("li"),
+			$aRest=ele.children("li").not($lists).children("a"),
+			ele.find("ul").parent("li").children("a").on("click",function(event){
+				var $li=$(this).parent("li");
+				var $li_left = $li.parent("ul").children("li").not($li);
+				$li.find("ul").slideToggle();
+				$li.toggleClass("active");
+				$li.toggleClass("open");
+				$li_left.find("ul").slideUp();
+				$li_left.removeClass("active");
+				$li_left.removeClass("open");
+				event.preventDefault();
+			});
+			ele.find("ul").children("li").children("a").on("click",function(event){
+				var $li=$(this).parent("li");
+				var $li_left = $li.parent("ul").children("li").not($li);
+				$li.addClass("active");
+				$li_left.removeClass("active");
+			});
+			$aRest.on("click",function(){
+				var $parent=$(this).parent("li");
+				$parent.addClass("active");
+				$lists.removeClass("active").find("ul").slideUp();
+			});
+		},
+	};
+}])
+.directive("slideFluid",["$window","$timeout",function($window,$timeout){
+	return{
+		restrict:"A",
+		link:function(scope,ele){
+			var currentIndex = scope.currentIndex = -1;
+			var destroyed = scope.destroyed = false;
+			var currentTimeout = scope.currentTimeout = null;
+			var isPlaying = scope.isPlaying = true;
+			scope.select = function(idx) {
+				if (currentIndex !== idx && !destroyed) {
+					var $lists=ele.find(".g-wrap").children(".imgItem");
+					var $lists_nav = ele.find(".slwrap").children(".item");
+					$lists_nav.on("mouseenter",function(event){
+						scope.isPlaying = false;
+						scope.select($(this).index());
+					});
+					$lists_nav.on("mouseleave",function(event){
+						scope.isPlaying = true;
+						scope.select($(this).index()+1);
+					});
+					currentIndex = idx >= $lists.length ? idx - $lists.length : idx;
+					var $cur = $($lists.get(currentIndex));
+					var $cur_nav = $($lists_nav.get(currentIndex));
+					$cur.addClass("selected");
+					$lists.not($cur).removeClass("selected");
+					$cur_nav.addClass("itempos");
+					$lists_nav.not($cur_nav).removeClass("itempos");
+					resetTimer();
+					var interval = +3000;
+					if (!isNaN(interval) && interval>=0) { 
+						currentTimeout = $timeout(function(){
+							if (isPlaying) { 
+								scope.select(currentIndex + 1);
+							} else if (!scope.noPause) { 
+								isPlaying = false; 
+								resetTimer(); 
+							} 
+						}, interval);  
+					}
+				}
+			};
+			scope.$on('$destroy', function () {
+				destroyed = true;
+				resetTimer();
+			});
+			function resetTimer() {
+				if (currentTimeout) { 
+					$timeout.cancel(currentTimeout); 
+					currentTimeout = null; 
+				}
+			}
+			scope.select(0);
+		},
+	};
+}])
+.directive("bsToggle",["$window",function($window){
+	return{
+		restrict:"A",
+		link:function(scope,ele){
+			var $btn=ele.find(".dropdown-toggle");
+			$btn.on("click", function(event){
+				$(this).parent(".btn-group").toggleClass("open");
+				event.preventDefault();
+			});
+			ele.find("ul").children("li").children("a").on("click", function(event){
+				$(this).parent(".btn-group").toggleClass("open");
+			});
+		},
+	};
+}])
+.directive("bsTab",["$window",function($window){
+	return{
+		restrict:"A",
+		link:function(scope,ele){
+			var $lists=ele.find("ul.nav-tabs").children("li");
+			$lists.children("a").on("click", function(event){
+				var $li=$(this).parent("li");
+				var $li_left = $li.parent("ul").children("li").not($li);
+				var $pnl = $(ele.find(".tab-pane").get($li.index()));
+				var $pnl_left = ele.find(".tab-pane").not($pnl);
+				$pnl.addClass("active");
+				$pnl_left.removeClass("active");
+				$li_left.removeClass("active");
+				$li.addClass("active");
+				event.preventDefault();
+			});
+		},
+	};
+}])
+.directive("bsCollapse",["$window",function($window){
+	return{
+		restrict:"A",
+		link:function(scope,ele){
+			var $lists=ele.find("a.nav-tabs").children("li");
+			ele.find("a.collapse").on("click", function(event){
+				var $i=$(this).children("i");
+				if($i.hasClass("icon-chevron-up")){
+					$(this).html('<i class="icon-chevron-down"></i>');
+				}else{
+					$(this).html('<i class="icon-chevron-up"></i>');
+				}
+				var $pnl = $(ele.find(".collapse-pane").get($(this).index()));
+				$pnl.toggle();
+				event.preventDefault();
+			});
+		},
+	};
+}])
+.directive('scrollOffTop', ["$rootScope",function($rootScope) {
+	return function(scope, elm, attr) {
+		var raw = elm[0];
+		elm.bind('scroll', function() {
+			if (raw.scrollTop >= 310) {
+				scope.$apply(function(){
+					if($rootScope.toState.substr(0,3) == 'job'){
+						$rootScope.showJobNav = true;
+						console.log("$rootScope.showJobNav = true;");
+						return;
+					}
+				});
+			}
+			$rootScope.showJobNav = false;
+		});
+	}
+}])
+.directive('scrollToBottom', function() {
+    return function(scope, elm, attr) {
+        var raw = elm[0];
+        elm.bind('scroll', function() {
+            if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+                scope.$apply(attr.scrollToBottom);
+            }
+        });
+    };
+})
+.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($stateProvider, $urlRouterProvider, $httpProvider) {
+	$urlRouterProvider.otherwise("/");
+	$stateProvider
+		.state("f", {abstract: true, templateUrl: 'tpl/f/layout', controller:"FCtl"})
+		.state("f.home", {url:'/',  templateUrl: 'tpl/f/home', controller:"FHomeCtl"})
+		.state("f.cat", {url:'/cat/:id', templateUrl: 'tpl/f/cat',controller:'FCatCtl'})
+		.state("f.video", {url:'/video/:id', templateUrl: 'tpl/f/video',controller:'FVideoCtl'})
+		.state("s", {abstract:true, url:'/s',  templateUrl: 'tpl/s/layout', controller:"SignCtl"})
+		.state("s.signin", {url:'/signin',  templateUrl: 'tpl/s/signin', controller:"SignCtl"})
+		.state("s.signup", {url:'/signup',  templateUrl: 'tpl/s/signup', controller:"SignCtl"})
+		.state("s.forgot", {url:'/forgot',  templateUrl: 'tpl/s/forgot', controller:"SignCtl"})
+		.state("b", {abstract:true, url:'/b',  templateUrl: 'tpl/b/layout', controller:"BCtl"})
+		.state("b.home", {url:'/home',  templateUrl: 'tpl/b/home', controller:"BHomeCtl"})
+		.state("b.faq", {abstract:true, url:'/faq',  templateUrl: 'tpl/b/faq', controller:"BFaqCtl"})
+		.state("b.faq.home", {url:'/home',  templateUrl: 'tpl/b/faq.home', controller:"BFaqCtl"})
+		.state("b.faq.ask", {url:'/ask',  templateUrl: 'tpl/b/faq.ask', controller:"BFaqCtl"})
+		.state("b.faq.answer", {url:'/answer',  templateUrl: 'tpl/b/faq.answer', controller:"BFaqCtl"})
+		.state("b.account", {url:'/account',  templateUrl: 'tpl/b/account', controller:"BAccountCtl"})
+		.state("b.profile", {url:'/profile',  templateUrl: 'tpl/b/profile', controller:"BProfileCtl"})
+		.state("b.uppwd", {url:'/uppwd',  templateUrl: 'tpl/b/uppwd', controller:"BUppwdCtl"})
+		.state("b.getvip", {url:'/getvip',  templateUrl: 'tpl/b/getvip', controller:"BGetvipCtl"})
+		.state("b.buyvip", {url:'/buyvip',  templateUrl: 'tpl/b/buyvip', controller:"BBuyvipCtl"})
+		.state("b.gcode", {url:'/gcode',  templateUrl: 'tpl/b/gcode', controller:"BGcodeCtl"})
+		.state("b.data", {abstract:true, url:'/data',  templateUrl: 'tpl/b/data', controller:"BDataCtl"})
+		.state("b.data.finance", {url:'/finance',  templateUrl: 'tpl/b/data.finance', controller:"BDataCtl"})
+		.state("b.data.member", {url:'/member',  templateUrl: 'tpl/b/data.member', controller:"BDataCtl"})
+		.state("b.data.promotion", {url:'/promotion',  templateUrl: 'tpl/b/data.promotion', controller:"BDataCtl"})
+		.state("b.site", {abstract:true, url:'/site',  templateUrl: 'tpl/b/site', controller:"BSiteCtl"})
+		.state("b.site.home", {url:'/home',  templateUrl: 'tpl/b/site.home', controller:"BSiteCtl"})
+		.state("b.site.cat", {url:'/cat',  templateUrl: 'tpl/b/site.cat', controller:"BSiteCtl"})
+		.state("b.site.video", {url:'/video',  templateUrl: 'tpl/b/site.video', controller:"BSiteCtl"})
+		.state("b.site.d3", {url:'/d3',  templateUrl: 'tpl/b/site.d3', controller:"BSiteCtl"})
+	$httpProvider.interceptors.push('authInterceptor');
+}])
+.controller("AppCtl",["$state", function($state){
+	$state.transitionTo('f.home');
+}])
+.controller("FCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
+}])
+.controller("FHomeCtl",["$scope","$rootScope","$http","$window","$timeout", function($scope,$rootScope,$http,$window,$timeout){
+	var slides = $rootScope.slides, currentTimeout, isPlaying=true, destroyed = false;
+	var currentIndex = $scope.currentIndex = -1;
+
+	$scope.select = function(idx) {
+		if (currentIndex !== idx && !destroyed) {
+			currentIndex = idx;
+			resetTimer();
+			var interval = +3000;
+			if (!isNaN(interval) && interval>=0) { 
+				currentTimeout = $timeout(function(){
+					if (isPlaying) { 
+						console.log("here");
+						var newIndex = (currentIndex + 1) % $rootScope.slides.length;
+						$scope.select(newIndex);
+					} else if (!$scope.noPause) { 
+						console.log("here2");
+						isPlaying = false; 
+						resetTimer(); 
+					} 
+				}, 1000);  
+			}
+		}
+	};
+	$scope.$on('$destroy', function () {
+		destroyed = true;
+		resetTimer();
+	});
+	function resetTimer() {
+		if (currentTimeout) { 
+			$timeout.cancel(currentTimeout); 
+			currentTimeout = null; 
+		}
+	}
+	$scope.select(0);
+}])
+.controller("FCatCtl",["$scope","$rootScope","$stateParams","$window",function($scope,$rootScope,$stateParams,$window){
+	$scope.catIndex = $window._.findIndex($rootScope.cats, function(cat){return cat.key == $stateParams.id;});
+	$scope.catVideos = $window._.filter($rootScope.videos, function(video){return video.cats.indexOf($stateParams.id) > -1;});
+}])
+.controller("FVideoCtl",["$scope","$rootScope","$stateParams","$window","$timeout", "video", function($scope,$rootScope,$stateParams,$window,$timeout,$video){
+	$scope.videos = {};
+	$scope.videos[$stateParams.id] = $window._.find($rootScope.videos,{_id: $stateParams.id}).url;
+	$video.addSource('mp4', $scope.videos[$stateParams.id]);
+	console.log($video);
+	$scope.playlistOpen = false;
+	$scope.playVideo = function playVideo(sourceUrl) {
+		$video.addSource('mp4', sourceUrl, true);
+	};
+	$scope.getVideoName = function getVideoName(videoModel) {
+		var item = $window._.find($rootScope.videos,{_id: videoModel.src});
+		var result = item ? item.title : "未知文件！";
+	};
+}])
+.controller("SignCtl",["$scope","$rootScope","$http","$window","$state", function($scope,$rootScope,$http,$window,$state){
+	if($rootScope.user){$state.go("b.home");}
+	$scope._id="";
+	$scope.username="";
+	$scope.password="";
+	$scope.sms="";
+	$scope.smsCaption="发送验证码";
+	$scope.smsDisable = false;
+	$scope.interval = 60;
+	$scope.rememberme = false;
+	$scope.activeBox = "signup-box";
+	$scope.show_box = function(box){
+		$scope.activeBox = box;
+	};
+	function leftCount(){
+		$scope.interval--;
+		if($scope.interval < 0){
+			$scope.smsCaption = "发送验证码";
+			$scope.smsDisable = false;
+		}else{
+			$scope.smsCaption = $scope.interval + " 秒后再次发送";
+			$scope.smsDisable = true;
+			$timeout(leftCount, 1000);
+		}
+	}
+	$scope.sendSms = function(){
+		//这里调用sms发送验证码
+		$http.post('/api/signsms',{_id:$scope._id, org:'钱路书院'}).success(function(data){
+			//这里设定倒计时
+			$scope.interval = 6;
+			leftCount();	
+		})
+	};
+	$scope.signup = function(){
+		$http.post('/api/signup',{_id:$scope._id, username:$scope.username, sms:$scope.sms, password:$scope.password}).success(function(data){
+			console.log(data);
+			if(data.error){
+				$scope.msg = data.error;
+			}else{
+				$rootScope.user = data.user;
+				$window.sessionStorage.token = data.token;
+				$window.sessionStorage.user = JSON.stringify(data.user);
+				$state.go("b.home");
+			}
+		})
+	};
+	$scope.signin = function(){
+		$http.post('/api/signin',{username:$scope.username, password:$scope.password}).success(function(data){
+			console.log(data);
+			if(data.error){
+				$scope.msg = data.error;
+			}else{
+				$rootScope.user = data.user;
+				var storage = $scope.rememberme ? $window.localStorage : $window.sessionStorage;
+				storage.token = data.token;
+				storage.user = JSON.stringify(data.user);
+				$state.go('b.home');
+			}
+		})
+	}
+	$scope.forget = function(){
+		$http.forget('/api/forget',{username:$scope.username, password:$scope.password}).success(function(data){
+			console.log(data);
+			if(data.error){
+				$scope.msg = data.error;
+			}else{
+				$window.sessionStorage.token = data.token;
+				$state.go('b.home');
+			}
+		})
+	}
+}])
+.controller("BCtl",["$scope", "$rootScope","$state", function($scope,$rootScope,$state){
+	if(!$rootScope.user){$state.go("f.sign");}
+	$scope.summary = {
+		orders_count_latest: 0,
+		orders_money_latest: 0,
+		orders_count_top: 0,
+		orders_money_top: 0,
+		waybills_count_latest: 0,
+		waybills_count_top: 0,
+		waybills_count_get: 0,
+		waybills_progress_get: 0,
+		waybills_isincrease_get: false,
+		waybills_count_carry: 0,
+		waybills_progress_carry: 0,
+		waybills_isincrease_carry: false,
+		waybills_count_warehouse: 0,
+		waybills_progress_warehouse: 0,
+		waybills_isincrease_warehouse: false,
+		waybills_count_finance: 0,
+		waybills_rate_well:100,
+	};
+	$scope.customer_derivatives = [
+		{org_name:"客户1", slope: 0.34, derivative:-0.23, suggest:"深入整合"},
+		{org_name:"客户1", slope: 0.34, derivative:-0.23, suggest:"深入整合"},
+		{org_name:"客户1", slope: 0.34, derivative:-0.23, suggest:"深入整合"},
+		{org_name:"客户1", slope: 0.34, derivative:-0.23, suggest:"深入整合"},
+		{org_name:"客户1", slope: 0.34, derivative:-0.23, suggest:"深入整合"},
+	];
+	$scope.tasks = [
+		{title:"飞利浦 上海发武汉 30吨棉花 需报价！", progress: 30, },
+		{title:"飞利浦 上海发武汉 30吨棉花 需报价！", progress: 30, },
+		{title:"飞利浦 上海发武汉 30吨棉花 需报价！", progress: 30, },
+		{title:"飞利浦 上海发武汉 30吨棉花 需报价！", progress: 30, },
+	];
+	$scope.alerts = [
+		{color:"pink", icon:"comment", title:"您的订单处理已超时！", num:"3"},
+		{color:"pink", icon:"comment", title:"您的订单处理已超时！", num:"3"},
+		{color:"pink", icon:"comment", title:"您的订单处理已超时！", num:"3"},
+		{color:"pink", icon:"comment", title:"您的订单处理已超时！", num:"3"},
+	];
+	$scope.msgs = [
+		{from:{username:"叶辛", avatar:"assets/avatars/avatar.png"}, title:"帮我找几个9米6的车跑洛阳的！", create_at: Date.now()},
+		{from:{username:"叶辛", avatar:"assets/avatars/avatar.png"}, title:"帮我找几个9米6的车跑洛阳的！", create_at: Date.now()},
+		{from:{username:"叶辛", avatar:"assets/avatars/avatar.png"}, title:"帮我找几个9米6的车跑洛阳的！", create_at: Date.now()},
+	];
+	$scope.custs = [
+		{name: "上海邻客物流有限公司", contact:"刘德华", tel:"13041666292", area:"江苏 南京 浦口区", addr:"化工大道501弄14号"},
+		{name: "上海邻客物流有限公司", contact:"刘德华", tel:"13041666292", area:"江苏 南京 浦口区", addr:"化工大道501弄14号"},
+		{name: "上海邻客物流有限公司", contact:"刘德华", tel:"13041666292", area:"江苏 南京 浦口区", addr:"化工大道501弄14号"},
+		{name: "上海邻客物流有限公司", contact:"刘德华", tel:"13041666292", area:"江苏 南京 浦口区", addr:"化工大道501弄14号"},
+		{name: "上海邻客物流有限公司", contact:"刘德华", tel:"13041666292", area:"江苏 南京 浦口区", addr:"化工大道501弄14号"},
+		{name: "上海邻客物流有限公司", contact:"刘德华", tel:"13041666292", area:"江苏 南京 浦口区", addr:"化工大道501弄14号"},
+	];
+	//Socket.connect(host,port,data._id,$rootScope.token);
+}])
+.controller("BHomeCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+}])
+.controller("BFaqCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+}])
+.controller("BAccountCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+}])
+.controller("BProfileCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+}])
+.controller("BUppwdCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+}])
+.controller("BGetvipCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+}])
+.controller("BBuyvipCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+}])
+.controller("BGcodeCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+}])
+.controller("BDataCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+}])
+.controller("BSiteCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
+	$scope.selCatType = function(t){
+		$scope.curCatType = t;
+		if(t == "video"){$scope.curCatTypeCaption = "视频"}
+		else if(t == "article"){$scope.curCatTypeCaption = "文章"}	
+		console.log(t);
+	}
+	$scope.selCatType('video');
+	$scope.addSubCat = function(cat){
+		var newKey = "", pkey = cat ? cat.key : "";
+		var regex = new RegExp("^" + pkey + "\\d{2}$","g");
+		var sublst = $window._.filter($rootScope.cats, function(item){  return regex.test(item.key); });
+		if(sublst.length > 0){
+			var subkeylst =$window._.pluck(sublst, "key");
+			var newKey = (Number("1" + $window._.max(subkeylst)) + 1).toString().substr(1);
+		}else{
+			newKey = pkey + "01";
+		}
+		console.log(newKey);
+		var curCat = {
+			hostname:$rootScope.site._id,
+			type:$scope.curCatType, 
+			key:newKey,
+			title:"",
+			face:"/img/" + newKey + ".jpg",
+			priority: 50,
+			description:"",
+			isNew:true,
+		};
+		$scope.curCatTip = cat ? "作为 [" + cat.title + "] 的子类" : "作为顶级分类";
+		$scope.editCat(curCat);
+	}
+	$scope.editCat = function(cat){
+		$scope.curCat = cat;
+		console.log("cat");
+		$scope.curVideoList = $window._.filter($rootScope.videos, function(item){ return $window._.indexOf(item.cats, cat.key) > -1; });
+		console.log($scope.curVideoList);
+		$scope.newVideo();
+	}
+	$scope.saveCat = function(){
+		if($scope.curCat.isNew){
+			delete $scope.curCat.isNew;
+			$rootScope.cats.push($scope.curCat);
+		}
+		$http.post("/api/cat", $scope.curCat).success(function(){
+			$scope.msg = "分类信息 " + $scope.curCat.title + "已保存";
+		});
+	}
+	$scope.delCat = function(){
+		if($scope.curCat.isNew){
+			$scope.addSubCat();	
+			$scope.msg = "分类信息 " + $scope.curCat.title + "已保存";
+		}else{
+			var idx  = $window._.findIndex($rootScope.cats, function(item){ return item.key == $scope.curCat.key; });
+			$rootScope.cats.slice(idx);
+			$scope.selCatType($scope.curCatType);
+			$http.post("/api/cat/del", $scope.curCat).success(function(){
+				$scope.msg = "分类信息 " + $scope.curCat.title + "已删除";
+				$scope.addSubCat();
+			});
+		}
+	}
+	$scope.newVideo = function(){
+		var curVideo = {
+			hostname:$rootScope.site._id,
+			title:"", 
+			url:"",
+			cats:[],
+			face: $scope.curCat && $scope.curCat.face,
+			visits: 50,
+			create_at: Date.now(),
+			description:"",
+		};
+		if($scope.curCat && $scope.curCat.type == "video"){
+			curVideo.cats.push($scope.curCat.key);
+			$scope.curVideoTip = "归类于 [" + $scope.curCat.title + "] ";
+		}else{
+			$scope.curVideoTip = "作为顶级分类";
+		}
+		$scope.editVideo(curVideo);
+	}
+	$scope.editVideo = function(video){
+		$scope.curVideo = video;
+	}
+	$scope.saveVideo = function(){
+		console.log($scope.curVideo);
+		$http.post("/api/video", $scope.curVideo).success(function(data){
+			$scope.msg = "视频信息 " + $scope.curVideo.title + " 已保存";
+			if(!$scope.curVideo._id){
+				console.log(data);
+				$rootScope.videos.push(data);
+			}
+		});
+	}
+	$scope.delVideo = function(){
+		if(!$scope.curVideo._id){
+			$scope.msg = "视频信息 " + $scope.curVideo.title + "已删除";
+			$scope.newVideo();	
+		}else{
+			var idx  = $window._.findIndex($rootScope.videos, function(item){ return item._id == $scope.curVideo._id; });
+			$rootScope.videos.slice(idx);
+			$http.post("/api/video/del", $scope.curVideo).success(function(){
+				$scope.msg = "视频信息 " + $scope.curVideo.title + "已删除";
+				$scope.newVideo();
+			});
+		}
+	}
+	$scope.addVideoCat = function(key){
+		$scope.curVideo.cats = $window._.union($scope.curVideo.cats, [key]);
+		$scope.saveVideo();
+	}
+	$scope.delVideoCat = function(key){
+		$scope.curVideo.cats = $window._.without($scope.curVideo.cats, key);
+		$scope.saveVideo();
+	}
+	$scope.addSubCat();
+}])
+.run(['$rootScope', '$location', '$window', '$http', function ($rootScope, $location, $window, $http) {
+	$rootScope.user = JSON.parse($window.sessionStorage.user || $window.localStorage.user || "{}");
+	$rootScope.signout = function () {
+		delete $rootScope.user;
+		delete $window.sessionStorage.token;
+		delete $window.sessionStorage.user;
+		delete $window.localStorage.token;
+		delete $window.localStorage.user;
+		$state.transitionTo('s.sign');
+	};
+	var cache =  JSON.parse($window.localStorage.cache || "{}");
+	angular.forEach(cache, function(value, key){
+		$rootScope[key] = value;			
+	});
+	$http.get("/api/site?attachments=slides,cats,videos").success(function(data){
+		angular.forEach(data, function(value, key){
+			$rootScope[key] = value;			
+		});
+		console.log("here");
+		console.log($rootScope.videos);
+		$window.localStorage.cache = JSON.stringify(data);
+	});
+	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+		$rootScope.toState = toState;
+		$rootScope.toParams = toParams;
+		$rootScope.fromState = fromState;
+		$rootScope.fromParams = fromParams;
+		$rootScope.bodycss = $rootScope.toState.name.substr(0,2) == 's.' ? "login-layout" : "";
+	});
+}]);
+
+
+</script>
 
 
 </body>

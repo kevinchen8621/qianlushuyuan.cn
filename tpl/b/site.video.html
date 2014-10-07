@@ -1,0 +1,120 @@
+<h3 class="row-fluid header smaller lighter purple">
+	<span class="span7"> <i class="icon-list"></i>视频教程管理 </span><!-- /span -->
+</h3>
+<div class="row">
+	<div class="col-md-6">
+		<div class="widget-box" data-bs-tab>
+			<div class="widget-header">
+				<h5 class="smaller">视频教程</h5>
+				<div class="widget-toolbar no-border">
+					<ul class="nav nav-tabs">
+						<li class="active"><a >{{curCat.title || "全部视频"}}</a></li>
+						<li><a >筛选条件</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="widget-body">
+				<div class="widget-main padding-6">
+					<div class="tab-content">
+						<div id="home" class="tab-pane in active">
+							<table class="table">
+								<tr ng-repeat="item in curVideoList | orderBy:'-create_at' ">
+									<td><a ng-click="editVideo(item)">{{item.title}}</a></td>
+								</tr>
+							</table>
+						</div>
+						<div id="profile" class="tab-pane">
+							<table class="table">
+								<tr class="{{item.key | filterNestcolor}}" ng-repeat="item in cats | filter:{type:'video'} | orderBy:'key' ">
+									<td><a ng-click="editCat(item)">{{item.key | filterNestspace}} {{item.title}}</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>	
+	</div>
+	<div class="col-md-6">
+		<h3 class="header smaller lighter blue">编辑视频信息 <small> {{curCat.title}}</small><span class="pull-right"><button class="btn btn-sm" ng-click="newVideo()">添加视频</button></span></h3>
+		<form class="form-horizontal" role="form">
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right"> 视频名称 </label>
+				<div class="col-sm-9">
+					<input type="text" placeholder="视频名称" ng-model="curVideo.title">
+					<span class="help-inline">
+						<span class="middle">{{curVideoTip}}</span>
+					</span>
+				</div>
+			</div>
+			<div class="space-4"></div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right"> MP4资源URL </label>
+				<div class="col-sm-9">
+					<input type="text" placeholder="输入MP4视频资源URL" ng-model="curVideo.url">
+					<span class="help-inline">
+						<span class="middle">推荐七牛云存储 qiniu.com</span>
+					</span>
+				</div>
+			</div>
+			<div class="space-4"></div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right"> 输入封面URL </label>
+				<div class="col-sm-9">
+					<input type="text" placeholder="输入封面URL" ng-model="curVideo.face">
+					<span class="help-inline">
+						<span class="middle">推荐七牛云存储 qiniu.com</span>
+					</span>
+				</div>
+			</div>
+			<div class="space-4"></div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right"> 封面效果 </label>
+				<div class="col-sm-9">
+					<img ng-src="{{curVideo.face}}" width="180px" height="100px" class="img-thumbnail">
+				</div>
+			</div>
+			<div class="space-4"></div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right"> 点击量 </label>
+				<div class="col-sm-9">
+					<input class="form-control" type="number" ng-model="curVideo.visits">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right"> 视频介绍 </label>
+				<div class="col-sm-9">
+					<textarea class="form-control" rows="8" ng-model="curVideo.description"></textarea>
+				</div>
+			</div>
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					<button class="btn btn-info" ng-click="saveVideo()"><i class="icon-ok bigger-110"></i>提交</button>
+					&nbsp; &nbsp; &nbsp;
+					<button class="btn" ng-click="delVideo()"><i class="icon-trash bigger-110"></i>删除</button>
+				</div>
+			</div>			
+		</form>
+		<h3 class="header smaller lighter blue">所属类别信息 <small> </small>
+			<span class="pull-right">
+				<div class="btn-group" data-bs-toggle>
+					<button data-toggle="dropdown" class="btn btn-success dropdown-toggle">添加分类<span class="icon-caret-down icon-on-right"></span></button>
+					<ul class="dropdown-menu dropdown-success pull-right">
+						<li  ng-repeat="item in cats | orderBy: 'key'"><a ng-click="addVideoCat(item.key)">{{item.key | filterNestspace}} {{item.title}}</a></li>
+					</ul>
+				</div>
+			</span>
+		</h3>
+		<ul id="tasks" class="item-list ui-sortable">
+			<li class="item-orange clearfix" ng-repeat="item in curVideo.cats">
+				<label class="inline"><span class="lbl"> {{item | filterGetValByKey:cats:'key':'title'}}</span></label>
+				<div class="pull-right action-buttons"><a ng-click="delVideoCat(item)" class="red"><i class="icon-trash bigger-130"></i></a></div>
+			</li>
+		</ul>		
+		<div ng-show="msg" class="alert alert-block alert-success">
+			<button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
+			<i class="icon-ok green"></i>{{msg}}
+		</div>	
+	</div>
+</div>

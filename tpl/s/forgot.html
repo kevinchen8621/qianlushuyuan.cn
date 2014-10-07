@@ -1,0 +1,57 @@
+<div id="forgot-box" class="forgot-box widget-box no-border">
+	<div class="widget-body">
+		<div class="widget-main">
+			<h4 class="header red lighter bigger">
+				<i class="icon-key"></i>
+				重置密码
+			</h4>
+
+			<form>
+				<fieldset>
+					<label class="block clearfix">
+						<span class="block input-icon input-icon-right">
+							<input type="text" class="form-control" ng-model="username" placeholder="用户名或手机号" />
+							<i class="icon-envelope"></i>
+						</span>
+					</label>
+
+					<label class="block clearfix">
+						<span class="block input-icon input-icon-right">
+							<div class="input-group">
+								<input type="text" class="form-control" ng-model="sms" placeholder="输入验证码" />
+								<span class="input-group-btn">
+									<button class="btn btn-sm btn-default" type="button" ng-disabled="smsDisable" ng-click="sendSms()">
+										<i class="icon-calendar bigger-110"></i>{{smsCaption}}!
+									</button>
+								</span>
+							</div>	
+						</span>
+					</label>
+
+					<label class="block clearfix">
+						<span class="block input-icon input-icon-right">
+							<input type="password" class="form-control" ng-model="password" placeholder="设定新密码" />
+							<i class="icon-retweet"></i>
+						</span>
+					</label>
+
+					<div class="space-24"></div>
+
+					<div class="clearfix">
+						<button type="button" class="width-35 pull-right btn btn-sm btn-danger" ng-click="forget()">
+							<i class="icon-lightbulb"></i>
+							登陆!
+						</button>
+					</div>
+				</fieldset>
+			</form>
+		</div><!-- /widget-main -->
+
+		<div class="toolbar center">
+			<a href="#/s/signin" class="back-to-login-link">
+				返回登陆
+				<i class="icon-arrow-right"></i>
+			</a>
+		</div>
+	</div><!-- /widget-body -->
+</div><!-- /forgot-box -->

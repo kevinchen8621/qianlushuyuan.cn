@@ -1,0 +1,80 @@
+<div id="signup-box" class="signup-box widget-box no-border">
+	<div class="widget-body">
+		<div class="widget-main">
+			<h4 class="header green lighter bigger">
+				<i class="icon-group blue"></i>
+				新用户注册
+			</h4>
+
+			<div class="space-6"></div>
+			<p> 输入您的注册信息: </p>
+
+			<form>
+				<fieldset>
+					<label class="block clearfix">
+						<spusernamean class="block input-icon input-icon-right">
+							<input type="text" class="form-control" ng-model="username" placeholder="会员名" />
+							<i class="icon-user"></i>
+						</span>
+					</label>
+
+					<label class="block clearfix">
+						<span class="block input-icon input-icon-right">
+							<input type="text" class="form-control" ng-model="_id" placeholder="手机号" />
+							<i class="icon-envelope"></i>
+						</span>
+					</label>
+
+					<label class="block clearfix">
+						<span class="block input-icon input-icon-right">
+							<div class="input-group">
+								<input type="text" class="form-control" ng-model="sms" placeholder="输入验证码" />
+								<span class="input-group-btn">
+									<button class="btn btn-sm btn-default" type="button" ng-disabled="smsDisable" ng-click="sendSms()">
+										<i class="icon-calendar bigger-110"></i>{{smsCaption}}!
+									</button>
+								</span>
+							</div>	
+						</span>
+					</label>
+
+					<label class="block clearfix">
+						<span class="block input-icon input-icon-right">
+							<input type="password" class="form-control" ng-model="password" placeholder="设定密码" />
+							<i class="icon-retweet"></i>
+						</span>
+					</label>
+
+					<label class="block">
+						<input type="checkbox" class="ace" />
+						<span class="lbl">
+							我同意邻客
+							<a href="#">会员协议</a>
+						</span>
+					</label>
+
+					<div class="space-24"></div>
+
+					<div class="clearfix">
+						<button type="reset" class="width-30 pull-left btn btn-sm" ng-click="reset()">
+							<i class="icon-refresh"></i>
+							重置
+						</button>
+
+						<button type="button" class="width-65 pull-right btn btn-sm btn-success" ng-click="signup()">
+							注册
+							<i class="icon-arrow-right icon-on-right"></i>
+						</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+
+		<div class="toolbar center">
+			<a href="#/s/signin" class="back-to-login-link">
+				<i class="icon-arrow-left"></i>
+				返回登陆
+			</a>
+		</div>
+	</div><!-- /widget-body -->
+</div><!-- /signup-box -->

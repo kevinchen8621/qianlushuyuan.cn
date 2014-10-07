@@ -1,0 +1,91 @@
+<h3 class="row-fluid header smaller lighter purple">
+	<span class="span7"> <i class="icon-list"></i>分类管理 </span><!-- /span -->
+</h3>
+<div ng-show="msg" class="alert alert-block alert-success">
+	<button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
+	<i class="icon-ok green"></i>{{msg}} {{Date.now | date:"yyyy-MM-dd hh:mm:ss"}}
+</div>
+<div class="widget-box">
+	<div class="widget-header header-color-green">
+		<h5 ng-show="curCat.key">编辑分类信息</h5>
+		<h5 ng-hide="curCat.key">新增分类信息</h5>
+	</div>
+	<div class="widget-body">
+		<div class="widget-main">
+			<div class="row">
+				<div class="col-xs-2">
+					<select ng-model="curCat.parent" placeholder="选择父级" class="form-control">
+						<option value="">顶级分类</option>
+						<option ng-repeat = "cat in cats | orderBy: 'key' " value="{{cat.key}}">
+							{{getCatIndent(cat)}} {{cat.title}}
+						</option>
+					</select>
+				</div>
+				<div class="col-xs-2">
+					<input type="text" placeholder="分类名称" ng-model="curCat.title" class="form-control">
+				</div>
+				<div class="col-xs-2">
+					<select ng-model="curCat.type" placeholder="内容类型" class="form-control">
+						<option value="video">视频教程</option>
+						<option value="article">文章</option>
+					</select>
+				</div>
+				<div class="col-xs-6">
+					<input type="text" placeholder="封面URL" ng-model="curCat.face" class="form-control">
+				</div>
+				<br><br>
+				<div class="col-xs-12">
+					<textarea class="form-control" rows="6" placeholder="分类介绍"></textarea>
+				</div>
+			</div>		
+		</div>
+		<div class="widget-toolbox padding-8 clearfix">
+			<button class="btn btn-xs btn-success pull-left" ng-click="newCat()">
+				<span class="bigger-110">新增</span>
+				<i class="icon-arrow-left icon-on-left"></i>
+			</button>
+			<button class="btn btn-xs btn-success pull-right" ng-click="submit()">
+				<span class="bigger-110">提交</span>
+				<i class="icon-arrow-right icon-on-right"></i>
+			</button>
+		</div>
+	</div>
+</div>
+<div class="widget-box" style="opacity: 1; z-index: 0;">
+	<div class="widget-header header-color-green">
+		<h5>全部分类</h5>
+	</div>
+	<div class="widget-body">
+		<div class="widget-main">
+			<div class="table-responsive">
+				<table id="sample-table-1" class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>代码</th>
+							<th>类别</th>
+							<th>分类</th>
+							<th>封面</th>
+							<th>父级代码</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in cats | orderBy: 'key'">
+							<td>{{item.key}}</td>
+							<td>{{item.type}}</td>
+							<td>{{item.title}}</td>
+							<td>{{item.face}}</td>
+							<td>{{item.parent}}</td>
+							<td>
+								<div class="btn-group">
+									<button class="btn btn-xs" ng-click="editCat(item)">修改</button>
+									<button class="btn btn-xs" ng-click="delCat(item)">删除</button>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

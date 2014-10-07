@@ -1,0 +1,63 @@
+<div class="widget-box no-border login-box">
+	<div class="widget-body">
+		<div class="widget-main">
+			<h4 class="header blue lighter bigger">
+				<i class="icon-coffee green"></i>
+				会员登陆
+			</h4>
+
+			<div class="space-6"></div>
+
+			<form>
+				<fieldset>
+					<label class="block clearfix">
+						<span class="block input-icon input-icon-right">
+							<input type="text" class="form-control" ng-model="username" placeholder="用户名或注册手机号" />
+							<i class="icon-user"></i>
+						</span>
+					</label>
+
+					<label class="block clearfix">
+						<span class="block input-icon input-icon-right">
+							<input type="password" class="form-control" ng-model="password" placeholder="密码" />
+							<i class="icon-lock"></i>
+						</span>
+					</label>
+
+					<div class="space"></div>
+
+					<div class="clearfix">
+						<label class="inline">
+							<input type="checkbox" ng-model="rememberme" class="ace" />
+							<span class="lbl"> 记住我</span>
+						</label>
+
+						<button type="button" class="width-35 pull-right btn btn-sm btn-primary" ng-click="signin()">
+							<i class="icon-key"></i>
+							登陆
+						</button>
+					</div>
+
+					<div class="space-4"></div>
+				</fieldset>
+			</form>
+
+		</div><!-- /widget-main -->
+
+		<div class="toolbar clearfix">
+			<div>
+				<a href="#/s/forgot" class="forgot-password-link">
+					<i class="icon-arrow-left"></i>
+					忘记密码了？
+				</a>
+			</div>
+
+			<div>
+				<a href="#/s/signup" class="user-signup-link">
+					我要注册
+					<i class="icon-arrow-right"></i>
+				</a>
+			</div>
+		</div>
+	</div><!-- /widget-body -->
+</div><!-- /login-box -->

@@ -1,0 +1,206 @@
+<link rel="stylesheet" href="/assets/css/ace.min.css" />
+<link rel="stylesheet" href="/assets/css/ace-rtl.min.css" />
+<link rel="stylesheet" href="/assets/css/ace-skins.min.css" />
+<!--[if lte IE 8]>
+  <link rel="stylesheet" href="/assets/css/ace-ie.min.css" />
+<![endif]-->
+<script src="/assets/js/ace-extra.min.js"></script>
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<div class="navbar navbar-default" id="navbar">
+	<script type="text/javascript">try{ace.settings.check('navbar' , 'fixed')}catch(e){}</script>
+	<div class="navbar-container" id="navbar-container">
+		<div class="navbar-header pull-left">
+			<a href="#" class="navbar-brand"><small><i class="icon-leaf"></i>{{site.title}}</small></a><!-- /.brand -->
+		</div><!-- /.navbar-header -->
+		<div class="navbar-header pull-right" role="navigation">
+			<ul class="nav ace-nav" data-collapse-nav>
+				<li class="grey">
+					<a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-tasks"></i><span class="badge badge-grey">{{tasks.length}}</span></a>
+					<ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+						<li class="dropdown-header"><i class="icon-ok"></i>您有 {{tasks.length}} 个事务未处理</li>
+						<li ng-repeat="item in tasks | limitTo: 4">
+							<a href="#"><div class="clearfix"><span class="pull-left">{{tasks[0].title}}</span><span class="pull-right">{{tasks[0].progress}}%</span></div><div class="progress progress-mini "><div style="width:{{tasks[0].progress}}%" class="progress-bar progress-bar-{{tasks[0].progressColor}}"></div></div></a>
+						</li>
+						<li><a href="#">查看我的事务<i class="icon-arrow-right"></i></a></li>
+					</ul>
+				</li>
+				<li class="purple">
+					<a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-bell-alt icon-animated-bell"></i><span class="badge badge-important">{{alerts.length}}</span></a>
+					<ul class="pull-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
+						<li class="dropdown-header"><i class="icon-warning-sign"></i>您有 {{alerts.length}} 个提醒信息</li>
+						<li ng-repeat="item in alerts | limitTo: 4">
+							<a href="#"><div class="clearfix"><span class="pull-left"><i class="btn btn-xs no-hover btn-{{item.color}} icon-{{item.icon}}"></i>{{item.title}}</span><span ng-show="item.num > 1" class="pull-right badge badge-info">+{{item.num}}</span></div></a>
+						</li>
+						<li><a href="#">查看我的提醒信息<i class="icon-arrow-right"></i></a></li>
+					</ul>
+				</li>
+
+				<li class="green">
+					<a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-envelope icon-animated-vertical"></i><span class="badge badge-success">5</span></a>
+					<ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+						<li class="dropdown-header"><i class="icon-envelope-alt"></i> 收件箱 {{msgs.length}} 个消息</li>
+						<li ng-repeat="item in msgs">
+							<a href="#"><img src="{{item.from.avatar}}" class="msg-photo" alt="{{item.from.username}}" /><span class="msg-body"><span class="msg-title"><span class="blue">{{item.from.username}}:</span>{{item.title}} ...</span><span class="msg-time"><i class="icon-time"></i><span>{{item.create_at | date:"MM-dd hh:mm"}}</span></span></span></a>
+						</li>
+						<li><a href="#/inbox">查看我的收件箱<i class="icon-arrow-right"></i></a></li>
+					</ul>
+				</li>
+
+				<li class="light-blue">
+					<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+						<img class="nav-user-photo" src="assets/avatars/user.jpg" alt="{{user.username}}" />
+						<span class="user-info"><small>欢迎,</small>{{user.username}}</span>
+						<i class="icon-caret-down"></i>
+					</a>
+					<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+						<li><a href="#"><i class="icon-cog"></i>设置</a></li>
+						<li><a href="#"><i class="icon-user"></i>个人信息</a></li>
+						<li class="divider"></li>
+						<li><a href="#"><i class="icon-off"></i>注销</a></li>
+					</ul>
+				</li>
+			</ul><!-- /.ace-nav -->
+		</div><!-- /.navbar-header -->
+	</div><!-- /.container -->
+</div>
+
+<div class="main-container" id="main-container">
+	<script type="text/javascript">try{ace.settings.check('main-container' , 'fixed')}catch(e){}</script>
+	<div class="main-container-inner">
+		<a class="menu-toggler" id="menu-toggler" href="#"><span class="menu-text"></span></a>
+		<div class="sidebar" id="sidebar">
+			<script type="text/javascript">try{ace.settings.check('sidebar' , 'fixed')}catch(e){}</script>
+			<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+				<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+					<button class="btn btn-success"><i class="icon-signal"></i></button>
+					<button class="btn btn-info"><i class="icon-pencil"></i></button>
+					<button class="btn btn-warning"><i class="icon-group"></i></button>
+					<button class="btn btn-danger"><i class="icon-cogs"></i></button>
+				</div>
+				<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+					<span class="btn btn-success"></span>
+					<span class="btn btn-info"></span>
+					<span class="btn btn-warning"></span>
+					<span class="btn btn-danger"></span>
+				</div>
+			</div><!-- #sidebar-shortcuts -->
+
+			<ul class="nav nav-list" data-collapse-nav>
+				<li class="active"><a href="#/b/home"><i class="icon-dashboard"></i><span class="menu-text"> 我的课程 </span></a></li>
+				<li>
+					<a href="#"><i class="icon-inbox"></i><span class="menu-text"> 课堂问答 </span><b class="arrow icon-angle-down"></b></a>
+					<ul class="submenu">
+						<li><a href="#/b/faq/home"><i class="icon-double-angle-right"></i>大家的讨论</a></li>
+						<li><a href="#/b/faq/ask"><i class="icon-double-angle-right"></i>我的问题</a></li>
+						<li><a href="#/b/faq/answer"><i class="icon-double-angle-right"></i>我的回答</a></li>
+					</ul>
+				</li>
+				<li><a href="#/b/account"><i class="icon-credit-card"></i><span class="menu-text"> 我的账户 </span></a></li>
+				<li><a href="#/b/profile"><i class="icon-cog"></i><span class="menu-text"> 个人设置 </span></a></li>
+				<li><a href="#/b/uppwd"><i class="icon-key"></i><span class="menu-text"> 修改密码 </span></a></li>
+				<li><a href="#/b/getvip"><i class="icon-bullhorn"></i><span class="menu-text"> 免费VIP </span></a></li>
+				<li><a href="#/b/buyvip"><i class="icon-fire"></i><span class="menu-text"> 购买VIP </span></a></li>
+				<li><a href="#/b/gcode"><i class="icon-film"></i><span class="menu-text"> G码兑换 </span></a></li>
+				<li>
+					<a href="#"><i class="icon-inbox"></i><span class="menu-text"> 数据管理 </span><b class="arrow icon-angle-down"></b></a>
+					<ul class="submenu">
+						<li><a href="#/b/data/finance"><i class="icon-double-angle-right"></i>财务管理</a></li>
+						<li><a href="#/b/data/member"><i class="icon-double-angle-right"></i>会员管理</a></li>
+						<li><a href="#/b/data/promotion"><i class="icon-double-angle-right"></i>推广管理</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="#"><i class="icon-globe"></i><span class="menu-text"> 网站管理 </span><b class="arrow icon-angle-down"></b></a>
+					<ul class="submenu">
+						<li><a href="#/b/site/home"><i class="icon-double-angle-right"></i>网站设置</a></li>
+						<li><a href="#/b/site/cat"><i class="icon-double-angle-right"></i>类别管理</a></li>
+						<li><a href="#/b/site/video"><i class="icon-double-angle-right"></i>视频管理</a></li>
+						<li><a href="#/b/site/d3"><i class="icon-double-angle-right"></i>D3图表</a></li>
+					</ul>
+				</li>
+			</ul><!-- /.nav-list -->
+			<div class="sidebar-collapse" id="sidebar-collapse"><i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i></div>
+			<script type="text/javascript">try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}</script>
+		</div>
+
+		<div class="main-content">
+			<div class="breadcrumbs" id="breadcrumbs">
+				<script type="text/javascript">try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}</script>
+				<ul class="breadcrumb">
+					<li><i class="icon-home home-icon"></i><a href="#/">主页</a></li>
+					<li class="active"><span ng-bind="breadcrumb"></span></li>
+				</ul><!-- .breadcrumb -->
+				<div class="nav-search" id="nav-search">
+					<form class="form-search">
+						<span class="input-icon">
+							<input type="text" placeholder="搜索 ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+							<i class="icon-search nav-search-icon"></i>
+						</span>
+					</form>
+				</div><!-- #nav-search -->
+			</div>
+
+			<div class="page-content">
+
+				<section ui-view></section>
+
+			</div><!-- /.page-content -->
+		</div><!-- /.main-content -->
+
+		<div class="ace-settings-container" id="ace-settings-container">
+			<div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+				<i class="icon-cog bigger-150"></i>
+			</div>
+
+			<div class="ace-settings-box" id="ace-settings-box">
+				<div>
+					<div class="pull-left">
+						<select id="skin-colorpicker" class="hide">
+							<option data-skin="default" value="#438EB9">#438EB9</option>
+							<option data-skin="skin-1" value="#222A2D">#222A2D</option>
+							<option data-skin="skin-2" value="#C6487E">#C6487E</option>
+							<option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+						</select>
+					</div>
+					<span>&nbsp; 切换皮肤</span>
+				</div>
+
+				<div>
+					<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-navbar" />
+					<label class="lbl" for="ace-settings-navbar"> 锁定顶部</label>
+				</div>
+
+				<div>
+					<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-sidebar" />
+					<label class="lbl" for="ace-settings-sidebar"> 锁定侧边栏</label>
+				</div>
+
+				<div>
+					<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-breadcrumbs" />
+					<label class="lbl" for="ace-settings-breadcrumbs"> 锁定位置栏</label>
+				</div>
+
+				<div>
+					<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" />
+					<label class="lbl" for="ace-settings-rtl"> 右侧优先排列</label>
+				</div>
+
+				<div>
+					<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" />
+					<label class="lbl" for="ace-settings-add-container">限宽排列</label>
+				</div>
+			</div>
+		</div><!-- /#ace-settings-container -->
+	</div><!-- /.main-container-inner -->
+
+	<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="icon-double-angle-up icon-only bigger-110"></i></a>
+</div>
+<!-- ace scripts -->
+<script src="assets/js/ace-elements.min.js"></script>
+<script src="assets/js/ace.min.js"></script>
+

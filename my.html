@@ -10,11 +10,7 @@
 		<!-- basic styles -->
 
 		<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="assets/css/font-awesome.min.css" />
-
-		<!--[if IE 7]>
-		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
-		<![endif]-->
+		<link href="http://cdn.bootcss.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
 		<!-- page specific plugin styles -->
 
@@ -138,7 +134,10 @@
 					<ul class="nav nav-list">
 						<li class="active"><a href="#/"><i class="icon-dashboard"></i><span class="menu-text"> 信息汇总 </span></a></li>
 						<li><a href="#/balance"><i class="icon-edit"></i><span class="menu-text"> 我的账户 </span></a></li>
-						<li><a href="#/manager"><i class="icon-list"></i><span class="menu-text"> 课程管理 </span></a></li>
+						<li><a href="#/article"><i class="icon-list"></i><span class="menu-text"> 文章管理 </span></a></li>
+						<li><a href="#/video"><i class="icon-credit-card"></i><span class="menu-text"> 课程管理 </span></a></li>
+						<li><a href="#/cat"><i class="icon-cogs"></i><span class="menu-text"> 类别管理 </span></a></li>
+						<li><a href="#/member"><i class="icon-eye-close"></i><span class="menu-text"> 成员管理 </span></a></li>
 						<li><a href="#/sys"><i class="icon-picture"></i><span class="menu-text"> 系统管理 </span></a></li>
 					</ul><!-- /.nav-list -->
 
@@ -267,13 +266,15 @@
 		<script src="assets/js/ace.min.js"></script>
 
 		<!-- inline scripts related to this page -->
+	<script src="assets/js/angular-file-upload-shim.js"></script>	
 	<script src="http://cdn.bootcss.com/lodash.js/2.4.1/lodash.min.js"></script>
 	<script src="http://cdn.bootcss.com/angular.js/1.2.16/angular.min.js"></script>
 	<script src="http://cdn.bootcss.com/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>
 	<script src="http://cdn.bootcss.com/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script>
+	<script src="assets/js/angular-file-upload.js"></script>
 	<script type="text/javascript">
 		'use strict';
-		angular.module("myApp",["ui.router","ui.bootstrap"])
+		angular.module("myApp",["ui.router","ng-file-upload-shim","ui.bootstrap","ng-file-upload"])
 		.factory('authInterceptor', ["$rootScope", "$q", "$window", function ($rootScope, $q, $window) {
 			return {
 				request: function (config) {
@@ -317,7 +318,9 @@
 			$stateProvider
 				.state("sys", {url:'/sys', templateUrl: 'tpl/sys', controller:"SysCtl"})
 				.state("balance", {url:'/balance', templateUrl: 'tpl/balance', controller:"BalanceCtl"})
-				.state("manager", {url:'/manager', templateUrl: 'tpl/manager', controller:"ManagerCtl"})
+				.state("video", {url:'/video', templateUrl: 'tpl/m_video', controller:"VideoCtl"})
+				.state("article", {url:'/article', templateUrl: 'tpl/m_article', controller:"ArticleCtl"})
+				.state("cat", {url:'/cat', templateUrl: 'tpl/m_cat', controller:"CatCtl"})
 				.state("dashboard", {url:'/', templateUrl: 'tpl/dashboard', controller:"DashboardCtl"});
 			 $httpProvider.interceptors.push('authInterceptor');
 
@@ -349,11 +352,81 @@
     			});
 
 		}])
-		.controller("ManagerCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
+		.controller("CatCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
+			$scope.newCat = function(){
+				$scope.curCat = {parent:"",title:"",type:"video",face:"",key:"",_id:"",description:""};
+			}
+			$scope.newCat();
+			$scope.editCat = function(cat){
+				$scope.curCat = cat;
+				console.log(cat);
+				console.log($scope.curCat);
+			}
+			function getNewkey(pkey){
+				var tmp, comkey, key = "1" + pkey + "00"; 
+				$rootScope.cats.forEach(function(cat){
+					comkey = "1" + cat.key; 
+					if(key < comkey){key = comkey;}
+				});
+				tmp = +key + 1;
+				return tmp.toString().substr(1);
+			}
+			$scope.saveCat = function(){
+				curCat.key == curCat.key? curCat : getNewkey;
+				$http.post("/api/cat", $scope.curCat).success(function(){
+					$scope.msg = "分类信息 " + curCat.title + "已保存";
+					$scope.newCat();
+				});
+			}
+		}])			
+		.controller("VideoCtl",["$scope","$rootScope","$http","$window",'$timeout', '$upload',function($scope,$rootScope,$http,$window,$timeout,$upload){
+ 			var uploader = $scope.uploader = new FileUploader({url: '/api/upload/video'});
+			uploader.filters.push({
+			    name: 'customFilter',
+			    fn: function(item /*{File|FileLikeObject}*/, options) {
+			        return this.queue.length < 10;
+			    }
+			});
+			uploader.onWhenAddingFileFailed = function(item /*{File|FileLikeObject}*/, filter, options) {
+			    console.info('onWhenAddingFileFailed', item, filter, options);
+			};
+			uploader.onAfterAddingFile = function(fileItem) {
+			    console.info('onAfterAddingFile', fileItem);
+			};
+			uploader.onAfterAddingAll = function(addedFileItems) {
+			    console.info('onAfterAddingAll', addedFileItems);
+			};
+			uploader.onBeforeUploadItem = function(item) {
+			    console.info('onBeforeUploadItem', item);
+			};
+			uploader.onProgressItem = function(fileItem, progress) {
+			    console.info('onProgressItem', fileItem, progress);
+			};
+			uploader.onProgressAll = function(progress) {
+			    console.info('onProgressAll', progress);
+			};
+			uploader.onSuccessItem = function(fileItem, response, status, headers) {
+			    console.info('onSuccessItem', fileItem, response, status, headers);
+			};
+			uploader.onErrorItem = function(fileItem, response, status, headers) {
+			    console.info('onErrorItem', fileItem, response, status, headers);
+			};
+			uploader.onCancelItem = function(fileItem, response, status, headers) {
+			    console.info('onCancelItem', fileItem, response, status, headers);
+			};
+			uploader.onCompleteItem = function(fileItem, response, status, headers) {
+			    console.info('onCompleteItem', fileItem, response, status, headers);
+			};
+			uploader.onCompleteAll = function() {
+			    console.info('onCompleteAll');
+			};
+
+			console.info('uploader', uploader);			
+
 			$scope.selection = [ ];
 			$scope.toggleSelection = function toggleSelection(item) {
 				item.selected = item.selected ? false : true;
-			};
+			}
 			$scope.setCat = function(cat){
 				var addIds = [ ], delIds = [ ];
 				$rootScope.videos.forEach(function(item){
@@ -396,6 +469,7 @@
 	    				$rootScope.catkeys = $window._.keys($rootScope.cats);
 	    			});
     			}
+
 		}])
 		.controller("SysCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
 			$scope.resetCatInfo = function(){

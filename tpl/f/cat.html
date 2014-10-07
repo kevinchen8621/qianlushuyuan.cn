@@ -1,0 +1,84 @@
+<div class="m-topnav rel">
+	<div class="container">
+		<a href="#/" class="li f-fl f-c3"><h4>{{site.title}}</h4></a>
+		<form class="form-inline li f-fl" role="form">
+			<div class="form-group m-search">
+				<div class="input-group ">
+					<input class="form-control input-sm" type="text" placeholder="搜索钱路书院课程、视频">
+					<div type="button" class="input-group-addon btn btn-warning">搜索</div>
+				</div>
+			</div>
+		</form>
+		<span class="u-nav u-beforelogin j-beforelogin f-fr">
+			<span class="f-c6 li hidden-xs">欢迎来到{{site.title}}!</span>
+			<a ng-hide="user" class="f-cgreen li j-loginBtn" href="#/signin">登录/注册</a>
+			<a ng-show="user" class="f-cgreen li j-loginBtn" href="#/b/home">我的钱路</a>
+		</span>
+	</div>	
+</div>
+<div class="u-breadnav">
+	<div class="container">
+		<a href="/" target="_blank" class="link f-c9">{{site.title}}></a>
+        <span class="f-icon sp"></span>
+        <span class="pos f-f0 f-c3">{{cats[catIndex].title}}</span>
+    </div>
+</div>
+<div class="mainwrap">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-5">
+				<img width="100%" height="340px" src="{{cats[catIndex].face}}" alt="{{cats[catIndex].title}}">
+			</div>
+			<div class="col-md-7 hidden-xs">
+				<h2>{{cats[catIndex].title}}</h2>
+				<p>本专题共 {{catVideos.length}} 堂课程 敬请关注</p>
+				<span class="blank20"></span>
+				<span class="blank20"></span>
+				<p>专题介绍</p>
+				<p>{{cats[catIndex].description}}</p> <b></b>
+				<a ng-show="catVideos[0]" href="#/video/{{catVideos[0]._id}}" class="plybtn"></a>
+				<a ng-hide="catVideos[0]" href="#/cat/{{catIndex}}" class="plybtn"></a>
+			</div>
+		</div>
+	</div>
+</div>	
+<div class="container">
+	<div class="row">
+		<div class="col-md-8">
+			<table class="table table-striped">
+				<thead><tr><th>序号</th><th>课程名称</th><th class="hidden-xs">内容概述</th><th>视频下载</th><tr></thead>
+				<tbody>
+					<tr ng-repeat="item in videos | filterByCat:catIndex">
+						<td>{{$index}}</td>
+						<td>{{item.title}}</td>
+						<td class="hidden-xs">{{item.brief}}</td>
+						<td><a class="btn" href="#/video/{{item._id}}">播放</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>	
+		<div class="col-md-4">
+			<div class="m-cteacher">
+				<h3>讲师介绍</h3>
+				<span class="blank9"></span>
+				<div class="rightContent">   
+					<div class="picText">
+						<img src="http://img6.cache.netease.com/video/2012/12/11/201212111535389f63c.jpg" width="120" height="90" style="border:1px  solid #484848">
+						<span class="blank9"></span>
+						<h4>讲师：<span class="fB cdY">李谦诚</span></h4> 
+						<h5>职业：<span class="fB">钱路学创始人</span></h5> 
+						<h5><span class="fB f-c6">SAT数学成绩满分。MIT数学学士；电气工程、计算机科学学士、硕士；哈佛大学工商管理硕士（MBA）。2009年专职于Khan Academy的教学传播事业。</span></h5> 
+						<span class="blank9"></span>
+						<span class="cdblan"></span>
+					</div>
+				</div>
+			</div>
+			<div class="m-ccollege">
+				<h3>学院介绍</h3>
+				<span class="blank9"></span>
+				<h5 class="f-c6">钱路书院(Qianlu Academy)，是由孟加拉裔美国人萨尔曼·可汗创立的一家教育性非营利组织，主旨在于利用网络影片进行免费授课，现有关于数学、历史、金融、物理、化学、生物、天文学等科目的内容，教学影片超过2000段，机构的使命是加快各年龄学生的学习速度。</h5>
+			</div>
+		</div>
+	</div>
+</div>		
+

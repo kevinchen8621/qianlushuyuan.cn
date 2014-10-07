@@ -1,0 +1,32 @@
+<div class="page-header"><h1>我的课程<small><i class="icon-double-angle-right"></i> 正在学习</small></h1></div><!-- /.page-header -->
+<div class="row">
+	<div class="col-xs-12">
+		<!-- PAGE CONTENT BEGINS -->
+		<div ng-if="user.alert" class="alert alert-block alert-success">
+			<button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button><i class="icon-ok green"></i>
+			{{user.alert}}
+		</div>
+		<div class="row-fluid">
+			<ul class="ace-thumbnails">
+				<li ng-repeat="item in myVideos">
+					<a href="#/video/{{item._id}}">
+						<div class="ue-video-list-show">
+							<div class="ue-video-show-img">
+								<img width="218" height="124" alt="{{item.title}}" src="{{item.face}}">
+							</div>
+							<div class="ue-video-show-name"><h3>{{item.title}}</h3></div>
+							<div class="ue-video-show-long"><i></i><span>大于30分钟</span></div>
+							<div class="ue-video-show-star"><i></i><span class="ue-num">{{item.visits}}</span><span>{{item.create_at}}</span></div>
+							<div class="ue-video-show-ing">学习中</div>
+						</div>
+						<div class="ue-video-list-hide" style="bottom: -1px;">
+							<div class="ue-video-show-name"><h3>{{item.title}}</h3></div>
+							<div class="ue-video-show-desc">{{item.description}}</div>
+							<div class="ue-video-show-btn"><span>查看课程</span></div>
+						</div>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>				

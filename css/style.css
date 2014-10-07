@@ -425,6 +425,7 @@ a .f-c0:hover,a.f-c0:hover,a .f-c3:hover,a.f-c3:hover,a .f-c6:hover,a.f-c6:hover
 .m-slidebox .tabwrap .tabcon{height:388px}
 
 .m-slidebox .tabwrap .subtabcon{display:none}
+.m-slidebox .tabwrap .subtabcon.active{display:none}
 
 .m-slidebox .tabwrap .tabbox{display:none;top:0;left:0;height:100%;width:100%}
 
