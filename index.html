@@ -141,6 +141,14 @@ angular.module("app",["ui.router","ngVideo"])
 	}
 	return service;
 }])
+.filter("filterCats", ["$window",function($window) {
+	return function() {
+		var args = Array.prototype.slice.call(arguments);  
+		var result, lst = args[0], ctype = args[1], pkey = args[2] || "";
+		var regex = new RegExp("^" + pkey +"\\d{2}$");
+		return $window._.filter(lst, function(item){ return item.type == ctype && regex.test(item.key); });
+	};
+}])
 .filter("filterSubByKey", ["$window",function($window) {
 	return function(items, pkey) {
 		if(pkey == ""){
@@ -718,10 +726,8 @@ angular.module("app",["ui.router","ngVideo"])
 	});
 	$http.get("/api/site?attachments=slides,cats,videos").success(function(data){
 		angular.forEach(data, function(value, key){
-			$rootScope[key] = value;			
+			$rootScope[key] = value;	
 		});
-		console.log("here");
-		console.log($rootScope.videos);
 		$window.localStorage.cache = JSON.stringify(data);
 	});
 	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){

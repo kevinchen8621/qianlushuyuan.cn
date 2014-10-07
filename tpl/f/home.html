@@ -34,7 +34,7 @@
 		<ul>
 			<li class="left rel"><a class="link f-f0 nowrp f-cf" href="#/" target="_self">首页</a></li>
 
-			<li class="left rel visible-lg" ng-repeat="item in cats | filterSubByKey : '' | orderBy: 'key'"><a class="link f-f0 nowrp f-cf" href="#/f/cat/{{item.key}}">{{item.title}}</a></li>
+			<li class="left rel visible-lg" ng-repeat="item in cats | filterCats:'video':'' | orderBy: 'key'"><a class="link f-f0 nowrp f-cf" href="#/f/cat/{{item.key}}">{{item.title}}</a></li>
 			<li class="right rel"><a class="link f-f0 nowrp f-cyellow" href="#/s/signin">注册</a></li>
 			<li class="right rel"><a class="link f-f0 nowrp f-cyellow" href="#/s/signin">登陆</a></li>
 		</ul>
@@ -96,12 +96,12 @@
 	</div>
 </div><!-- /图片轮播 -->
 <div class="container">
-	<div class="row g-card-row" ng-repeat="item in cats | filterSubByKey : '' | orderBy: 'key'">
+	<div class="row g-card-row" ng-repeat="item in cats | filterCats : 'video' : '' | orderBy: 'key'">
 		<div class="col-xs-4 col-sm-4 col-md-3 col-lg-2 g-card1 u-tag2"> 
 			<h2>{{item.title.substr(0,2)}}</h2><div class="b-10"></div><span>{{item.title.substr(2)}}</span>
 		</div>	
-		<div class="col-xs-4 col-sm-4 col-md-3 col-lg-2 g-card1" ng-repeat="sub in cats | filterSubByKey : item.key | orderBy: 'key'">
-			<a href="#/f/cat/{{sub.key}}" class="u-cover">
+		<div class="col-xs-4 col-sm-4 col-md-3 col-lg-2 g-card1" ng-repeat="sub in cats | filterCats : 'video' : item.key | orderBy: 'key'">
+			<a href="#/cat/{{sub.key}}" class="u-cover">
 				<div class="shadow rel">
 					<img ng-src="{{sub.face}}" class="lazy" alt="{{sub.title}}" height="100px" width="180px" style="display: inline;">
 					<div class="mask abs"></div><div class="abs hide new">new</div>
