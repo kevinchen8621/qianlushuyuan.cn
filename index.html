@@ -436,9 +436,20 @@ angular.module("app",["ui.router","ngVideo"])
 }])
 .controller("FVideoCtl",["$scope","$rootScope","$stateParams","$window","$timeout", "video", function($scope,$rootScope,$stateParams,$window,$timeout,$video){
 	$scope.videos = {};
-	$scope.videos[$stateParams.id] = $window._.find($rootScope.videos,{_id: $stateParams.id}).url;
-	$video.addSource('mp4', $scope.videos[$stateParams.id]);
-	console.log($video);
+	var vlst, regex = new RegExp("^\\d{2,12}$");
+	if(regex.test($stateParams.id)){
+		regex = new RegExp("^" + $stateParams.id);
+		vlst = $window._.filter($rootScope.videos, function(item){ return $window._.find(item.cats, function(c){ return regex.test(c);}); });
+		vlst.forEach(function(item){
+			$scope.videos[item._id] = item.url;
+			$video.addSource("mp4", item.url);
+		});	
+	}else{
+		vlst = $window._.find($rootScope.videos,{_id: $stateParams.id}); 
+		$scope.videos[item._id] = vlst.url;
+		$video.addSource("mp4", vlst.url);
+	}
+
 	$scope.playlistOpen = false;
 	$scope.playVideo = function playVideo(sourceUrl) {
 		$video.addSource('mp4', sourceUrl, true);

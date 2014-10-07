@@ -20,24 +20,23 @@
 	<div class="container">
 		<a href="/" target="_blank" class="link f-c9">{{site.title}}></a>
         <span class="f-icon sp"></span>
-        <span class="pos f-f0 f-c3">{{cats[catIndex].title}}</span>
+        <span class="pos f-f0 f-c3">{{curCat.title}}</span>
     </div>
 </div>
 <div class="mainwrap">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-5">
-				<img width="100%" height="340px" src="{{cats[catIndex].face}}" alt="{{cats[catIndex].title}}">
+				<img width="100%" height="340px" src="{{curCat.face}}" alt="{{curCat.title}}">
 			</div>
 			<div class="col-md-7 hidden-xs">
-				<h2>{{cats[catIndex].title}}</h2>
+				<h2>{{curCat.title}}</h2>
 				<p>本专题共 {{catVideos.length}} 堂课程 敬请关注</p>
 				<span class="blank20"></span>
 				<span class="blank20"></span>
 				<p>专题介绍</p>
-				<p>{{cats[catIndex].description}}</p> <b></b>
-				<a ng-show="catVideos[0]" href="#/video/{{catVideos[0]._id}}" class="plybtn"></a>
-				<a ng-hide="catVideos[0]" href="#/cat/{{catIndex}}" class="plybtn"></a>
+				<p>{{curCat.description}}</p> <b></b>
+				<a href="#/video/{{curCat.key}}" class="plybtn"></a>
 			</div>
 		</div>
 	</div>
