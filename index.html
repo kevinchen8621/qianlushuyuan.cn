@@ -160,13 +160,13 @@ angular.module("app",["ui.router","ngVideo"])
 		}
 	};
 }])
-.filter("filterByCat", ["$window",function($window) {
-	return function(items, cat) {
-		if(cat == ""){
-			return items;
-		}else{
-			return $window._.filter(items, function(item){ return $window._.contains(item.cats, cat); });
-		}
+.filter("filterVideos", ["$window",function($window) {
+	return function() {
+		var args = Array.prototype.slice.call(arguments); 
+		var result, lst = args[0], ckey = args[1];
+		var regex = new RegExp("^" + ckey);
+		return $window._.filter(lst, function(item){ return $window._.find(item.cats, function(c){ return regex.test(c);}); });
+		console.log(args);
 	};
 }])
 .filter("filterGetValByKey", ["$window",function($window) {
@@ -431,8 +431,8 @@ angular.module("app",["ui.router","ngVideo"])
 	$scope.select(0);
 }])
 .controller("FCatCtl",["$scope","$rootScope","$stateParams","$window",function($scope,$rootScope,$stateParams,$window){
-	$scope.catIndex = $window._.findIndex($rootScope.cats, function(cat){return cat.key == $stateParams.id;});
-	$scope.catVideos = $window._.filter($rootScope.videos, function(video){return video.cats.indexOf($stateParams.id) > -1;});
+	$scope.curCat =  $window._.find($rootScope.cats, function(cat){return cat.key == $stateParams.id;});
+	console.log($scope.curCat);
 }])
 .controller("FVideoCtl",["$scope","$rootScope","$stateParams","$window","$timeout", "video", function($scope,$rootScope,$stateParams,$window,$timeout,$video){
 	$scope.videos = {};
