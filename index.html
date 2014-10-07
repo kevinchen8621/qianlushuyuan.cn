@@ -446,7 +446,7 @@ angular.module("app",["ui.router","ngVideo"])
 		});	
 	}else{
 		vlst = $window._.find($rootScope.videos,{_id: $stateParams.id}); 
-		$scope.videos[item._id] = vlst.url;
+		$scope.videos[vlst._id] = vlst.url;
 		$video.addSource("mp4", vlst.url);
 	}
 
