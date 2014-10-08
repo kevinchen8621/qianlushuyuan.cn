@@ -31,12 +31,11 @@ window.jQuery || document.write("<script src='http://cdn.bootcss.com/jquery/1.10
 <script src="http://cdn.bootcss.com/lodash.js/2.4.1/lodash.min.js"></script>
 <script src="http://cdn.bootcss.com/angular.js/1.2.16/angular.min.js"></script>
 <script src="http://cdn.bootcss.com/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>
-<script src="/js/ng-video.min.js"></script>
 <script src="/js/mqttws31.js"></script>
 
 <script type="text/javascript">
 'use strict';
-angular.module("app",["ui.router","ngVideo"])
+angular.module("app",["ui.router"])
 .factory('$transition', ['$q', '$timeout', '$rootScope', function($q, $timeout, $rootScope) {
 	var $transition = function(element, trigger, options) {
 		options = options || {};
@@ -140,6 +139,228 @@ angular.module("app",["ui.router","ngVideo"])
 		service.callback = callback;
 	}
 	return service;
+}])
+.factory('servCat', ["$rootScope", "$window", "$http", function($rootScope, $window, $http) {
+	return {
+		newOne : function(pcat, cb){
+			cb = cb || angular.noop;
+			var newKey,item;
+			var regex = new RegExp("^" + pcat.key + "\\d{2}$","g");
+			var sublst = $window._.filter($rootScope.cats, function(item){  return regex.test(item.key); });
+			if(sublst.length > 0){
+				var subkeylst =$window._.pluck(sublst, "key");
+				newKey = (Number("1" + $window._.max(subkeylst)) + 1).toString().substr(1);
+			}else{
+				newKey = pcat.key + "01";
+			}
+			item = {
+				hostname: $rootScope.site._id,
+				type: pcat.type, 
+				key: newKey,
+				title: "",
+				face: "/img/0101.jpg",
+				priority: 50,
+				description:"",
+			};
+			cb(null, item);
+		},
+		save : function(cat, cb){
+			cb = cb || angular.noop;
+			$http.post("/api/cat", cat).success(function(data){
+				var idx = $window._.findIndex($rootScope.cats, function(item){
+					return item._id == data.cat._id;
+				});
+				if(idx > -1){
+					$rootScope.cats.splice(idx,1,data.cat);
+					cb(null, "分类[" + data.cat.title + "]的修改信息已提交");
+				}else{
+					$rootScope.cats.push(data.cat);
+					cb(null, "新分类[" + data.cat.title + "]已提交");
+				}
+			});
+		},
+		del : function(cat, cb){
+			if(cat._id){
+				$http.post("/api/cat/del", cat).success(function(data){//返回{cat_ids: 删除掉的id}
+					var cat_ids = data.cat_ids || [ ];
+					$rootScope.cats = $window._.filter($rootScope.cats, function(item){
+						return $window._.indexOf(cat_ids, item._id) == -1;
+					});
+					cb(null, "分类 " + cat.title + "已删除,连带删除子分类" + (cat_ids.length - 1) + '个');
+				});
+			}else{
+				cb(null, "分类 " + cat.title + "已删除");
+			}
+		},
+	};
+}])
+.factory('servVideo', ["$rootScope", "$window", "$http", function($rootScope, $window, $http) {
+	return {
+		visit : function(video_id, cb){
+			cb = cb || angular.noop;
+			var visitObj = $rootScope.user ? {user_id:$rootScope.user._id, video_id: video_id} : {video_id: video_id};
+			$http.post('/api/video/visit',visitObj).success(function(data){
+				cb(null, data);
+			});
+		},
+		getById : function(video_id, cb){
+			cb = cb || angular.noop;
+			var item = $window._.find($rootScope.videos,{_id: video_id}); 
+			if(item){
+				cb(null, item);
+			}else{
+				$http.get('/api/video/' + video_id).success(function(data){
+					cb(null, data.video);
+				});
+			}
+		},
+		getListByCatKey : function(key, cb){
+			cb = cb || angular.noop;
+			var vList = $window._.filter($rootScope.videos, function(item){ return $window._.indexOf(item.cats, key) > -1; });
+			cb(null, vList);
+		},
+		getMyVisitList : function(cb){
+			$http.get("/api/video/my_visit_ids").success(function(data){
+				var video_ids = data.video_ids || [ ];
+				var myVisitVideos = $window._.filter($rootScope.videos, function(item){
+					return $window._.contains(video_ids, item._id);
+				});
+				cb(null, myVisitVideos);
+			});
+		},
+		newOne : function(cb){
+			cb = cb || angular.noop;
+			var item = {
+				hostname:$rootScope.site._id,
+				title:"", 
+				url:"",
+				cats:[],
+				face: "/img/0202.jpg",
+				visits: 50,
+				create_at: Date.now(),
+				description:"",
+			};
+			cb(null, item);
+		},
+		save : function(video, cb){
+			$http.post("/api/video", video).success(function(data){
+				var idx = $window._.findIndex($rootScope.videos, function(item){
+					return item._id == data._id;
+				});
+				if(idx > -1){
+					$rootScope.videos.splice(idx,1,data);
+					cb(null, "视频[" + data.title + "]的修改信息已提交");
+				}else{
+					$rootScope.videos.push(data);
+					cb(null, "新视频[" + data.title + "]已提交");
+				}
+			});
+		},
+		del : function(video, cb){
+			if(video._id){
+				$http.post("/api/video/del", video).success(function(){
+					var idx = $window._.findIndex($rootScope.videos, function(item){
+						return item._id == video._id;
+					});
+					if(idx > -1){$rootScope.videos.splice(idx,1);}
+					cb(null, "视频信息 " + video.title + "已删除");
+				});
+			}else{
+				cb(null, "视频信息 " + video.title + "已删除");
+			}
+		},
+	};
+}])
+.factory('servUser', ["$rootScope", "$window", "$http", "$state", function($rootScope, $window, $http, $state) {
+	return {
+		init : function(cb){
+			cb = cb || angular.noop;
+			$rootScope.user = JSON.parse($window.sessionStorage.user || $window.localStorage.user || null);
+			cb($rootScope.user);
+		},
+		sendSignSms : function(mobile, org, seconds, cb){
+			function leftCount(){
+				cb(null, seconds--);
+				$timeout(leftCount, 1000);
+			}			
+			$http.post('/api/signsms',{_id:mobile, org:org}).success(function(){
+				leftCount();	//这里设定倒计时
+			});
+		},
+		signUp : function(u, cb){
+			$http.post('/api/signup', u).success(function(data){
+				if(data.error){
+					cb(null, data.error);
+				}else{
+					$rootScope.user = data.user;
+					$window.sessionStorage.token = data.token;
+					$window.sessionStorage.user = JSON.stringify(data.user);
+					cb(null, null);
+				}
+			});
+		},
+		signIn : function(username, password, remember, cb){
+			$http.post('/api/signin',{username:username, password:password}).success(function(data){
+				if(data.error){
+					cb(null, data.error);
+				}else{
+					$rootScope.user = data.user;
+					var storage = remember ? $window.localStorage : $window.sessionStorage;
+					storage.token = data.token;
+					storage.user = JSON.stringify(data.user);
+					cb(null, null);
+				}
+			});			
+		},
+		forgot : function(username,password,sms){
+			$http.post('/api/forgot',{username:username, password:password, sms: sms}).success(function(data){
+				if(data.error){
+					cb(null, data.error);
+				}else{
+					$rootScope.user = data.user;
+					$window.sessionStorage.token = data.token;
+					$window.sessionStorage.user = JSON.stringify(data.user);
+					cb(null, null);
+				}
+			});			
+		},
+		signOut: function(cb){
+			cb = cb || angular.noop;
+			delete $rootScope.user;
+			delete $window.sessionStorage.token;
+			delete $window.sessionStorage.user;
+			delete $window.localStorage.token;
+			delete $window.localStorage.user;
+			$state.transitionTo('s.sign');
+			cb();
+		},
+	};
+}])
+.factory('servSite', ["$rootScope", "$window", "$http", "$state", function($rootScope, $window, $http, $state) {
+	return {
+		init : function(cb){
+			cb = cb || angular.noop;
+			var site =  JSON.parse($window.localStorage.site || "{}");
+			angular.forEach(site, function(value, key){
+				$rootScope[key] = value;			
+			});
+			$http.get("/api/site?attachments=slides,cats,videos").success(function(data){
+				angular.forEach(data, function(value, key){
+					$rootScope[key] = value;	
+				});
+				$window.localStorage.cache = JSON.stringify(data);
+			});
+			$rootScope.signOut = function(){
+				delete $rootScope.user;
+				delete $window.sessionStorage.token;
+				delete $window.sessionStorage.user;
+				delete $window.localStorage.token;
+				delete $window.localStorage.user;
+				$state.transitionTo('s.sign');
+			};
+			cb();
+		},
+	};
 }])
 .filter("filterCats", ["$window",function($window) {
 	return function() {
@@ -472,34 +693,23 @@ angular.module("app",["ui.router","ngVideo"])
 	$scope.curCat =  $window._.find($rootScope.cats, function(cat){return cat.key == $stateParams.id;});
 	console.log($scope.curCat);
 }])
-.controller("FVideoCtl",["$scope","$rootScope","$stateParams","$window","$timeout", "video", function($scope,$rootScope,$stateParams,$window,$timeout,$video){
-	$scope.curVideo = $window._.find($rootScope.videos,{_id: $stateParams.id}); 
-/*	$scope.videos = {};
-	var vlst, regex = new RegExp("^\\d{2,12}$");
+.controller("FVideoCtl",["$scope","$rootScope","$stateParams","$window","servVideo", function($scope,$rootScope,$stateParams,$window,servVideo){
+	var regex = new RegExp("^\\d{2,12}$");
 	if(regex.test($stateParams.id)){
-		regex = new RegExp("^" + $stateParams.id);
-		vlst = $window._.filter($rootScope.videos, function(item){ return $window._.find(item.cats, function(c){ return regex.test(c);}); });
-		vlst.forEach(function(item){
-			$scope.videos[item._id] = item.url;
-			$video.addSource("mp4", item.url);
-		});	
+		servVideo.getListByCatKey($stateParams.id, function(err, data){
+			$scope.curVideoList = data;
+			$scope.curVideo = $scope.curVideoList[0];
+			servVideo.visit($scope.curVideo._id);
+		});
 	}else{
-		vlst = $window._.find($rootScope.videos,{_id: $stateParams.id}); 
-		$scope.videos[vlst._id] = vlst.url;
-		$video.addSource("mp4", vlst.url);
+		servVideo.getById($stateParams.id, function(err, data){
+			$scope.curVideo =  data;	
+			$scope.curVideoList = [$scope.curVideo];
+			servVideo.visit($stateParams.id);
+		}); 
 	}
-
-	$scope.playlistOpen = false;
-	$scope.playVideo = function playVideo(sourceUrl) {
-		$video.addSource('mp4', sourceUrl, true);
-	};
-	$scope.getVideoName = function getVideoName(videoModel) {
-		var item = $window._.find($rootScope.videos,{_id: videoModel.src});
-		var result = item ? item.title : "未知文件！";
-	};
-	*/
 }])
-.controller("SignCtl",["$scope","$rootScope","$http","$window","$state", function($scope,$rootScope,$http,$window,$state){
+.controller("SignCtl",["$scope","$rootScope","$window","$state","servUser", function($scope,$rootScope,$window,$state,servUser){
 	if($rootScope.user){$state.go("b.home");}
 	$scope._id="";
 	$scope.username="";
@@ -509,124 +719,64 @@ angular.module("app",["ui.router","ngVideo"])
 	$scope.smsDisable = false;
 	$scope.interval = 60;
 	$scope.rememberme = false;
-	$scope.activeBox = "signup-box";
-	$scope.show_box = function(box){
-		$scope.activeBox = box;
-	};
-	function leftCount(){
-		$scope.interval--;
-		if($scope.interval < 0){
-			$scope.smsCaption = "发送验证码";
-			$scope.smsDisable = false;
-		}else{
-			$scope.smsCaption = $scope.interval + " 秒后再次发送";
-			$scope.smsDisable = true;
-			$timeout(leftCount, 1000);
-		}
-	}
+
 	$scope.sendSms = function(){
-		//这里调用sms发送验证码
-		$http.post('/api/signsms',{_id:$scope._id, org:'钱路书院'}).success(function(data){
-			//这里设定倒计时
-			$scope.interval = 6;
-			leftCount();	
-		})
+		servUser.sendSignSms($scope._id, "钱路书院", 60, function(err, left){
+			$scope.smsCaption = left <= 0 ? "发送验证码" : left + " 秒后再次发送";
+		});
 	};
 	$scope.signup = function(){
-		$http.post('/api/signup',{_id:$scope._id, username:$scope.username, sms:$scope.sms, password:$scope.password}).success(function(data){
-			console.log(data);
-			if(data.error){
-				$scope.msg = data.error;
-			}else{
-				$rootScope.user = data.user;
-				$window.sessionStorage.token = data.token;
-				$window.sessionStorage.user = JSON.stringify(data.user);
+		var data = {_id:$scope._id, username:$scope.username, sms:$scope.sms, password:$scope.password};
+		servUser.signUp(data, function(err, msg){
+			$scope.msg = msg;
+			if(!msg){
 				$state.go("b.home");
 			}
-		})
+		});
 	};
 	$scope.signin = function(){
-		$http.post('/api/signin',{username:$scope.username, password:$scope.password}).success(function(data){
-			console.log(data);
-			if(data.error){
-				$scope.msg = data.error;
-			}else{
-				$rootScope.user = data.user;
-				var storage = $scope.rememberme ? $window.localStorage : $window.sessionStorage;
-				storage.token = data.token;
-				storage.user = JSON.stringify(data.user);
-				$state.go('b.home');
+		servUser.signIn($scope.username, $scope.password, $scope.rememberme, function(err, msg){
+			$scope.msg = msg;
+			if(!msg){
+				$state.go("b.home");
 			}
-		})
+		});
 	}
 	$scope.forget = function(){
-		$http.forget('/api/forget',{username:$scope.username, password:$scope.password}).success(function(data){
-			console.log(data);
-			if(data.error){
-				$scope.msg = data.error;
-			}else{
-				$window.sessionStorage.token = data.token;
-				$state.go('b.home');
+		servUser.forgot($scope.username, $scope.password, $scope.sms, function(err, msg){
+			$scope.msg = msg;
+			if(!msg){
+				$state.go("b.home");
 			}
-		})
+		});
 	}
 }])
 .controller("BCtl",["$scope", "$rootScope","$state", function($scope,$rootScope,$state){
 	if(!$rootScope.user){$state.go("f.sign");}
-	$scope.summary = {
-		orders_count_latest: 0,
-		orders_money_latest: 0,
-		orders_count_top: 0,
-		orders_money_top: 0,
-		waybills_count_latest: 0,
-		waybills_count_top: 0,
-		waybills_count_get: 0,
-		waybills_progress_get: 0,
-		waybills_isincrease_get: false,
-		waybills_count_carry: 0,
-		waybills_progress_carry: 0,
-		waybills_isincrease_carry: false,
-		waybills_count_warehouse: 0,
-		waybills_progress_warehouse: 0,
-		waybills_isincrease_warehouse: false,
-		waybills_count_finance: 0,
-		waybills_rate_well:100,
-	};
-	$scope.customer_derivatives = [
-		{org_name:"客户1", slope: 0.34, derivative:-0.23, suggest:"深入整合"},
-		{org_name:"客户1", slope: 0.34, derivative:-0.23, suggest:"深入整合"},
-		{org_name:"客户1", slope: 0.34, derivative:-0.23, suggest:"深入整合"},
-		{org_name:"客户1", slope: 0.34, derivative:-0.23, suggest:"深入整合"},
-		{org_name:"客户1", slope: 0.34, derivative:-0.23, suggest:"深入整合"},
-	];
 	$scope.tasks = [
-		{title:"飞利浦 上海发武汉 30吨棉花 需报价！", progress: 30, },
-		{title:"飞利浦 上海发武汉 30吨棉花 需报价！", progress: 30, },
-		{title:"飞利浦 上海发武汉 30吨棉花 需报价！", progress: 30, },
-		{title:"飞利浦 上海发武汉 30吨棉花 需报价！", progress: 30, },
+		{title:"你还有30个问题没有关闭！", progress: 30, },
+		{title:"你还有30个问题没有关闭！", progress: 30, },
+		{title:"你还有30个问题没有关闭！", progress: 30, },
+		{title:"你还有30个问题没有关闭！", progress: 30, },
 	];
 	$scope.alerts = [
-		{color:"pink", icon:"comment", title:"您的订单处理已超时！", num:"3"},
-		{color:"pink", icon:"comment", title:"您的订单处理已超时！", num:"3"},
-		{color:"pink", icon:"comment", title:"您的订单处理已超时！", num:"3"},
-		{color:"pink", icon:"comment", title:"您的订单处理已超时！", num:"3"},
+		{color:"pink", icon:"comment", title:"您的VIP权限已超时！", num:"3"},
+		{color:"pink", icon:"comment", title:"您的VIP权限已超时！", num:"3"},
+		{color:"pink", icon:"comment", title:"您的VIP权限已超时！", num:"3"},
+		{color:"pink", icon:"comment", title:"您的VIP权限已超时！", num:"3"},
 	];
 	$scope.msgs = [
-		{from:{username:"叶辛", avatar:"assets/avatars/avatar.png"}, title:"帮我找几个9米6的车跑洛阳的！", create_at: Date.now()},
-		{from:{username:"叶辛", avatar:"assets/avatars/avatar.png"}, title:"帮我找几个9米6的车跑洛阳的！", create_at: Date.now()},
-		{from:{username:"叶辛", avatar:"assets/avatars/avatar.png"}, title:"帮我找几个9米6的车跑洛阳的！", create_at: Date.now()},
-	];
-	$scope.custs = [
-		{name: "上海邻客物流有限公司", contact:"刘德华", tel:"13041666292", area:"江苏 南京 浦口区", addr:"化工大道501弄14号"},
-		{name: "上海邻客物流有限公司", contact:"刘德华", tel:"13041666292", area:"江苏 南京 浦口区", addr:"化工大道501弄14号"},
-		{name: "上海邻客物流有限公司", contact:"刘德华", tel:"13041666292", area:"江苏 南京 浦口区", addr:"化工大道501弄14号"},
-		{name: "上海邻客物流有限公司", contact:"刘德华", tel:"13041666292", area:"江苏 南京 浦口区", addr:"化工大道501弄14号"},
-		{name: "上海邻客物流有限公司", contact:"刘德华", tel:"13041666292", area:"江苏 南京 浦口区", addr:"化工大道501弄14号"},
-		{name: "上海邻客物流有限公司", contact:"刘德华", tel:"13041666292", area:"江苏 南京 浦口区", addr:"化工大道501弄14号"},
+		{from:{username:"叶辛", avatar:"assets/avatars/avatar.png"}, title:"您的VIP权限已超时！", create_at: Date.now()},
+		{from:{username:"叶辛", avatar:"assets/avatars/avatar.png"}, title:"您的VIP权限已超时！", create_at: Date.now()},
+		{from:{username:"叶辛", avatar:"assets/avatars/avatar.png"}, title:"您的VIP权限已超时！", create_at: Date.now()},
 	];
 	//Socket.connect(host,port,data._id,$rootScope.token);
 }])
-.controller("BHomeCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+.controller("BHomeCtl",["$scope","$rootScope","$state","servVideo", function($scope,$rootScope,$state,servVideo){
+	$scope.myVideos = [];
+	servVideo.getMyVisitList(function(err, lst){
+		$scope.myVideos = lst;
+	});
 }])
 .controller("BFaqCtl",["$rootScope","$state", function($scope,$rootScope,$state){
 }])
@@ -649,138 +799,73 @@ angular.module("app",["ui.router","ngVideo"])
 		$scope.curCatType = t;
 		if(t == "video"){$scope.curCatTypeCaption = "视频"}
 		else if(t == "article"){$scope.curCatTypeCaption = "文章"}	
-		console.log(t);
 	}
 	$scope.selCatType('video');
 	$scope.addSubCat = function(cat){
-		var newKey = "", pkey = cat ? cat.key : "";
-		var regex = new RegExp("^" + pkey + "\\d{2}$","g");
-		var sublst = $window._.filter($rootScope.cats, function(item){  return regex.test(item.key); });
-		if(sublst.length > 0){
-			var subkeylst =$window._.pluck(sublst, "key");
-			var newKey = (Number("1" + $window._.max(subkeylst)) + 1).toString().substr(1);
-		}else{
-			newKey = pkey + "01";
-		}
-		console.log(newKey);
-		var curCat = {
-			hostname:$rootScope.site._id,
-			type:$scope.curCatType, 
-			key:newKey,
-			title:"",
-			face:"/img/" + newKey + ".jpg",
-			priority: 50,
-			description:"",
-			isNew:true,
-		};
-		$scope.curCatTip = cat ? "作为 [" + cat.title + "] 的子类" : "作为顶级分类";
+		cat = cat || {key: "", type: $scope.curCatType};
+		servCat.newOne(cat, function(err, data){
+			$scope.editCat(data);
+		});
 		$scope.editCat(curCat);
 	}
 	$scope.editCat = function(cat){
 		$scope.curCat = cat;
-		console.log("cat");
-		$scope.curVideoList = $window._.filter($rootScope.videos, function(item){ return $window._.indexOf(item.cats, cat.key) > -1; });
-		console.log($scope.curVideoList);
+		$scope.curCatTip = cat ? "作为 [" + cat.title + "] 的子类" : "作为顶级分类";
+		servVideo.getListByCatKey(cat.key, function(err, data){
+			$scope.curVideoList = data;
+		});
 		$scope.newVideo();
 	}
 	$scope.saveCat = function(){
-		if($scope.curCat.isNew){
-			delete $scope.curCat.isNew;
-			$rootScope.cats.push($scope.curCat);
-		}
-		$http.post("/api/cat", $scope.curCat).success(function(){
-			$scope.msg = "分类信息 " + $scope.curCat.title + "已保存";
+		servCat.save($scope.curCat, function(err, msg){
+			$scope.msg = msg;
 		});
 	}
 	$scope.delCat = function(){
-		if($scope.curCat.isNew){
-			$scope.addSubCat();	
-			$scope.msg = "分类信息 " + $scope.curCat.title + "已保存";
-		}else{
-			var idx  = $window._.findIndex($rootScope.cats, function(item){ return item.key == $scope.curCat.key; });
-			$rootScope.cats.slice(idx);
-			$scope.selCatType($scope.curCatType);
-			$http.post("/api/cat/del", $scope.curCat).success(function(){
-				$scope.msg = "分类信息 " + $scope.curCat.title + "已删除";
-				$scope.addSubCat();
-			});
-		}
+		servCat.del($scope.curCat, function(err, msg){
+			$scope.msg = msg;
+		});
+		$scope.addSubCat();
 	}
 	$scope.newVideo = function(){
-		var curVideo = {
-			hostname:$rootScope.site._id,
-			title:"", 
-			url:"",
-			cats:[],
-			face: $scope.curCat && $scope.curCat.face,
-			visits: 50,
-			create_at: Date.now(),
-			description:"",
-		};
-		if($scope.curCat && $scope.curCat.type == "video"){
-			curVideo.cats.push($scope.curCat.key);
-			$scope.curVideoTip = "归类于 [" + $scope.curCat.title + "] ";
-		}else{
-			$scope.curVideoTip = "作为顶级分类";
-		}
-		$scope.editVideo(curVideo);
+		servVideo.newOne(function(err, data){
+			if($scope.curCat && $scope.curCat.type == "video"){
+				data.cats.push($scope.curCat.key);
+				$scope.curVideoTip = "归类于 [" + $scope.curCat.title + "] ";
+			}
+			$scope.editVideo(data);
+		});
 	}
 	$scope.editVideo = function(video){
 		$scope.curVideo = video;
 	}
 	$scope.saveVideo = function(){
-		console.log($scope.curVideo);
-		$http.post("/api/video", $scope.curVideo).success(function(data){
-			$scope.msg = "视频信息 " + $scope.curVideo.title + " 已保存";
-			if(!$scope.curVideo._id){
-				console.log(data);
-				$rootScope.videos.push(data);
-			}
+		servVideo.save($scope.curVideo, function(err, msg){
+			$scope.msg = msg;
 		});
 	}
 	$scope.delVideo = function(){
-		if(!$scope.curVideo._id){
-			$scope.msg = "视频信息 " + $scope.curVideo.title + "已删除";
-			$scope.newVideo();	
-		}else{
-			var idx  = $window._.findIndex($rootScope.videos, function(item){ return item._id == $scope.curVideo._id; });
-			$rootScope.videos.slice(idx);
-			$http.post("/api/video/del", $scope.curVideo).success(function(){
-				$scope.msg = "视频信息 " + $scope.curVideo.title + "已删除";
-				$scope.newVideo();
-			});
-		}
+		servVideo.del($scope.curVideo, function(err, msg){
+			$scope.msg = msg;
+		});
 	}
 	$scope.addVideoCat = function(key){
-		$scope.curVideo.cats = $window._.union($scope.curVideo.cats, [key]);
+		$scope.curVideo.cats.splice(0,0,key);
 		$scope.saveVideo();
 	}
 	$scope.delVideoCat = function(key){
-		$scope.curVideo.cats = $window._.without($scope.curVideo.cats, key);
+		var idx = $window._.findIndex($scope.curVideo.cats, key);
+		if(idx > -1){
+			$scope.curVideo.cats.splice(idx,1);	
+		}
 		$scope.saveVideo();
 	}
+
 	$scope.addSubCat();
 }])
-.run(['$rootScope', '$location', '$window', '$http', function ($rootScope, $location, $window, $http) {
-	$rootScope.user = JSON.parse($window.sessionStorage.user || $window.localStorage.user || "{}");
-	$rootScope.signout = function () {
-		delete $rootScope.user;
-		delete $window.sessionStorage.token;
-		delete $window.sessionStorage.user;
-		delete $window.localStorage.token;
-		delete $window.localStorage.user;
-		$state.transitionTo('s.sign');
-	};
-	var cache =  JSON.parse($window.localStorage.cache || "{}");
-	angular.forEach(cache, function(value, key){
-		$rootScope[key] = value;			
-	});
-	$http.get("/api/site?attachments=slides,cats,videos").success(function(data){
-		angular.forEach(data, function(value, key){
-			$rootScope[key] = value;	
-		});
-		$window.localStorage.cache = JSON.stringify(data);
-	});
+.run(['$rootScope', '$location', '$window', 'servUser', 'servSite', function ($rootScope, $location, $window, servUser,servSite) {
+	servUser.init();
+	servSite.init();
 	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
 		$rootScope.toState = toState;
 		$rootScope.toParams = toParams;

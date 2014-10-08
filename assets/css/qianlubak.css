@@ -1,0 +1,22 @@
+.ue-video-list-box {background-color: #f2f2f2;}
+.ue-video-show-img {
+width: 100%;
+height: 124px;
+overflow: hidden;
+}
+
+.ue-video-list-box a * {
+cursor: pointer;
+}
+.ue-video-show-name h3{font-size: 14px; height: 18px; overflow: hidden; line-height: 18px;  color: #000; overflow: hidden;font-weight:500;}
+.ue-video-show-name h3{font-size: 14px; height: 18px; overflow: hidden; line-height: 18px; color: #000; overflow: hidden;font-weight:500;}
+.ue-video-show-long {margin:20px 10px 4px 12px; font-size: 12px; line-height: 16px; height: 16px;}
+.ue-video-show-long * { display: inline-block; vertical-align: top; color: #999;}
+.ue-video-show-star { margin:4px 0 0 12px; font-size: 12px; line-height: 16px; height: 16px; }
+.ue-video-show-star * { display: inline-block; vertical-align: top; }
+.ue-video-show-star i { width: 14px; height: 14px;  margin-right: 6px; background: url('../images/common/ue-time-02.png'); }
+.ue-video-show-star .ue-num { margin-right: 8px;}
+.ue-video-show-ing { background: #F5A623; line-height: 16px; color: #fff; position: absolute; right: -1px; bottom: 1.5em; height: 16px; padding: 0.2em 1em;}
+.ue-video-list-hide .ue-video-show-name { height: auto; max-height: 36px;}
+.ue-video-show-btn { position: absolute; bottom: 10px; left: 0; width: 100%; height: 28px; text-align: center;}
+.ue-video-show-btn span { display: inline-block; vertical-align: top; background: #82b548; color: #ffffff; padding: 0.3em 3.5em;}

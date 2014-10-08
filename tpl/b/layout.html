@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="/assets/css/ace.min.css" />
 <link rel="stylesheet" href="/assets/css/ace-rtl.min.css" />
 <link rel="stylesheet" href="/assets/css/ace-skins.min.css" />
+<link rel="stylesheet" href="/assets/css/qianlubak.css" />
 <!--[if lte IE 8]>
   <link rel="stylesheet" href="/assets/css/ace-ie.min.css" />
 <![endif]-->
@@ -61,7 +62,7 @@
 						<li><a href="#"><i class="icon-cog"></i>设置</a></li>
 						<li><a href="#"><i class="icon-user"></i>个人信息</a></li>
 						<li class="divider"></li>
-						<li><a href="#"><i class="icon-off"></i>注销</a></li>
+						<li><a ng-click="signOut()"><i class="icon-off"></i>注销</a></li>
 					</ul>
 				</li>
 			</ul><!-- /.ace-nav -->
