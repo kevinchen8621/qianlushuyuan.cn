@@ -348,7 +348,9 @@ angular.module("app",["ui.router"])
 				angular.forEach(data, function(value, key){
 					$rootScope[key] = value;	
 				});
-				$window.localStorage.cache = JSON.stringify(data);
+				if(data){
+					$window.localStorage.site = JSON.stringify(data);	
+				}
 			});
 			$rootScope.signOut = function(){
 				delete $rootScope.user;

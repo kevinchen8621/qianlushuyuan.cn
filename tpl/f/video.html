@@ -12,10 +12,13 @@
 				</div>
 			</div>
 		</form>
-		<span class="u-nav u-beforelogin j-beforelogin f-fr">
-			<span class="f-c6 li hidden-xs">欢迎来到{{site.title}}!</span>
-			<a ng-hide="user" class="f-cgreen li j-loginBtn" href="#/signin">登录/注册</a>
-			<a ng-show="user" class="f-cgreen li j-loginBtn" href="#/b/home">我的钱路</a>
+		<span ng-hide="user" class="u-nav u-beforelogin j-beforelogin right">
+			<span class="f-c6 li hidden-xs">欢迎来到{{site.title}}!!</span>
+			<a href="#/s/signin" class="f-c6 li">登录</a> | 
+			<a href="#/s/signup" class="f-c6 li">注册</a>
+		</span>
+		<span ng-show="user" class="u-nav u-beforelogin j-beforelogin right">
+			<a href="#/b/home" class="f-c6 li">我的{{site.title}}</a>
 		</span>
 	</div>	
 </div>

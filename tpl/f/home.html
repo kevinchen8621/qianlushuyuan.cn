@@ -38,7 +38,7 @@
 		<ul>
 			<li class="left rel"><a class="link f-f0 nowrp f-cf" href="#/" target="_self">首页</a></li>
 
-			<li class="left rel visible-lg" ng-repeat="item in cats | filterCats:'video':'' | orderBy: 'key'"><a class="link f-f0 nowrp f-cf" href="#/f/cat/{{item.key}}">{{item.title}}</a></li>
+			<li class="left rel visible-lg" ng-repeat="item in cats | filterCats:'video':'' | orderBy: 'key'"><a class="link f-f0 nowrp f-cf" href="#/cat/{{item.key}}">{{item.title}}</a></li>
 			<li ng-hide="user" class="right rel"><a class="link f-f0 nowrp f-cyellow" href="#/s/signup">注册</a></li>
 			<li ng-hide="user" class="right rel"><a class="link f-f0 nowrp f-cyellow" href="#/s/signin">登陆</a></li>
 			<li ng-show="user" class="right rel"><a class="link f-f0 nowrp f-cyellow" href="#/b/home">我的{{site.title}}</a></li>
