@@ -355,6 +355,44 @@ angular.module("app",["ui.router","ngVideo"])
         });
     };
 })
+.directive('videojs', function() {
+	var directive = {};
+	directive.restrict = 'A';
+	directive.replace = true;
+	directive.scope = {
+		options: '=',
+		model: '=ngModel'
+	};
+	directive.link = function($scope, element, attributes) {
+		$scope.scope = $scope;
+		$scope.$watch("model", function(newValue) {
+			document.body.scrollTop = document.documentElement.scrollTop = 0;
+			if(newValue){
+				var timer = setTimeout(function(){
+					var vid = '_' + Math.random().toString(36).substr(2, 9);
+					var face = '/img/slide3.jpg';
+
+					var str = '<video id="video'+vid+'" class="video-js vjs-default-skin" controls="controls" autoplay="autoplay" ';
+					str += 'width="100%" height="100%" ';
+					str += 'data-setup=\'{"example_option":true, "customControlsOnMobile": true}\' id="play_video" ';
+					str += 'poster="'+face+'" preload="none">';
+					str += '<source src="'+newValue.url+'" type="video/mp4" />';
+					str += '<object id="flash_fallback_1" class="vjs-flash-fallback" width="100%" height="100%" type="application/x-shockwave-flash" data="http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf">';
+					str += '<param name="movie" value="http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf" />';
+					str += '<param name="allowfullscreen" value="true" />';
+					str += '<param name="flashvars" value=\'config={"playlist":["'+face+'", {"url": "","autoPlay":false,"autoBuffering":true}]}\' />';
+					str += '<img src="'+face+'" width="100%" height="100%" alt="" title="No video playback capabilities." />';
+					str += '</object>';
+					str += '</video>';
+					element.html(str);
+				},500);
+			}else{
+				element.html("<p style='color:#fff;font-size:15pt;padding:10px;font-weight:bolder;'>Loading............</p>");
+			}
+		});
+	};
+	return directive;	
+})
 .config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($stateProvider, $urlRouterProvider, $httpProvider) {
 	$urlRouterProvider.otherwise("/");
 	$stateProvider
@@ -435,7 +473,8 @@ angular.module("app",["ui.router","ngVideo"])
 	console.log($scope.curCat);
 }])
 .controller("FVideoCtl",["$scope","$rootScope","$stateParams","$window","$timeout", "video", function($scope,$rootScope,$stateParams,$window,$timeout,$video){
-	$scope.videos = {};
+	$scope.curVideo = $window._.find($rootScope.videos,{_id: $stateParams.id}); 
+/*	$scope.videos = {};
 	var vlst, regex = new RegExp("^\\d{2,12}$");
 	if(regex.test($stateParams.id)){
 		regex = new RegExp("^" + $stateParams.id);
@@ -458,6 +497,7 @@ angular.module("app",["ui.router","ngVideo"])
 		var item = $window._.find($rootScope.videos,{_id: videoModel.src});
 		var result = item ? item.title : "未知文件！";
 	};
+	*/
 }])
 .controller("SignCtl",["$scope","$rootScope","$http","$window","$state", function($scope,$rootScope,$http,$window,$state){
 	if($rootScope.user){$state.go("b.home");}

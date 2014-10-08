@@ -1,3 +1,6 @@
+<link href="/css/video-js.css" rel="stylesheet">
+<script src="/js/video.js"></script>
+<script type="text/javascript">videojs.options.flash.swf = "http://cdn.bootcss.com/video.js/4.1.0/video-js.swf"; </script>
 <div class="m-topnav rel">
 	<div class="container">
 		<a href="#/" class="li f-fl f-c3"><h4>{{site.title}}</h4></a>
@@ -54,72 +57,16 @@
       </div>
   </div>
 
-<div class="videowrap">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-8 col-md-offset-2">
-				<!--视频播放器-->
-				<section class="video" ng-video>
-				<!-- Screen Directive -->
-					<video vi-screen></video>
-					<section vi-controls="" class="controls">
-						<span vi-controls-play="" title="Play" class="glyphicon glyphicon-play"></span>
-						<span vi-controls-pause="" title="Pause" class="glyphicon glyphicon-pause"></span>
-					</section>
-					<!-- Full Screen Directive -->
-					<section class="full-screen">
-						<span title="Full Screen" vi-full-screen-toggle="" class="glyphicon glyphicon-fullscreen"></span>
-					</section>
-					<!-- Feedback Directive -->
-					<section vi-feedback="" class="feedback ng-scope">
-						<span class="buffering ng-hide" ng-show="buffering">缓冲...</span>
-						<section class="loading ng-hide" ng-show="loading">装载... </section>
-						<!-- Volume Directive -->
-						<section vi-volume="" class="volume ng-scope">
-							<div class="scale"><div class="bar" style="width: {{volume * 100}}%"></div></div>
-							<span vi-volume-decrease="" title="Decrease Volume" class="decrease glyphicon glyphicon-minus"></span>
-							<span vi-volume-increase="" title="Increase Volume" class="increase glyphicon glyphicon-plus"></span>
-						</section>
-						<!-- Duration Directive -->
-						<section class="duration ng-binding">
-							{{currentTime | number: 2}}s of {{duration | number: 2}}s 
-							[{{percentagePlayed | number: 0}}%]
-						</section>
-						<section class="title">钱路学</section>
-						<!-- Timeline Directive -->
-						<section class="timeline"><input vi-timeline /></section>
-						<!-- Buffer Directive -->
-						<section vi-buffer class="buffer"></section>
-						<section class="generic">
-							音量{{volume}}
-							<span vi-messages>M{{messages.length}}</span>
-							R{{playbackRate}}
-							P{{playing ? 1 : 0}}
-							L{{loading ? 1 : 0}}
-							B{{buffered}}%
-							<a href="https://github.com/Wildhoney/ngVideo" target="_blank">
-								钱路书院
-							</a>
-						</section>
-					</section>
-					<!-- Playlist Directive -->
-					<section vi-playlist class="playlist" ng-show="$parent.playlistOpen">
-						<ul>
-							<li class="title">
-								<span class="glyphicon glyphicon-facetime-video"></span> &nbsp; Playlist
-								<div class="close-playlist" title="Close Playlist" ng-click="$parent.playlistOpen = !$parent.playlistOpen"> &times;</div>
-							</li>
-							<li vi-playlist-video ng-repeat="video in videos" ng-model="video">
-								<span vi-meta ng-model="video" class="meta">{{duration | number: 2}}s</span>
-								{{getVideoName(video)}}
-							</li>
-						</ul>
-					</section>
-					<span title="Open Playlist" ng-show="!playlistOpen" ng-click="playlistOpen = !playlistOpen" class="open-playlist glyphicon glyphicon-facetime-video"></span>
-				</section>
-			</div>
-		</div>
+<div class="container-fluid videowrap">
+  <div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<div class="blank20"></div><div class="blank20"></div>
+		<div  videojs ng-model="curVideo"></div>
+		<div class="blank20"></div><div class="blank20"></div>
 	</div>
-</div>	
+  </div>
+</div>
+
+
 	
 

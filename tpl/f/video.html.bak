@@ -1,0 +1,125 @@
+<div class="m-topnav rel">
+	<div class="container">
+		<a href="#/" class="li f-fl f-c3"><h4>{{site.title}}</h4></a>
+		<form class="form-inline li f-fl" role="form">
+			<div class="form-group m-search">
+				<div class="input-group ">
+					<input class="form-control input-sm" type="text" placeholder="搜索钱路书院课程、视频">
+					<div type="button" class="input-group-addon btn btn-warning">搜索</div>
+				</div>
+			</div>
+		</form>
+		<span class="u-nav u-beforelogin j-beforelogin f-fr">
+			<span class="f-c6 li hidden-xs">欢迎来到{{site.title}}!</span>
+			<a ng-hide="user" class="f-cgreen li j-loginBtn" href="#/signin">登录/注册</a>
+			<a ng-show="user" class="f-cgreen li j-loginBtn" href="#/b/home">我的钱路</a>
+		</span>
+	</div>	
+</div>
+<div class="m-pt f-pr">
+	<div class="container">
+		<div class="f-fr cz">
+			<div class="btn f-fr f-pr lastbtn j-hoverdown">
+				<span class="f-c9 ic ic-more"></span>
+				<span class="f-c9 in">更多</span>
+				<div class="f-pa menu j-downitem">
+					<a class="f-c6" href="#" target="_blank" id="j-check-subtitle">内容纠错</a>
+					<a class="f-c6" id="j-feedback">投诉或建议</a>
+					<a class="f-c6" href="#" target="_blank" id="j-movie-download">下载本课时</a>
+				</div>
+			</div>
+			<div class="btn f-fr f-pr" id="j-collect-btn">
+				<span class="f-c9 ic ic-store"></span>
+				<span class="f-c9 in">收藏课时</span>  
+			</div>
+			<div class="btn f-fr f-pr" id="j-subtitle-btn">
+				<span class="f-c9 ic ic-fanyi"></span>
+				<span class="f-c9 in">参与讨论</span>
+			</div>
+			<div class="btn f-fr f-pr" id="j-open-note-btn">
+				<span class="f-c9 ic ic-note" id="j-note-btn"></span>
+				<span class="f-c9 in">笔记</span>
+			</div>
+		</div>
+		<div class="f-fl nav">
+			<p class="bread">
+				<a href="#/" class="f-c9">{{site.title}}</a>
+				<span class="f-c9 f-icon sp"></span>
+				<a ng-repeat="item in video.cats" href="#/cat/{{item.key}}" class="f-c9"> {{item.title}} </a>
+			</p>
+			<h3 class="f-c3 mname">
+				<span class="f-fl">{{video.title}}</span>
+			</h3>
+          </div>
+      </div>
+  </div>
+
+<div class="videowrap">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<!--视频播放器-->
+				<section class="video" ng-video>
+				<!-- Screen Directive -->
+					<video vi-screen></video>
+					<section vi-controls="" class="controls">
+						<span vi-controls-play="" title="Play" class="glyphicon glyphicon-play"></span>
+						<span vi-controls-pause="" title="Pause" class="glyphicon glyphicon-pause"></span>
+					</section>
+					<!-- Full Screen Directive -->
+					<section class="full-screen">
+						<span title="Full Screen" vi-full-screen-toggle="" class="glyphicon glyphicon-fullscreen"></span>
+					</section>
+					<!-- Feedback Directive -->
+					<section vi-feedback="" class="feedback ng-scope">
+						<span class="buffering ng-hide" ng-show="buffering">缓冲...</span>
+						<!--section class="loading ng-hide" ng-show="loading">装载... </section-->
+						<!-- Volume Directive -->
+						<section vi-volume="" class="volume ng-scope">
+							<div class="scale"><div class="bar" style="width: {{volume * 100}}%"></div></div>
+							<span vi-volume-decrease="" title="Decrease Volume" class="decrease glyphicon glyphicon-minus"></span>
+							<span vi-volume-increase="" title="Increase Volume" class="increase glyphicon glyphicon-plus"></span>
+						</section>
+						<!-- Duration Directive -->
+						<section class="duration ng-binding">
+							{{currentTime | number: 2}}s of {{duration | number: 2}}s 
+							[{{percentagePlayed | number: 0}}%]
+						</section>
+						<section class="title">钱路学</section>
+						<!-- Timeline Directive -->
+						<section class="timeline"><input vi-timeline /></section>
+						<!-- Buffer Directive -->
+						<section vi-buffer class="buffer"></section>
+						<section class="generic">
+							音量{{volume}}
+							<span vi-messages>M{{messages.length}}</span>
+							R{{playbackRate}}
+							P{{playing ? 1 : 0}}
+							L{{loading ? 1 : 0}}
+							B{{buffered}}%
+							<a href="https://qianlushuyuan.cn" target="_blank">
+								钱路书院
+							</a>
+						</section>
+					</section>
+					<!-- Playlist Directive -->
+					<section vi-playlist class="playlist" ng-show="$parent.playlistOpen">
+						<ul>
+							<li class="title">
+								<span class="glyphicon glyphicon-facetime-video"></span> &nbsp; Playlist
+								<div class="close-playlist" title="Close Playlist" ng-click="$parent.playlistOpen = !$parent.playlistOpen"> &times;</div>
+							</li>
+							<li vi-playlist-video ng-repeat="video in videos" ng-model="video">
+								<span vi-meta ng-model="video" class="meta">{{duration | number: 2}}s</span>
+								{{getVideoName(video)}}
+							</li>
+						</ul>
+					</section>
+					<span title="Open Playlist" ng-show="!playlistOpen" ng-click="playlistOpen = !playlistOpen" class="open-playlist glyphicon glyphicon-facetime-video"></span>
+				</section>
+			</div>
+		</div>
+	</div>
+</div>	
+	
+
