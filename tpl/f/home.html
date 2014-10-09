@@ -1,4 +1,4 @@
-<div class="m-topnav rel">
+<div class="m-topnav hidden-xs">
 	<div class="container">
 		<span class="u-nav left clear">
 			<a href="#/" class="li f-c9">{{site.title}}</a>
@@ -6,14 +6,14 @@
 		<span ng-hide="user" class="u-nav u-beforelogin j-beforelogin right">
 			<span class="f-c6 li hidden-xs">欢迎来到{{site.title}}!!</span>
 			<a ng-click="toggleModal('signin')" class="f-c6 li">登录</a> | 
-			<a ng-click="toggleModal('signup')" class="f-c6 li">注册</a>
+			<a ng-click="toggleModal('signup_by_email')" class="f-c6 li">注册</a>
 		</span>
 		<span ng-show="user" class="u-nav u-beforelogin j-beforelogin right">
 			<a href="#/b/home" class="f-c6 li">我的{{site.title}}</a>
 		</span>
 	</div>
 </div>
-<div class="m-midnav rel">
+<div class="m-midnav  hidden-xs">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-8">
@@ -37,36 +37,37 @@
 	<div class="container">
 		<ul>
 			<li class="left rel"><a class="link f-f0 nowrp f-cf" href="#/" target="_self">首页</a></li>
+			<li class="left rel"><a class="link f-f0 nowrp f-cf" href="#/" target="_self">钱路课程</a></li>
+			<li class="left rel"><a class="link f-f0 nowrp f-cf" href="#/" target="_self">钱路问答</a></li>
+			<li class="left rel"><a class="link f-f0 nowrp f-cf" href="#/" target="_self">VIP会员</a></li>
 
-			<li class="left rel visible-lg" ng-repeat="item in cats | filterCats:'video':'' | orderBy: 'key'"><a class="link f-f0 nowrp f-cf" href="#/cat/{{item.key}}">{{item.title}}</a></li>
-			<li ng-hide="user" class="right rel"><a class="link f-f0 nowrp f-cyellow" href="#/s/signup">注册</a></li>
-			<li ng-hide="user" class="right rel"><a class="link f-f0 nowrp f-cyellow" href="#/s/signin">登陆</a></li>
+			<li ng-hide="user" class="right rel"><a class="link f-f0 nowrp f-cyellow" ng-click="toggleModal('signin')">注册</a></li>
+			<li ng-hide="user" class="right rel"><a class="link f-f0 nowrp f-cyellow" ng-click="toggleModal('signup_by_email')">登陆</a></li>
 			<li ng-show="user" class="right rel"><a class="link f-f0 nowrp f-cyellow" href="#/b/home">我的{{site.title}}</a></li>
 		</ul>
 	</div>
 </div>
-<div class="m-slidebox rel" data-slide-fluid>
-	<div class="g-wrap f-pr" id="j-mainslide-imgs">
-		<!-- 多个imgItem -->
-		<div ng-repeat="item in slides" class="imgItem f-pa j-slideImg" style="background: {{item.bgcolor}};">
+<div class="m-slidebox" data-slide-fluid>
+	<div class="g-wrap">
+		<div ng-repeat="item in slides" class="imgItem f-pa" style="background: {{item.bgcolor}};">
 			<div class="imgbox g-container f-pr">
 				<a href="{{item.url}}">
 					<div class="pic" style="background-image: url({{item.slide}});"></div>
-					<div class="txt f-pa"><img src="{{item.slide_little}}"></div>
+					<div class="txt f-pa  hidden-xs"><img src="{{item.slide_little}}"></div>
 				</a>
 			</div>
 		</div>
 	</div>
-	<div class="container f-pr ">
+	<div class="container f-pr  hidden-xs">
 		<!-- 缩略图 -->
-		<div class="slwrap f-pa" id="j-mainslide-items">
-			<div ng-repeat="item in slides" class="j-slideitem item f-pa" style="left: {{$index*84}}px;">
+		<div class="slwrap f-pa">
+			<div ng-repeat="item in slides" class="item f-pa" style="left: {{$index*84}}px;">
 				<div class="posborder f-pa"></div>
 				<div class="slt" style="background-image: url({{item.slide_nav}});"></div>
 			</div>
 		</div>
 		<!-- 右侧3个Tab -->
-		<div class="tabwrap f-pa hidden-xs" id="j-mainslide-tabs">
+		<div class="tabwrap f-pa">
 			<div class="bg"></div>
 			<div class="con f-pa" data-bs-tab>
 				<div class="tabtop"></div>
@@ -100,19 +101,22 @@
 		</div>
 	</div>
 </div><!-- /图片轮播 -->
-<div class="container">
-	<div class="row g-card-row" ng-repeat="item in cats | filterCats : 'video' : '' | orderBy: 'key'">
-		<div class="col-xs-4 col-sm-4 col-md-3 col-lg-2 g-card1 u-tag2"> 
-			<h2>{{item.title.substr(0,2)}}</h2><div class="b-10"></div><span>{{item.title.substr(2)}}</span>
-		</div>	
-		<div class="col-xs-4 col-sm-4 col-md-3 col-lg-2 g-card1" ng-repeat="sub in cats | filterCats : 'video' : item.key | orderBy: 'key'">
-			<a href="#/cat/{{sub.key}}" class="u-cover">
-				<div class="shadow rel">
-					<img ng-src="{{sub.face}}" class="lazy" alt="{{sub.title}}" height="100px" width="180px" style="display: inline;">
-					<div class="mask abs"></div><div class="abs hide new">new</div>
-				</div>
-			</a>
-			<a href="#/cat/{{sub.key}}"><h5 class="f-c3 ng-binding">{{sub.title}}</h5></a>
+
+
+<div class="blank20"></div><div class="blank20"></div><div class="blank20"></div>
+<div class="container" ng-repeat="item in cats | filterCats : 'video' : '' | orderBy: 'key'">
+	<div class="blank20"></div>
+	<div class="row">
+		<div class="face col-xs-4 col-sm-4 col-md-3 col-lg-2 ">
+			<div class="thumbnail cat">
+				<h1 class="f-cf  center">{{item.title.substr(0,2)}}</h1><div class="b-10"></div><h5 class="f-cf">{{item.title.substr(2)}}</h5>
+			</div>
+		</div>
+		<div class="face col-xs-4 col-sm-4 col-md-3 col-lg-2 " ng-repeat="sub in cats | filterCats : 'video' : item.key | orderBy: 'key'">
+			<div class="thumbnail">
+				<a href="{{sub.url}}" title="{{sub.title}}"><img src="{{sub.face}}" width="100%" alt="{{sub.title}}"></a>
+				<h5 class="f-c3">{{sub.title}}</h5>
+			</div>
 		</div>
 	</div>
 </div>
