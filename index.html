@@ -840,7 +840,7 @@ angular.module("app",["ui.router"])
 }])
 .controller("BDataCtl",["$scope","$rootScope","$state", function($scope,$rootScope,$state){
 }])
-.controller("BSiteCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
+.controller("BSiteCtl",["$scope","$rootScope","$http","$window","servCat","servVideo", function($scope,$rootScope,$http,$window,servCat,servVideo){
 	$scope.selCatType = function(t){
 		$scope.curCatType = t;
 		if(t == "video"){$scope.curCatTypeCaption = "视频"}
@@ -852,11 +852,10 @@ angular.module("app",["ui.router"])
 		servCat.newOne(cat, function(err, data){
 			$scope.editCat(data);
 		});
-		$scope.editCat(curCat);
+		$scope.curCatTip = cat.key ? "作为 [" + cat.title + "] 的子类" : "作为顶级分类";
 	}
 	$scope.editCat = function(cat){
 		$scope.curCat = cat;
-		$scope.curCatTip = cat ? "作为 [" + cat.title + "] 的子类" : "作为顶级分类";
 		servVideo.getListByCatKey(cat.key, function(err, data){
 			$scope.curVideoList = data;
 		});
