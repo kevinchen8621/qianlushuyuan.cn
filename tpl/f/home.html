@@ -5,8 +5,8 @@
 		</span>
 		<span ng-hide="user" class="u-nav u-beforelogin j-beforelogin right">
 			<span class="f-c6 li hidden-xs">欢迎来到{{site.title}}!!</span>
-			<a href="#/s/signin" class="f-c6 li">登录</a> | 
-			<a href="#/s/signup" class="f-c6 li">注册</a>
+			<a ng-click="toggleModal('signin')" class="f-c6 li">登录</a> | 
+			<a ng-click="toggleModal('signup')" class="f-c6 li">注册</a>
 		</span>
 		<span ng-show="user" class="u-nav u-beforelogin j-beforelogin right">
 			<a href="#/b/home" class="f-c6 li">我的{{site.title}}</a>

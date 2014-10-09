@@ -1,3 +1,175 @@
 <div class="page-header">
 	<h1>网站管理<small><i class="icon-double-angle-right"></i> 网站设置 </small></h1>
 </div>
+<div class="row">
+	<div class="col-xs-12">
+		<div  ng-show="msg" class="alert alert-danger">{{msg}}</div>	
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="tabbable" data-bs-tab>
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#"><i class="green icon-home bigger-110"></i>系统信息</a></li>
+						<li><a href="#"><i class="icon-spinner icon-spin orange bigger-110"></i>会员设置 <span class="badge badge-danger">4</span></a></li>
+						<li><a href="#">监控设置</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active">
+							<div class="row">
+								<div class="col-xs-12">
+									<form class="form-horizontal" role="form">
+										<div class="space-4"></div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 网站标题 </label>
+											<div class="col-sm-9">
+												<input type="text" ng-model="site.title" placeholder="网站标题" class="col-xs-10 col-sm-10">
+											</div>
+										</div>
+										<div class="space-4"></div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 搜索关键字 </label>
+											<div class="col-sm-9">
+												<input type="text" ng-model="site.key" placeholder="搜索关键字" class="col-xs-10 col-sm-10">
+											</div>
+										</div>
+										<div class="space-4"></div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 搜索描述 </label>
+											<div class="col-sm-9">
+												<input type="text" ng-model="site.description" placeholder="搜索描述" class="col-xs-10 col-sm-10">
+											</div>
+										</div>
+										<div class="space-4"></div>
+										<div class="space-4"></div>
+										<div class="space-10"></div>
+										<div class="clearfix form-actions">
+											<div class="col-md-offset-3 col-md-9">
+												<button class="btn btn-info" ng-click="doSubmit()"><i class="icon-ok bigger-110"></i>保存资料</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+
+							<form class="form-horizontal" role="form">
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 订单号 </label>
+									<div class="col-sm-3"><input readonly="true" type="text" id="form-field-1" placeholder="Username" class="col-xs-12 col-sm-12"></div>
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 客户 </label>
+									<div class="col-sm-5"><input readonly="true" type="text" id="form-field-1" placeholder="Username" class="col-xs-10 col-sm-10"></div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 订单简述 </label>
+									<div class="col-sm-10"><input type="text" id="form-field-1" placeholder="Username" class="col-xs-11 col-sm-11"></div>
+								</div>
+								<div class="space-4"></div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-2"> 订单说明 </label>
+									<div class="col-sm-9">
+										<textarea class="form-control" id="form-field-8" placeholder="Default Text"></textarea>
+									</div>
+								</div>
+								<hr>
+								<p class="alert alert-info">这里放发件方信息</p>
+								<p class="alert alert-success">这里放收件方信息</p>
+								<div class="clearfix form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-info" type="button"><i class="icon-ok bigger-110"></i>提交订单</button>
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn" type="reset"><i class="icon-undo bigger-110"></i>订单终止</button>
+									</div>
+								</div>
+							</form>						
+						</div>
+
+						<div class="tab-pane">
+							<p>这里放队列.</p>
+						</div>
+
+						<div class="tab-pane">
+							<p>这里放跟踪查询.</p>
+						</div>
+
+					</div>
+				</div>
+			</div><!-- /span -->
+
+			<div class="vspace-xs-6"></div>
+
+			<div class="col-sm-6">
+				<div class="tabbable tabs-right" data-bs-tab>
+					<ul class="nav nav-tabs" id="myTab3">
+						<li class="active"><a href="#"><i class="pink icon-dashboard bigger-110"></i>客户</a></li>
+						<li><a href="#"><i class="blue icon-user bigger-110"></i>地址</a></li>
+						<li><a href="#"><i class="green icon-rocket bigger-110"></i>服务</a></li>
+						<li><a href="#"><i class="icon-book bigger-110"></i>要求</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active">
+							<div class="widget-container-span ui-sortable">
+								<div class="widget-box transparent">
+									<div class="widget-header">
+										<h4 class="lighter">选择委托客户</h4>
+										<div class="widget-toolbar no-border">
+											<a ng-click="changeCustShow()"><i class="icon-list"></i></a>
+											<a ng-click="sel"><i class="icon-file"></i></a>
+										</div>
+										<div class="widget-toolbar no-border">
+											<input type="text"  class="input-small" placeholder="搜索...">												
+										</div>	
+									</div>
+									<div class="widget-body">
+										<div class="widget-main padding-6 no-padding-left no-padding-right">
+											<div class="row">
+												<div class="col-xs-6 col-md-3" ng-repeat="item in custs">
+													<div class="thumbnail alert alert-info">
+														<h5><i class="icon icon-user"></i>{{item.name}}</h5>
+														<h6 ng-show="custShowMode > 0">{{item.contact}} {{item.tel}}</h6>
+														<h6 ng-show="custShowMode > 1">{{item.area}}</h6>
+														<h6 ng-show="custShowMode > 2">{{item.addr}}</h6>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="space-24"></div>
+										<div class="accordion-style1 panel-group">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h4 class="panel-title">
+														<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+															<i class="bigger-110 icon-angle-right" data-icon-hide="icon-angle-down" data-icon-show="icon-angle-right"></i>
+															&nbsp;新建 & 编辑客户信息
+														</a>
+													</h4>
+												</div>
+
+												<div class="panel-collapse collapse" id="collapseOne" style="height: 0px;">
+													<div class="panel-body">
+														输入客户信息Form.
+													</div>
+												</div>
+											</div>											
+										</div>	
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane">
+							<p>地址信息.</p>
+						</div>
+
+						<div class="tab-pane">
+							<p>服务内容.</p>
+						</div>
+
+						<div class="tab-pane">
+							<p>服务要求.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!-- /row -->
+
+
+		<div class="hr hr-double hr-dotted hr18"></div>
+	</div><!-- /.col -->
+</div>						

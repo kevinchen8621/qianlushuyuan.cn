@@ -9,6 +9,7 @@
 <!-- Bootstrap -->
 <link href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 <link href="http://cdn.bootcss.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+<link href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
 <!-- Custom styles for this template -->
 
 <!--[if !IE]> -->
@@ -27,8 +28,230 @@ window.jQuery || document.write("<script src='http://cdn.bootcss.com/jquery/1.10
 
 <div ui-view></div>
 
+<modal-dialog key='signup_by_email' show='mdData.show' width='660px' dialog-title='邮箱注册'>
+	<div class="row">
+		<div class="col-md-7 seprate">
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">用户名:</label>
+					<div class="col-sm-9">
+						<input type="text" ng-model="mdData.username" class="form-control" placeholder="请在此输入您的用户名(3~15字符)">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">E-mail:</label>
+					<div class="col-sm-9">
+						<input type="email" ng-model="mdData.email" class="form-control" placeholder="在此输入您的Email">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">密码:</label>
+					<div class="col-sm-9">
+						<input type="password" ng-model="mdData.password" class="form-control" placeholder="请输入您的密码">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-sm-9">
+						<div class="checkbox">
+							<label class="control-label">
+								<input type="checkbox" ng-model="mdData.agree"> 同意用户协议
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-sm-9">
+						<button ng-click="doSignup()" class="btn btn-default btn-success">提交注册信息</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-4 col-md-offset-1">
+			<h4>已有{{site.title}}账号？</h4><br>
+			<button ng-click="toggleModal('signin')" class="btn btn-info btn-sm">登陆</button>
+			<br><br><br>
+			<h6>或使用以下账号直接登陆</h6>
+			<a ng-click="mdSignQQ()"><img src="/img/qq_login.png" alt="qq"></a>
+		</div>
+	</div>
+</modal-dialog>
+<modal-dialog key='signup_by_mobile' show='mdData.show' width='660px' dialog-title='手机注册'>
+	<div class="row">
+		<div class="col-md-7 seprate">
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">用户名:</label>
+					<div class="col-sm-9">
+						<input type="text" ng-model="mdData.username" class="form-control" placeholder="请在此输入您的用户名(3~15字符)">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">手机号:</label>
+					<div class="col-sm-9">
+						<input type="text" ng-model="mdData.mobile" class="form-control" placeholder="在此输入您的手机号码">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">验证码:</label>
+					<div class="col-sm-9">
+						<div class="input-group">
+							<input type="text" class="form-control" ng-model="mdData.sms" placeholder="输入验证码">
+							<span class="input-group-btn">
+								<button class="btn btn-sm btn-default  form-control" type="button" ng-disabled="mdData.smsDisable" ng-click="sendSms()">
+									<i class="icon-calendar bigger-110"></i>发送验证码!
+								</button>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">密码:</label>
+					<div class="col-sm-9">
+						<input type="password" ng-model="mdData.password" class="form-control" placeholder="请输入您的密码">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-sm-9">
+						<div class="checkbox">
+							<label class="control-label">
+								<input type="checkbox" ng-model="mdData.agree"> 同意用户协议
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-sm-9">
+						<button ng-click="doSignup()" class="btn btn-default btn-success">提交注册信息</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-4 col-md-offset-1">
+			<h4>已有{{site.title}}账号？</h4><br>
+			<button ng-click="toggleModal('signin')" class="btn btn-info btn-sm">登陆</button>
+			<br><br><br>
+			<h6>或使用以下账号直接登陆</h6>
+			<a ng-click="mdSignQQ()"><img src="/img/qq_login.png" alt="qq"></a>
+		</div>
+	</div>
+</modal-dialog>
+<modal-dialog key="signin" show='mdData.show' width='660px' dialog-title='登陆'>
+	<div class="row">
+		<div class="col-md-7 seprate">
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">用户名:</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" ng-model="mdData.username" placeholder="用户名 , 手机号 , Email">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">密码:</label>
+					<div class="col-sm-9">
+						<input type="password" ng-model="mdData.password" class="form-control" placeholder="请输入您的密码">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-sm-9">
+						找回密码通过 <a ng-click="toggleModal('forgot_by_email')" class="control-label">邮箱</a> | <a ng-click="toggleModal('forgot_by_mobile')" class="control-label">手机</a> 
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-sm-9">
+						<button ng-click="doSignin()" class="btn btn-default btn-success">登陆</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-4 col-md-offset-1">
+			<h4>还没有{{site.title}}账号？</h4><br>
+			<button ng-click="toggleModal('signup_by_email')" class="btn btn-info btn-sm">邮箱注册</button>
+			<button ng-click="toggleModal('signup_by_mobile')" class="btn btn-info btn-sm">手机注册</button>
+			<br><br><br>
+			<h6>或使用以下账号直接登陆</h6>
+			<a ng-click="mdSignQQ()"><img src="/img/qq_login.png" alt="qq"></a>
+		</div>
+	</div>
+</modal-dialog>
+<modal-dialog key="forgot_by_email" show='mdData.show' width='660px' dialog-title='找回密码'>
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2 seprate">
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Email:</label>
+					<div class="col-sm-9">
+						<input type="email" ng-model="mdData.email" class="form-control" placeholder="在此输入您注册时的Email">
+						<p class="help-block">此功能将会发送一个找回密码的特别链接到你的邮箱，通过该链接可以进入重置密码的页面.</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-sm-9">
+						<button ng-click="doForgot()" class="btn btn-default btn-success">找回密码</button>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-sm-9">
+						<h5><a ng-click="toggleModal('signin')">登陆</a> - <a ng-click="toggleModal('signup_by_email')">注册会员</a></h5><br>
+						<br><br>
+						<h6>也可以使用第三方账号登陆</h6>
+						<a ng-click="mdSignQQ()"><img src="/img/qq_login.png" alt="qq"></a>
+					</div>
+				</div>	
+			</form>
+		</div>
+	</div>
+</modal-dialog>
+<modal-dialog key="forgot_by_mobile" show='mdData.show' width='660px' dialog-title='找回密码'>
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2 seprate">
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">手机号:</label>
+					<div class="col-sm-9">
+						<input type="text" ng-model="mdData.username" class="form-control" placeholder="输入注册的用户名或手机号">
+						<p class="help-block">此功能将会发送一个手机验证码到你的手机，正确填写验证码和新设定的密码，进入系统.</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">验证码:</label>
+					<div class="col-sm-9">
+						<div class="input-group">
+							<input type="text" class="form-control" ng-model="mdData.sms" placeholder="输入验证码">
+							<span class="input-group-btn">
+								<button class="btn btn-sm btn-default" type="button" ng-disabled="mdData.smsDisable" ng-click="sendSms()">
+									<i class="icon-calendar bigger-110"></i>发送验证码!
+								</button>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">新密码:</label>
+					<div class="col-sm-9">
+						<input type="password" ng-model="mdData.password" class="form-control" placeholder="请输入新的密码">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-sm-9">
+						<button ng-click="doForgot()" class="btn btn-default btn-success">找回密码</button>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-sm-9">
+						<h5><a ng-click="toggleModal('signin')">登陆</a> - <a ng-click="toggleModal('signup_by_mobile')">注册会员</a></h5><br>
+						<br><br>
+						<h6>也可以使用第三方账号登陆</h6>
+						<a ng-click="mdSignQQ()"><img src="/img/qq_login.png" alt="qq"></a>
+					</div>
+				</div>	
+			</form>
+		</div>
+	</div>
+</modal-dialog>
+
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="http://cdn.bootcss.com/lodash.js/2.4.1/lodash.min.js"></script>
+<script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
 <script src="http://cdn.bootcss.com/angular.js/1.2.16/angular.min.js"></script>
 <script src="http://cdn.bootcss.com/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>
 <script src="/js/mqttws31.js"></script>
@@ -140,7 +363,57 @@ angular.module("app",["ui.router"])
 	}
 	return service;
 }])
-.factory('servCat', ["$rootScope", "$window", "$http", function($rootScope, $window, $http) {
+.factory('serv', ["$rootScope", "$window", "$http", "$state", function($rootScope, $window, $http, $state) {
+	return {
+		get: function(url, param, cb){
+			if(typeof(param) == "function"){
+				cb = param;
+				param = {};
+			}
+			$http.get(url, param).success(function(data, status, headers, config){
+				if(data.error){
+					toastr.message(data.error);
+					return;
+				}
+				cb(data)
+			}).error(function(data, status, headers, config){
+				var err = {status:status, title:"未知错误!",message:""};
+				if($rootScope.user && $rootScope.user.username == "kevinchen8621"){ 
+					err.message = "[url:"+config.url+"]" + "[method:"+config.method+"]"+ "[data:"+JSON.stringify(config.data)+"]";
+				}
+				if(status == 502){
+					err.title = "网关错误!";
+					err.message = "远程服务器访问失败，检查网络或联系管理员！\n" + err.message;
+				}
+				toastr.error(err.message, err.title);
+			});
+		},
+		post: function(url, param, cb){
+			if(typeof(param) == "function"){
+				cb = param;
+				param = {};
+			}
+			$http.post(url, param).success(function(data, status, headers, config){
+				if(data.error){
+					toastr.message(data.error);
+					return;
+				}
+				cb(data)
+			}).error(function(data, status, headers, config){
+				var err = {title:"未知错误!" + status, message:""};
+				if($rootScope.user && $rootScope.user.username == "kevinchen8621"){ 
+					err.message = "[url:"+config.url+"]" + "[method:"+config.method+"]"+ "[data:"+JSON.stringify(config.data)+"]";
+				}
+				if(status == 502){
+					err.title = "网关错误!";
+					err.message = "远程服务器访问失败，检查网络或联系管理员！\n" + err.message;
+				}
+				toastr.error(err.message, err.title);
+			});
+		},
+	}
+}])
+.factory('servCat', ["$rootScope", "$window", "serv", function($rootScope, $window, serv) {
 	return {
 		newOne : function(pcat, cb){
 			cb = cb || angular.noop;
@@ -162,70 +435,70 @@ angular.module("app",["ui.router"])
 				priority: 50,
 				description:"",
 			};
-			cb(null, item);
+			cb(item);
 		},
 		save : function(cat, cb){
 			cb = cb || angular.noop;
-			$http.post("/api/cat", cat).success(function(data){
-				var idx = $window._.findIndex($rootScope.cats, function(item){
+			serv.post("/api/cat", cat, function(data){
+								var idx = $window._.findIndex($rootScope.cats, function(item){
 					return item._id == data.cat._id;
 				});
 				if(idx > -1){
 					$rootScope.cats.splice(idx,1,data.cat);
-					cb(null, "分类[" + data.cat.title + "]的修改信息已提交");
+					cb("分类[" + data.cat.title + "]的修改信息已提交");
 				}else{
 					$rootScope.cats.push(data.cat);
-					cb(null, "新分类[" + data.cat.title + "]已提交");
+					cb("新分类[" + data.cat.title + "]已提交");
 				}
 			});
 		},
 		del : function(cat, cb){
 			if(cat._id){
-				$http.post("/api/cat/del", cat).success(function(data){//返回{cat_ids: 删除掉的id}
-					var cat_ids = data.cat_ids || [ ];
+				serv.post("/api/cat/del", cat, function(data){//返回{cat_ids: 删除掉的id}
+										var cat_ids = data.cat_ids || [ ];
 					$rootScope.cats = $window._.filter($rootScope.cats, function(item){
 						return $window._.indexOf(cat_ids, item._id) == -1;
 					});
-					cb(null, "分类 " + cat.title + "已删除,连带删除子分类" + (cat_ids.length - 1) + '个');
+					cb("分类 " + cat.title + "已删除,连带删除子分类" + (cat_ids.length - 1) + '个');
 				});
 			}else{
-				cb(null, "分类 " + cat.title + "已删除");
+				cb("分类 " + cat.title + "已删除");
 			}
 		},
 	};
 }])
-.factory('servVideo', ["$rootScope", "$window", "$http", function($rootScope, $window, $http) {
+.factory('servVideo', ["$rootScope", "$window", "serv", function($rootScope, $window, serv) {
 	return {
 		visit : function(video_id, cb){
 			cb = cb || angular.noop;
 			var visitObj = $rootScope.user ? {user_id:$rootScope.user._id, video_id: video_id} : {video_id: video_id};
-			$http.post('/api/video/visit',visitObj).success(function(data){
-				cb(null, data);
+			serv.post('/api/video/visit',visitObj, function(data){
+				cb(data);
 			});
 		},
 		getById : function(video_id, cb){
 			cb = cb || angular.noop;
 			var item = $window._.find($rootScope.videos,{_id: video_id}); 
 			if(item){
-				cb(null, item);
+				cb(item);
 			}else{
-				$http.get('/api/video/' + video_id).success(function(data){
-					cb(null, data.video);
+				serv.get('/api/video/' + video_id, function(data){
+					cb(data.video);
 				});
 			}
 		},
 		getListByCatKey : function(key, cb){
 			cb = cb || angular.noop;
 			var vList = $window._.filter($rootScope.videos, function(item){ return $window._.indexOf(item.cats, key) > -1; });
-			cb(null, vList);
+			cb(vList);
 		},
 		getMyVisitList : function(cb){
-			$http.get("/api/video/my_visit_ids").success(function(data){
+			serv.get("/api/video/my_visit_ids", function(data){
 				var video_ids = data.video_ids || [ ];
 				var myVisitVideos = $window._.filter($rootScope.videos, function(item){
 					return $window._.contains(video_ids, item._id);
 				});
-				cb(null, myVisitVideos);
+				cb(myVisitVideos);
 			});
 		},
 		newOne : function(cb){
@@ -240,137 +513,113 @@ angular.module("app",["ui.router"])
 				create_at: Date.now(),
 				description:"",
 			};
-			cb(null, item);
+			cb(item);
 		},
 		save : function(video, cb){
-			$http.post("/api/video", video).success(function(data){
-				var idx = $window._.findIndex($rootScope.videos, function(item){
-					return item._id == data._id;
-				});
+			serv.post("/api/video", video, function(data){
+								var idx = $window._.findIndex($rootScope.videos, function(item){return item._id == data._id;});
 				if(idx > -1){
 					$rootScope.videos.splice(idx,1,data);
-					cb(null, "视频[" + data.title + "]的修改信息已提交");
+					cb("视频[" + data.title + "]的修改信息已提交");
 				}else{
 					$rootScope.videos.push(data);
-					cb(null, "新视频[" + data.title + "]已提交");
+					cb("新视频[" + data.title + "]已提交");
 				}
 			});
 		},
 		del : function(video, cb){
 			if(video._id){
-				$http.post("/api/video/del", video).success(function(){
-					var idx = $window._.findIndex($rootScope.videos, function(item){
+				serv.post("/api/video/del", video, function(data){
+										var idx = $window._.findIndex($rootScope.videos, function(item){
 						return item._id == video._id;
 					});
 					if(idx > -1){$rootScope.videos.splice(idx,1);}
-					cb(null, "视频信息 " + video.title + "已删除");
+					cb("视频信息 " + video.title + "已删除");
 				});
 			}else{
-				cb(null, "视频信息 " + video.title + "已删除");
+				cb("视频信息 " + video.title + "已删除");
 			}
 		},
 	};
 }])
-.factory('servUser', ["$rootScope", "$window", "$http", "$state", function($rootScope, $window, $http, $state) {
+.factory('servUser', ["$rootScope", "$window", "serv", "$state", function($rootScope, $window, serv, $state) {
 	return {
-		init : function(cb){
-			cb = cb || angular.noop;
+		init : function(){
 			$rootScope.user = JSON.parse($window.sessionStorage.user || $window.localStorage.user || null);
-			cb($rootScope.user);
 		},
-		sendSignSms : function(mobile, org, seconds, cb){
+		sendSignSms : function(mdData, cb){
+			var seconds = mdData.smsInterval;
 			function leftCount(){
-				cb(null, seconds--);
+				cb(seconds--);
 				$timeout(leftCount, 1000);
 			}			
-			$http.post('/api/signsms',{_id:mobile, org:org}).success(function(){
-				leftCount();	//这里设定倒计时
+			serv.post('/api/signsms',{_id:mdData.mobile, org:org}, function(data){
+				leftCount();
 			});
 		},
-		signUp : function(u, cb){
-			$http.post('/api/signup', u).success(function(data){
-				if(data.error){
-					cb(null, data.error);
-				}else{
+		signUp : function(mdData, cb){
+			var u = $window._.pick(mdData, "mobile","email","sms","username","password");
+			serv.post('/api/signup', u, function(data){
+				$rootScope.user = data.user;
+				$window.localStorage.token = data.token;
+				$window.localStorage.user = JSON.stringify(data.user);
+			});
+		},
+		signIn : function(mdData, cb){
+			var u = $window._.pick(mdData, "username","password");
+			serv.post('/api/signin', u, function(data){
+				$rootScope.user = data.user;
+				var storage = remember ? $window.localStorage : $window.sessionStorage;
+				storage.token = data.token;
+				storage.user = JSON.stringify(data.user);
+				
+			});			
+		},
+		forgot : function(mdData,by,cb){
+			var u;
+			if(by == "email"){
+				u = $window._.pick(mdData, "email");
+			}else if(by == "mobile"){
+				u = $window._.pick(mdData, "username", "password", "sms");
+			}
+			serv.post('/api/forgot', u, function(data){
+								if(by == "mobile"){
 					$rootScope.user = data.user;
 					$window.sessionStorage.token = data.token;
 					$window.sessionStorage.user = JSON.stringify(data.user);
-					cb(null, null);
 				}
-			});
-		},
-		signIn : function(username, password, remember, cb){
-			$http.post('/api/signin',{username:username, password:password}).success(function(data){
-				if(data.error){
-					cb(null, data.error);
-				}else{
-					$rootScope.user = data.user;
-					var storage = remember ? $window.localStorage : $window.sessionStorage;
-					storage.token = data.token;
-					storage.user = JSON.stringify(data.user);
-					cb(null, null);
-				}
+				
 			});			
 		},
-		forgot : function(username,password,sms){
-			$http.post('/api/forgot',{username:username, password:password, sms: sms}).success(function(data){
-				if(data.error){
-					cb(null, data.error);
-				}else{
-					$rootScope.user = data.user;
-					$window.sessionStorage.token = data.token;
-					$window.sessionStorage.user = JSON.stringify(data.user);
-					cb(null, null);
-				}
-			});			
-		},
-		signOut: function(cb){
+		signOut: function(){
 			cb = cb || angular.noop;
 			delete $rootScope.user;
 			delete $window.sessionStorage.token;
 			delete $window.sessionStorage.user;
 			delete $window.localStorage.token;
 			delete $window.localStorage.user;
-			$state.transitionTo('s.sign');
-			cb();
+			$state.transitionTo('f.home');
 		},
 		changePass: function(oldPass, newPass, cb){
 			cb = cb || angular.noop;
-			$http.post('/api/changepass',{oldpass:oldpass, newpass:newpass}).success(function(data){
-				if(data.success){
-					cb(null, "您的新密码已设置成功！")
-				}else{
-					cb(null, data.error);	
-				}
+			serv.post('/api/changepass',{oldpass:oldpass, newpass:newpass}, function(data){
+				cb("您的新密码已设置成功！")
 			});
 		},
 		saveProfile: function(cb){
 			cb = cb || angular.noop;
-			$http.post('/api/user/profile',$rootScope.user.profile).success(function(data){
-				if(data.success){
-					cb(null, "您的基本资料已设置成功！")
-				}else{
-					cb(null, data.error);	
-				}
+			serv.post('/api/user/profile',$rootScope.user.profile,function(data){
+				cb("您的基本资料已设置成功！")
 			});
 		},
 	};
 }])
-.factory('servSite', ["$rootScope", "$window", "$http", "$state", function($rootScope, $window, $http, $state) {
+.factory('servSite', ["$rootScope", "$window", "serv", "$state", function($rootScope, $window, serv, $state) {
 	return {
-		init : function(cb){
-			cb = cb || angular.noop;
+		init : function(){
 			var site =  JSON.parse($window.localStorage.site || "{}");
 			angular.forEach(site, function(value, key){
 				$rootScope[key] = value;			
-			});
-			$http.get("/api/site?attachments=slides,cats,videos").success(function(data){
-				angular.forEach(data, function(value, key){
-					$rootScope[key] = value;	
-				});
-				if(data){
-					$window.localStorage.site = JSON.stringify(data);	
-				}
 			});
 			$rootScope.signOut = function(){
 				delete $rootScope.user;
@@ -380,7 +629,12 @@ angular.module("app",["ui.router"])
 				delete $window.localStorage.user;
 				$state.transitionTo('s.sign');
 			};
-			cb();
+			serv.get("/api/site?attachments=slides,cats,videos",function(data){
+				angular.forEach(data, function(value, key){
+					$rootScope[key] = value;	
+				});
+				$window.localStorage.site = JSON.stringify(data);	
+			});
 		},
 	};
 }])
@@ -430,6 +684,57 @@ angular.module("app",["ui.router"])
 		}else if(len == 4){ return "warning";
 		} else { return "";}
 	}
+})
+.directive("modalDialog",function(){
+	return {
+		restrict: 'E',
+		scope: {
+			key: '=',
+			show: '=',
+			dialogTitle: '@',
+			onClose: '&?'
+		},
+		replace: true,
+		transclude: true,
+		link: function(scope, element, attrs) {
+			var setupStyle;
+			setupStyle = function() {
+				scope.dialogStyle = {};
+				if (attrs.width) {
+					scope.dialogStyle['width'] = attrs.width;
+				}
+				if (attrs.height) {
+					return scope.dialogStyle['height'] = attrs.height;
+				}
+			};
+			scope.hideModal = function() {
+				return scope.show = "";
+			};
+			scope.$watch('show', function(newVal, oldVal) {
+				if (newVal == attrs.key) {
+					document.getElementsByTagName("body")[0].style.overflow = "hidden";
+					$(element).removeClass("ng-hide");
+				} else {
+					document.getElementsByTagName("body")[0].style.overflow = "";
+					$(element).addClass("ng-hide");
+				}
+				if (newVal !== attrs.key && (scope.onClose != null)) {
+					return scope.onClose();
+				}
+			});
+			return setupStyle();
+		},
+		template: 	"<div class='ng-modal'>"+
+						"<div class='ng-modal-overlay' ng-click='hideModal()'></div>"+
+						"<div class='ng-modal-dialog' ng-style='dialogStyle'>"+
+							"<span class='ng-modal-title' ng-show='dialogTitle && dialogTitle.length' ng-bind='dialogTitle'></span>"+
+							"<div class='ng-modal-close' ng-click='hideModal()'>"+
+								"<span ng-click='hideModal()' class='ng-modal-close-x'>X</span>"+
+							"</div>"+
+							"<div class='ng-modal-dialog-content' ng-transclude></div>"+
+						"</div>"+
+					"</div>",
+	};
 })
 .directive("collapseNav",["$window",function($window){
 	return{
@@ -670,8 +975,8 @@ angular.module("app",["ui.router"])
 		.state("b.site.d3", {url:'/d3',  templateUrl: 'tpl/b/site.d3', controller:"BSiteCtl"})
 	$httpProvider.interceptors.push('authInterceptor');
 }])
-.controller("AppCtl",["$state", function($state){
-	$state.transitionTo('f.home');
+.controller("AppCtl",["$scope", "$state", function($scope, $state){
+	$state.transitionTo('f.home');	
 }])
 .controller("FCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
 }])
@@ -835,6 +1140,16 @@ angular.module("app",["ui.router"])
 
 }])
 .controller("BBuyvipCtl",["$scope","$rootScope","$state", function($scope,$rootScope,$state){
+	$scope.buy = function(level){
+		var parameter = {
+			total_fee : 2380,
+			subject : "VIP会员",
+			body : "钱路书院VIP会员年费"
+		};
+  			$http.post('/api/alipay/create_direct_pay_by_user_location/qianlushuyuan', parameter).success(function(data){
+  				$window.location.href = data.location;
+  			});
+	};	
 }])
 .controller("BGcodeCtl",["$scope","$rootScope","$state", function($scope,$rootScope,$state){
 }])
@@ -918,6 +1233,61 @@ angular.module("app",["ui.router"])
 		$rootScope.fromParams = fromParams;
 		$rootScope.bodycss = $rootScope.toState.name.substr(0,2) == 's.' ? "login-layout" : "";
 	});
+
+	$rootScope.mdData = {
+		org: "钱路书院",
+		show: "", //显示哪个Modal
+		mobile:"",
+		email:"",
+		sms:"",
+		username:"",
+		password:"",
+		smsCaption: "发送验证码",
+		smsDisable: false,
+		smsInterval: 60,
+		rememberme: true,
+		agree: true,
+		msg: "",
+	};
+	$rootScope.toggleModal = function(key){
+		$rootScope.mdData.msg = "";
+		$rootScope.mdData.show = key;
+		console.log($rootScope.mdData);
+	}
+
+	$rootScope.sendSignSms = function(){
+		servUser.sendSignSms($rootScope.mdData, function(err, left){
+			$rootScope.mdData.smsCaption = left <= 0 ? "发送验证码" : left + " 秒后再次发送";
+		});
+	};
+	$rootScope.doSignup = function(){
+		servUser.signUp($rootScope.mdData, function(err, msg){
+			$scope.msg = msg;
+			if(!msg){
+				$rootScope.mdData.show = "";
+				$state.go("b.home");
+			}
+		});
+	};
+	$rootScope.doSignin = function(){
+		servUser.signIn($rootScope.mdData, function(err, msg){
+			$scope.msg = msg;
+			if(!msg){
+				$rootScope.mdData.show = "";
+				$state.go("b.home");
+			}
+		});
+	}
+	$rootScope.doForgotByEmail = function(){
+		servUser.forgot($rootScope.mdData, function(err, msg){
+			$scope.msg = msg;
+			if(!msg){
+				$rootScope.mdData.show = "";
+				$state.go("b.home");
+			}
+		});
+	}
+
 }]);
 
 
