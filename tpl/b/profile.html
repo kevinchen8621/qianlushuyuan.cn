@@ -1,1 +1,61 @@
-<div class="page-header"><h1>个人设置<small><i class="icon-double-angle-right"></i> 基本资料</small></h1></div><!-- /.page-header -->
+<div class="page-header">
+	<h1>个人设置<small><i class="icon-double-angle-right"></i> 基本资料</small></h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<div  ng-show="msg" class="alert alert-danger">{{msg}}</div>	
+		<form class="form-horizontal" role="form">
+			<div class="space-4"></div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 用户名 </label>
+				<div class="col-sm-9">
+					<input type="text" readonly="true" ng-model="user.username" placeholder="用户名" class="col-xs-10 col-sm-5">
+				</div>
+			</div>
+			<div class="space-4"></div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 真实姓名 </label>
+				<div class="col-sm-9">
+					<input type="text" ng-model="user.profile.realname" placeholder="真实姓名" class="col-xs-10 col-sm-5">
+				</div>
+			</div>
+			<div class="space-4"></div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 用户性别 </label>
+				<div class="col-sm-9">
+					<label class="inline"><input ng-model="user.profile.gender" value="男" type="radio" class="ace"><span class="lbl"> 男</span></label>
+					&nbsp; &nbsp; &nbsp;
+					<label class="inline"><input ng-model="user.profile.gender" value="女" type="radio" class="ace"><span class="lbl"> 女</span></label>
+				</div>
+			</div>
+			<div class="space-4"></div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 生日 </label>
+				<div class="col-sm-9">
+					<input type="date" ng-model="user.profile.birthday" placeholder="生日" class="col-xs-10 col-sm-5">
+				</div>
+			</div>
+			<div class="space-4"></div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 手机 </label>
+				<div class="col-sm-9">
+					<input type="text" readonly="true" ng-model="user._id" placeholder="手机" class="col-xs-10 col-sm-5">
+				</div>
+			</div>
+			<div class="space-4"></div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 邮箱 </label>
+				<div class="col-sm-9">
+					<input type="email" ng-model="user.profile.email" placeholder="邮箱" class="col-xs-10 col-sm-5">
+				</div>
+			</div>
+			<div class="space-10"></div>
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-3 col-md-9">
+					<button class="btn btn-info" ng-click="doSubmit()"><i class="icon-ok bigger-110"></i>保存资料</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+

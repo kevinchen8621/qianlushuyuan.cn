@@ -334,6 +334,26 @@ angular.module("app",["ui.router"])
 			$state.transitionTo('s.sign');
 			cb();
 		},
+		changePass: function(oldPass, newPass, cb){
+			cb = cb || angular.noop;
+			$http.post('/api/changepass',{oldpass:oldpass, newpass:newpass}).success(function(data){
+				if(data.success){
+					cb(null, "您的新密码已设置成功！")
+				}else{
+					cb(null, data.error);	
+				}
+			});
+		},
+		saveProfile: function(cb){
+			cb = cb || angular.noop;
+			$http.post('/api/user/profile',$rootScope.user.profile).success(function(data){
+				if(data.success){
+					cb(null, "您的基本资料已设置成功！")
+				}else{
+					cb(null, data.error);	
+				}
+			});
+		},
 	};
 }])
 .factory('servSite', ["$rootScope", "$window", "$http", "$state", function($rootScope, $window, $http, $state) {
@@ -780,21 +800,45 @@ angular.module("app",["ui.router"])
 		$scope.myVideos = lst;
 	});
 }])
-.controller("BFaqCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+.controller("BFaqCtl",["$scope","$rootScope","$state", function($scope,$rootScope,$state){
 }])
-.controller("BAccountCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+.controller("BAccountCtl",["$scope","$rootScope","$state", function($scope,$rootScope,$state){
 }])
-.controller("BProfileCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+.controller("BProfileCtl",["$scope","$rootScope","servUser", function($scope,$rootScope,servUser){
+	$scope.doSubmit = function(){
+		servUser.saveProfile(function(err, msg){
+			$scope.msg = msg;
+		});
+	}
 }])
-.controller("BUppwdCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+.controller("BUppwdCtl",["$scope", "$rootScope","servUser", function($scope,$rootScope,servUser){
+	$scope.doSubmit = function(){
+		if(!$scope.oldpassword || !$scope.password){
+			$scope.msg = "密码不能为空，请正确输入！";
+		}else if($scope.password !== $scope.password2){
+			$scope.msg = "新密码两次输入不一致，请正确输入！";
+		}else{
+			servUser.changePass($scope.oldpassword, $scope.password, function(err, msg){
+				$scope.msg = msg;
+			});
+		}
+	};
+	$scope.doReset = function(){
+		$scope.msg = "";
+		$scope.oldpassword = "";
+		$scope.password = "";
+		$scope.password2 = "";
+	};
+	$scope.doReset();
 }])
-.controller("BGetvipCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+.controller("BGetvipCtl",["$scope","$rootScope","$state", function($scope,$rootScope,$state){
+
 }])
-.controller("BBuyvipCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+.controller("BBuyvipCtl",["$scope","$rootScope","$state", function($scope,$rootScope,$state){
 }])
-.controller("BGcodeCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+.controller("BGcodeCtl",["$scope","$rootScope","$state", function($scope,$rootScope,$state){
 }])
-.controller("BDataCtl",["$rootScope","$state", function($scope,$rootScope,$state){
+.controller("BDataCtl",["$scope","$rootScope","$state", function($scope,$rootScope,$state){
 }])
 .controller("BSiteCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
 	$scope.selCatType = function(t){
