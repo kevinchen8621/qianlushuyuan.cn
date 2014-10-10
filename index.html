@@ -489,6 +489,7 @@ angular.module("app",["ui.router"])
 		},
 		getListByCatKey : function(key, cb){
 			cb = cb || angular.noop;
+			if(!key){return cb($rootScope.videos);}
 			var vList = $window._.filter($rootScope.videos, function(item){ return $window._.indexOf(item.cats, key) > -1; });
 			cb(vList);
 		},
@@ -569,7 +570,7 @@ angular.module("app",["ui.router"])
 			var u = $window._.pick(mdData, "username","password");
 			serv.post('/api/signin', u, function(data){
 				$rootScope.user = data.user;
-				var storage = remember ? $window.localStorage : $window.sessionStorage;
+				var storage = mdData.remember ? $window.localStorage : $window.sessionStorage;
 				storage.token = data.token;
 				storage.user = JSON.stringify(data.user);
 				
@@ -1023,13 +1024,13 @@ angular.module("app",["ui.router"])
 .controller("FVideoCtl",["$scope","$rootScope","$stateParams","$window","servVideo", function($scope,$rootScope,$stateParams,$window,servVideo){
 	var regex = new RegExp("^\\d{2,12}$");
 	if(regex.test($stateParams.id)){
-		servVideo.getListByCatKey($stateParams.id, function(err, data){
+		servVideo.getListByCatKey($stateParams.id, function(data){
 			$scope.curVideoList = data;
 			$scope.curVideo = $scope.curVideoList[0];
 			servVideo.visit($scope.curVideo._id);
 		});
 	}else{
-		servVideo.getById($stateParams.id, function(err, data){
+		servVideo.getById($stateParams.id, function(data){
 			$scope.curVideo =  data;	
 			$scope.curVideoList = [$scope.curVideo];
 			servVideo.visit($stateParams.id);
@@ -1079,7 +1080,7 @@ angular.module("app",["ui.router"])
 	}
 }])
 .controller("BCtl",["$scope", "$rootScope","$state", function($scope,$rootScope,$state){
-	if(!$rootScope.user){$state.go("f.sign");}
+	if(!$rootScope.user){$state.go("f.home");}
 	$scope.tasks = [
 		{title:"你还有30个问题没有关闭！", progress: 30, },
 		{title:"你还有30个问题没有关闭！", progress: 30, },
@@ -1164,16 +1165,23 @@ angular.module("app",["ui.router"])
 	$scope.selCatType('video');
 	$scope.addSubCat = function(cat){
 		cat = cat || {key: "", type: $scope.curCatType};
-		servCat.newOne(cat, function(err, data){
+		servCat.newOne(cat, function(data){
 			$scope.editCat(data);
 		});
 		$scope.curCatTip = cat.key ? "作为 [" + cat.title + "] 的子类" : "作为顶级分类";
 	}
 	$scope.editCat = function(cat){
-		$scope.curCat = cat;
-		servVideo.getListByCatKey(cat.key, function(err, data){
-			$scope.curVideoList = data;
-		});
+		if(cat){
+			$scope.curCat = cat;
+			servVideo.getListByCatKey(cat.key, function(data){
+				$scope.curVideoList = data;
+			});
+		}else{
+			servVideo.getListByCatKey("", function(data){
+				console.log(data);
+				$scope.curVideoList = data;
+			});			
+		}
 		$scope.newVideo();
 	}
 	$scope.saveCat = function(){
@@ -1188,11 +1196,7 @@ angular.module("app",["ui.router"])
 		$scope.addSubCat();
 	}
 	$scope.newVideo = function(){
-		servVideo.newOne(function(err, data){
-			if($scope.curCat && $scope.curCat.type == "video"){
-				data.cats.push($scope.curCat.key);
-				$scope.curVideoTip = "归类于 [" + $scope.curCat.title + "] ";
-			}
+		servVideo.newOne(function(data){
 			$scope.editVideo(data);
 		});
 	}
@@ -1222,6 +1226,7 @@ angular.module("app",["ui.router"])
 	}
 
 	$scope.addSubCat();
+	$scope.editCat();
 }])
 .run(['$rootScope', '$location', '$window', 'servUser', 'servSite', function ($rootScope, $location, $window, servUser,servSite) {
 	servUser.init();

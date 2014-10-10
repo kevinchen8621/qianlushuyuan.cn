@@ -171,3 +171,5 @@ line-height: 1;
 .face .thumbnail {border-radius: 0;border: 0; height: 145px;}
 .face .thumbnail.cat {background: #7d9519;text-align: center;}
 .face .thumbnail img{height: 100px;}
+.face .mask {top: 0;left: 0;background-color: #1f6740;opacity: 0;filter: alpha(opacity=0);-webkit-transition: opacity 0.2s ease-in 0s;-moz-transition: opacity 0.2s ease-in 0s;transition: opacity 0.2s ease-in 0s;-webkit-transition: box-shadow 0.2s ease-in 0s;-moz-transition: box-shadow 0.2s ease-in 0s;transition: box-shadow 0.2s ease-in 0s;z-index: 25;}
+.face .thumbnail .mask:hover{opacity:0.30;filter:alpha(opacity=30)}

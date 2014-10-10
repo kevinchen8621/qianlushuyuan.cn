@@ -114,7 +114,8 @@
 		</div>
 		<div class="face col-xs-4 col-sm-4 col-md-3 col-lg-2 " ng-repeat="sub in cats | filterCats : 'video' : item.key | orderBy: 'key'">
 			<div class="thumbnail">
-				<a href="{{sub.url}}" title="{{sub.title}}"><img src="{{sub.face}}" width="100%" alt="{{sub.title}}"></a>
+				<a href="{{sub.url}}" title="{{sub.title}}"><img src="{{sub.face}}" width="100%" alt="{{sub.title}}" style="display:inline;"></a>
+				<div class-"mask abs"></div>
 				<h5 class="f-c3">{{sub.title}}</h5>
 			</div>
 		</div>
