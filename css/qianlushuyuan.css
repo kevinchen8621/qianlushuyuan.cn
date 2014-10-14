@@ -1,4 +1,4 @@
-body, textarea, input, button, select, keygen, legend {font: 12px/1.14 "Arial","Hiragino Sans GB", \5b8b\4f53, "Georgia", "serif";color: #333;outline: 0;}
+body, textarea, input, button, select, keygen, legend {font: normal 12px/1.5 "Lantinghei SC","Microsoft YaHei","宋体",Arial,Helvetica,san-serif;_font-family:"\5b8b\4f53"; color: #333;outline: 0;}
 h1, h2, h3, h4, h5, h6, small {font-family: "Arial","Hiragino Sans GB","Microsoft YaHei", \5fae\8f6f\96c5\9ed1, "Helvetica", "sans-serif";line-height: 150%;font-weight: normal;}
 a, button {cursor: pointer;}
 del, ins, u, s, a, a:hover {text-decoration: none;}
@@ -166,7 +166,7 @@ line-height: 1;
 .ng-modal-close-x {float: right;font-size: 21px;font-weight: bold;line-height: 1;color: #000;text-shadow: 0 1px 0 #fff;opacity: .2;padding: 5px 5px;cursor: pointer;background: transparent;border: 0;-webkit-appearance: none;margin-top: -2px;}
 .ng-modal-title {font-size: 20px;margin: 0;line-height: 1.428571429;font-weight: normal;display: block;margin-bottom: 10px;padding: 0 0 7px 7px;border-bottom: solid 1px #666;}
 .ng-modal-dialog-content .control-label{font-size: 14px; font-weight: normal;}
-.ng-modal-dialog-content .seprate{border-right: 1px #CCCCCC dashed;}
+.dashed-right{border-right: 1px #CCCCCC dashed;}
 
 .face .thumbnail {border-radius: 0;border: 0; height: 145px;}
 .face .thumbnail.cat {background: #7d9519;text-align: center;}

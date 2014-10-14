@@ -1,0 +1,39 @@
+<div class="modal-header"><h3 class="modal-title">登陆</h3></div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-md-7 seprate">
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">用户名:</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" ng-model="mdData.username" placeholder="用户名 , 手机号 , Email">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">密码:</label>
+					<div class="col-sm-9">
+						<input type="password" ng-model="mdData.password" class="form-control" placeholder="请输入您的密码">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-sm-9">
+						找回密码通过 <a ng-click="toggleModal('forgot_by_email')" class="control-label">邮箱</a> | <a ng-click="toggleModal('forgot_by_mobile')" class="control-label">手机</a> 
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-sm-9">
+						<button ng-click="doSignin()" class="btn btn-default btn-success">登陆</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-4 col-md-offset-1">
+			<h4>还没有{{site.title}}账号？</h4><br>
+			<button ng-click="sign('signup_by_email')" class="btn btn-info btn-sm">邮箱注册</button>
+			<button ng-click="sign('signup_by_mobile')" class="btn btn-info btn-sm">手机注册</button>
+			<br><br><br>
+			<h6>或使用以下账号直接登陆</h6>
+			<a ng-click="mdSignQQ()"><img src="/img/qq_login.png" alt="qq"></a>
+		</div>
+	</div>
+</div>

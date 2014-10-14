@@ -1,18 +1,3 @@
-<div class="m-topnav hidden-xs">
-	<div class="container">
-		<span class="u-nav left clear">
-			<a href="#/" class="li f-c9">{{site.title}}</a>
-		</span>
-		<span ng-hide="user" class="u-nav u-beforelogin j-beforelogin right">
-			<span class="f-c6 li hidden-xs">欢迎来到{{site.title}}!!</span>
-			<a ng-click="toggleModal('signin')" class="f-c6 li">登录</a> | 
-			<a ng-click="toggleModal('signup_by_email')" class="f-c6 li">注册</a>
-		</span>
-		<span ng-show="user" class="u-nav u-beforelogin j-beforelogin right">
-			<a href="#/b/home" class="f-c6 li">我的{{site.title}}</a>
-		</span>
-	</div>
-</div>
 <div class="m-midnav  hidden-xs">
 	<div class="container">
 		<div class="row">
@@ -41,8 +26,8 @@
 			<li class="left rel"><a class="link f-f0 nowrp f-cf" href="#/" target="_self">钱路问答</a></li>
 			<li class="left rel"><a class="link f-f0 nowrp f-cf" href="#/" target="_self">VIP会员</a></li>
 
-			<li ng-hide="user" class="right rel"><a class="link f-f0 nowrp f-cyellow" ng-click="toggleModal('signin')">注册</a></li>
-			<li ng-hide="user" class="right rel"><a class="link f-f0 nowrp f-cyellow" ng-click="toggleModal('signup_by_email')">登陆</a></li>
+			<li ng-hide="user" class="right rel"><a class="link f-f0 nowrp f-cyellow" ng-click="sign('signin')">登陆</a></li>
+			<li ng-hide="user" class="right rel"><a class="link f-f0 nowrp f-cyellow" ng-click="sign('signup_simple')">注册</a></li>
 			<li ng-show="user" class="right rel"><a class="link f-f0 nowrp f-cyellow" href="#/b/home">我的{{site.title}}</a></li>
 		</ul>
 	</div>
@@ -114,7 +99,7 @@
 		</div>
 		<div class="face col-xs-4 col-sm-4 col-md-3 col-lg-2 " ng-repeat="sub in cats | filterCats : 'video' : item.key | orderBy: 'key'">
 			<div class="thumbnail">
-				<a href="{{sub.url}}" title="{{sub.title}}"><img src="{{sub.face}}" width="100%" alt="{{sub.title}}" style="display:inline;"></a>
+				<a href="#/cat/{{sub.key}}" title="{{sub.title}}"><img src="{{sub.face}}" width="100%" alt="{{sub.title}}" style="display:inline;"></a>
 				<div class-"mask abs"></div>
 				<h5 class="f-c3">{{sub.title}}</h5>
 			</div>
