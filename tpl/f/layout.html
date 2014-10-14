@@ -1,4 +1,38 @@
 <link href="/css/qianlushuyuan.css" rel="stylesheet">
+<div class="m-midnav  hidden-xs">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8">
+				<a href="/"><img src="/img/logo_big.jpg" title="{{site.title}}"></a>
+			</div>
+			<div class="col-md-4">
+				<form class="form" role="form">
+					<div class="form-group m-search">
+						<div class="input-group ">
+							<input class="form-control" type="text" placeholder="搜索{{site.title}}课程、视频">
+							<div type="button" class="input-group-addon btn btn-warning">搜索</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<div class="m-botnav rel">
+	<div class="container">
+		<ul>
+			<li class="left rel"><a class="link f-f0 nowrp f-cf" href="#/" target="_self">首页</a></li>
+			<li class="left rel"><a class="link f-f0 nowrp f-cf" href="#/" target="_self">钱路课程</a></li>
+			<li class="left rel"><a class="link f-f0 nowrp f-cf" href="#/" target="_self">钱路问答</a></li>
+			<li class="left rel"><a class="link f-f0 nowrp f-cf" href="#/" target="_self">VIP会员</a></li>
+
+			<li ng-hide="user" class="right rel"><a class="link f-f0 nowrp f-cyellow" ng-click="sign('signin')">登陆</a></li>
+			<li ng-hide="user" class="right rel"><a class="link f-f0 nowrp f-cyellow" ng-click="sign('signup_simple')">注册</a></li>
+			<li ng-show="user" class="right rel"><a class="link f-f0 nowrp f-cyellow" href="#/b/home">我的{{site.title}}</a></li>
+		</ul>
+	</div>
+</div>
 <div ui-view></div>
 <div class="m-footer">
 	<div class="container">

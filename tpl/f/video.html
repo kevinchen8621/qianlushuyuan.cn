@@ -1,27 +1,6 @@
 <link href="/css/video-js.css" rel="stylesheet">
 <script src="/js/video.js"></script>
 <script type="text/javascript">videojs.options.flash.swf = "http://cdn.bootcss.com/video.js/4.1.0/video-js.swf"; </script>
-<div class="m-topnav rel">
-	<div class="container">
-		<a href="#/" class="li f-fl f-c3"><h4>{{site.title}}</h4></a>
-		<form class="form-inline li f-fl" role="form">
-			<div class="form-group m-search">
-				<div class="input-group ">
-					<input class="form-control input-sm" type="text" placeholder="搜索钱路书院课程、视频">
-					<div type="button" class="input-group-addon btn btn-warning">搜索</div>
-				</div>
-			</div>
-		</form>
-		<span ng-hide="user" class="u-nav u-beforelogin j-beforelogin right">
-			<span class="f-c6 li hidden-xs">欢迎来到{{site.title}}!!</span>
-			<a href="#/s/signin" class="f-c6 li">登录</a> | 
-			<a href="#/s/signup" class="f-c6 li">注册</a>
-		</span>
-		<span ng-show="user" class="u-nav u-beforelogin j-beforelogin right">
-			<a href="#/b/home" class="f-c6 li">我的{{site.title}}</a>
-		</span>
-	</div>	
-</div>
 <div class="m-pt f-pr">
 	<div class="container">
 		<div class="f-fr cz">
