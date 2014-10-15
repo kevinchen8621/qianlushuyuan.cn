@@ -26,11 +26,12 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		.state("b.data", {abstract:true, url:'/data',  templateUrl: 'tpl/b/data', controller:"BDataCtl"})
 		.state("b.data.finance", {url:'/finance',  templateUrl: 'tpl/b/data.finance', controller:"BDataCtl"})
 		.state("b.data.member", {url:'/member',  templateUrl: 'tpl/b/data.member', controller:"BDataCtl"})
+		.state("b.data.vip", {url:'/vip',  templateUrl: 'tpl/b/data.vip', controller:"BDataCtl"})
 		.state("b.data.promotion", {url:'/promotion',  templateUrl: 'tpl/b/data.promotion', controller:"BDataCtl"})
 		.state("b.site", {abstract:true, url:'/site',  templateUrl: 'tpl/b/site', controller:"BSiteCtl"})
 		.state("b.site.home", {url:'/home',  templateUrl: 'tpl/b/site.home', controller:"BSiteCtl"})
-		.state("b.site.cat", {url:'/cat',  templateUrl: 'tpl/b/site.cat', controller:"BSiteCtl"})
-		.state("b.site.video", {url:'/video',  templateUrl: 'tpl/b/site.video', controller:"BSiteCtl"})
+		.state("b.site.cat", {url:'/cat',  templateUrl: 'tpl/b/site.cat', controller:"BSiteCatCtl"})
+		.state("b.site.video", {url:'/video',  templateUrl: 'tpl/b/site.video', controller:"BSiteVideoCtl"})
 		.state("b.site.d3", {url:'/d3',  templateUrl: 'tpl/b/site.d3', controller:"BSiteCtl"})
 	$httpProvider.interceptors.push('authInterceptor');
 }])
@@ -170,81 +171,168 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 }])
 .controller("BGcodeCtl",["$scope","$rootScope","$state", function($scope,$rootScope,$state){
 }])
-.controller("BDataCtl",["$scope","$rootScope","$state", function($scope,$rootScope,$state){
+.controller("BDataCtl",["$scope","$rootScope","$state", "servVip", "servPay", "servUser", function($scope,$rootScope,$state,servVip,servPay,servUser){
+	$scope.pmt_types = ["vip"]; //promotion
+	$scope.pmt_type = "";
+	$scope.pmt_fors = []; 
+	$scope.pmt_for_idx = -1;
+
+	servPay.get_gcodes(function(data){
+		$scope.pmt_gcodes = data;
+	});
+	servVip.get_vips(function(data){
+		$scope.vips = data;
+	})
+	servUser.get_users(function(data){
+		$scope.mems = data;
+	})
+	servPay.get_pays(function(data){
+		$scope.pays = data;
+	})
+	
+	$scope.$watch("pmt_type", function(newVal){
+		if(newVal == "vip"){
+			servVip.get_vips(function(data){$scope.pmt_fors = data;});
+		}
+	});
+
+	$scope.pmt_new = function(){
+		$scope.pmt_gcode = {gcode : "",fee_back: 0,username:"",deadline:Date.now()};
+		$scope.pmt_type = "";
+		$scope.pmt_for_idx = -1;
+	}
+	$scope.pmt_edit = function(item){
+		$scope.pmt_gcode = item;
+		$scope.pmt_type = item.type;
+		$scope.pmt_for_idx = -1;
+	}
+	$scope.pmt_del = function(item){
+		servPay.del_gcode(item, function(result){
+			var idx = _.findIndex($scope.pmt_gcodes, function(it){return it._id == item._id}); 
+			$scope.pmt_gcodes.splice(idx,1);
+		});
+	}
+	$scope.pmt_save = function(){
+		$scope.pmt_gcode.type = $scope.pmt_type;
+		$scope.pmt_gcode.ref_id = $scope.pmt_fors[$scope.pmt_for_idx]._id;
+		$scope.pmt_gcode.title = $scope.pmt_fors[$scope.pmt_for_idx].title + " 折扣码";
+		servPay.set_gcode($scope.pmt_gcode, function(result){
+			console.log(result);
+			var idx = _.findIndex($scope.pmt_gcodes, function(it){return it._id == result._id}); 
+			if(idx > -1){
+				$scope.pmt_gcodes.splice(idx,1,result);
+			}else{
+				$scope.pmt_gcodes.unshift(result);
+			}
+			$scope.pmt_new();
+		});
+	}
+	$scope.vip_new = function(){
+		$scope.vip = {title:"", subtitle:"", description:"", span:0, fee_now: 0, fee_origin:0,priority:50};
+	}
+	$scope.vip_edit = function(item){
+		$scope.vip = item;
+	}
+	$scope.vip_del = function(item){
+		servVip.del_vip(item, function(result){
+			var idx = _.findIndex($scope.vips, function(it){return it._id == item._id}); 
+			$scope.vips.splice(idx,1);
+		});
+	}
+	$scope.vip_save = function(){
+		console.log($scope.vip);
+		servVip.set_vip($scope.vip, function(result){
+			console.log(result);
+			var idx = _.findIndex($scope.vips, function(it){return it._id == result._id}); 
+			console.log(idx);
+			console.log($scope.vips);
+			if(idx > -1){
+				$scope.vips.splice(idx,1,result);
+			}else{
+				$scope.vips.unshift(result);
+			}
+			console.log($scope.vips);
+			$scope.vip_new();
+			console.log($scope.vips);
+		});
+	}
+	$scope.mem_edit = function(item){
+		$scope.mem = item;
+	}
+	$scope.mem_setrole = function(){
+		var idx = _.indexOf($scope.mem.roles, $scope.mem_role);
+		if(idx == -1){
+			$scope.mem.roles.push($scope.mem_role);
+		}else{
+			$scope.mem.roles.splice(idx,1);
+		}
+		servUser.set_roles($scope.mem);
+	}
+	$scope.pay_edit = function(item){
+		$scope.pay = item;
+	}
+	$scope.pay_setfee = function(){
+		$scope.pay.fee_origin = +$scope.pay.fee_origin || 0;
+		$scope.pay.fee_back = +$scope.pay.fee_back || 0;
+		$scope.pay.fee_actual = $scope.pay.fee_origin - $scope.pay.fee_back;
+		if($scope.pay.fee_actual == 0){$scope.pay.status = "finished";}
+		servPay.set_fee($scope.pay);
+	}
 }])
 .controller("BSiteCtl",["$scope","$rootScope","$http","$window","servCat","servVideo", function($scope,$rootScope,$http,$window,servCat,servVideo){
-	$scope.selCatType = function(t){
-		$scope.curCatType = t;
-		if(t == "video"){$scope.curCatTypeCaption = "视频"}
-		else if(t == "article"){$scope.curCatTypeCaption = "文章"}	
+}])
+.controller("BSiteCatCtl",["$scope","$rootScope","$http","$window","servCat","servVideo", function($scope,$rootScope,$http,$window,servCat,servVideo){
+	$scope.ctypes = ["video","article"];
+	$scope.sel_ctype = function(t){
+		$scope.ctype = t;
+		$scope.data = _.filter($rootScope.cats, function(item){return item.type == $scope.ctype;});
+		$scope.add_top();
 	}
-	$scope.selCatType('video');
-	$scope.addSubCat = function(cat){
-		cat = cat || {key: "", type: $scope.curCatType};
-		servCat.newOne(cat, function(data){
-			$scope.editCat(data);
-		});
-		$scope.curCatTip = cat.key ? "作为 [" + cat.title + "] 的子类" : "作为顶级分类";
+	$scope.add_top = function(){
+		$scope.cat = {hostname: $rootScope.site._id,type: $scope.ctype, key:"", pkey:"", title: "",face: "/img/0101.jpg",priority: 50,description:""};
+		$scope.cat_tip = "作为顶级分类";
 	}
-	$scope.editCat = function(cat){
-		if(cat){
-			$scope.curCat = cat;
-			servVideo.getListByCatKey(cat.key, function(data){
-				$scope.curVideoList = data;
-			});
+	$scope.sel_ctype('video');
+	$scope.add_sub = function(cat){
+		$scope.cat = {hostname: $rootScope.site._id,type: $scope.ctype, pkey: cat.key, title: "",face: "/img/0101.jpg",priority: 50,description:""};
+		$scope.cat_tip = "作为 [" + cat.title + "] 的子类";
+	}
+	$scope.edit = function(item){ $scope.cat = item; }
+	$scope.set = function(){
+		servCat.save($scope.cat, function(){$scope.add_top();});
+
+	}
+	$scope.del = function(item){
+		servCat.del(item, function(){$scope.add_top();}); 
+	}
+}])
+.controller("BSiteVideoCtl",["$scope","$rootScope","$http","$window","servCat","servVideo", function($scope,$rootScope,$http,$window,servCat,servVideo){
+	$scope.cat = null;
+	$scope.sel_cat = function(ckey){
+		if(ckey){
+			$scope.cat_videos = _.filter($rootScope.videos, function(item){ return _.indexOf(item.cats, key) > -1; });
 		}else{
-			servVideo.getListByCatKey("", function(data){
-				console.log(data);
-				$scope.curVideoList = data;
-			});			
+			$scope.cat_videos = _.filter($rootScope.videos, function(item){ return item.cats.length == 0; });
 		}
-		$scope.newVideo();
 	}
-	$scope.saveCat = function(){
-		servCat.save($scope.curCat, function(err, msg){
-			$scope.msg = msg;
-		});
+	$scope.new = function(){
+		$scope.video = {hostname:$rootScope.site._id,title:"", url:"",cats:[],face: "/img/0202.jpg",visits: 50,create_at: Date.now(),description:""}; 
+		if($scope.cat){ $scope.video.cats.push(cat); }
 	}
-	$scope.delCat = function(){
-		servCat.del($scope.curCat, function(err, msg){
-			$scope.msg = msg;
-		});
-		$scope.addSubCat();
-	}
-	$scope.newVideo = function(){
-		servVideo.newOne(function(data){
-			$scope.editVideo(data);
-		});
-	}
-	$scope.editVideo = function(video){
-		$scope.curVideo = video;
-	}
-	$scope.saveVideo = function(){
-		servVideo.save($scope.curVideo, function(err, msg){
-			$scope.msg = msg;
-		});
-	}
-	$scope.delVideo = function(){
-		servVideo.del($scope.curVideo, function(err, msg){
-			$scope.msg = msg;
-		});
-	}
-	$scope.addVideoCat = function(key){
-		$scope.curVideo.cats.splice(0,0,key);
-		$scope.saveVideo();
-	}
-	$scope.delVideoCat = function(key){
-		var idx = $window._.findIndex($scope.curVideo.cats, key);
-		if(idx > -1){
+	$scope.edit = function(item){$scope.video = item;}
+	$scope.save = function(){servVideo.save($scope.video, function(){toastr.info("视频信息已保存！");});}
+	$scope.del = function(){servVideo.del($scope.video, function(){toastr.info("视频信息已删除！");}); $scope.new();}
+	$scope.set_cat = function(ckey){
+		var idx = _.indexOf($scope.video.cats, ckey);
+		if(idx == -1){
+			$scope.video.cats.push(key);
+		}else{
 			$scope.curVideo.cats.splice(idx,1);	
 		}
-		$scope.saveVideo();
+		$scope.save();
 	}
-
-	$scope.addSubCat();
-	$scope.editCat();
 }])
-.controller("SignCtl", function($scope,$rootScope,$modalInstance,$state,servUser,servSms){
+.controller("SignCtl", function($scope,$rootScope,$window,$modalInstance,$state,servUser,servSms,servPay){
 	$scope.mdData = {
 		org: "钱路书院",
 		show: "", //显示哪个Modal
@@ -275,11 +363,28 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 	$scope.signup_by_email = function(){
 		servUser.signup_by_email($scope.mdData, function(user){$modalInstance.close();});
 	};
+	$scope.pay_vip = function(vip){
+		servPay.vip(vip, function(data){
+			if(data.status == "finished"){
+				$state.go("b.pays");	
+			}else{
+				$window.location.href = data.location;
+			}
+		});
+	};
+	$scope.update_gcode = function(vip){
+		servPay.get_gcode(vip.gcode, function(data){
+			if(!data || data.type !== "vip"){
+				vip.subtitle = "折扣码错误！";
+			}else{
+				vip.subtitle = "享受折扣" + data.fee_back + "元";
+			}
+		});
+	}
 })
 .run(['$rootScope', '$location', '$modal', 'servUser', 'servSite', 'constants', function ($rootScope, $location, $modal, servUser,servSite,constants) {
-	console.log("here");
 	servUser.init();
-	servSite.init();
+	servSite.init("slides,cats,videos,vips");
 	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
 		$rootScope.toState = toState;
 		$rootScope.toParams = toParams;
@@ -329,6 +434,9 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 				$rootScope.toggleModal("");
 			}
 		});
+	}
+	$rootScope.update_gcode = function(){
+		
 	}
 	$rootScope.doForgotByEmail = function(){
 		servUser.forgot($rootScope.mdData, function(err, msg){

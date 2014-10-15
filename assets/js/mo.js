@@ -43961,7 +43961,7 @@ mo.constant('constants', {
 			}
 			$http.get(url, param).success(function(data, status, headers, config){
 				if(data.error){
-					toastr.info(data.error);
+					toastr.error(data.error);
 					return;
 				}
 				cb(data)
@@ -43984,7 +43984,7 @@ mo.constant('constants', {
 			}
 			$http.post(url, param).success(function(data, status, headers, config){
 				if(data.error){
-					toastr.info(data.error);
+					toastr.error(data.error);
 					return;
 				}
 				cb(data)
@@ -44004,55 +44004,33 @@ mo.constant('constants', {
 }])
 .factory('servCat', ["$rootScope", "$window", "serv", function($rootScope, $window, serv) {
 	return {
-		newOne : function(pcat, cb){
-			cb = cb || angular.noop;
-			var newKey,item;
-			var regex = new RegExp("^" + pcat.key + "\\d{2}$","g");
-			var sublst = $window._.filter($rootScope.cats, function(item){  return regex.test(item.key); });
-			if(sublst.length > 0){
-				var subkeylst =$window._.pluck(sublst, "key");
-				newKey = (Number("1" + $window._.max(subkeylst)) + 1).toString().substr(1);
-			}else{
-				newKey = pcat.key + "01";
-			}
-			item = {
-				hostname: $rootScope.site._id,
-				type: pcat.type, 
-				key: newKey,
-				title: "",
-				face: "/img/0101.jpg",
-				priority: 50,
-				description:"",
-			};
-			cb(item);
-		},
 		save : function(cat, cb){
 			cb = cb || angular.noop;
-			serv.post("/api/cat", cat, function(data){
-								var idx = $window._.findIndex($rootScope.cats, function(item){
-					return item._id == data.cat._id;
-				});
-				if(idx > -1){
-					$rootScope.cats.splice(idx,1,data.cat);
-					cb("分类[" + data.cat.title + "]的修改信息已提交");
+			if(cat.key.length<2){return cb();}
+			serv.post("/api/cat", cat, function(){
+				var idx = _.indexOf($rootScope.cats, function(item){return item.type == cat.type && item.key == cat.key;});
+				if(idx == -1){
+					$rootScope.cats.push(cat);
 				}else{
-					$rootScope.cats.push(data.cat);
-					cb("新分类[" + data.cat.title + "]已提交");
+					$rootScope.cats.splice(idx, 1, cat);
 				}
+				toastr.info("分类 " + cat.title + "已提交");
+				cb();
 			});
 		},
 		del : function(cat, cb){
-			if(cat._id){
-				serv.post("/api/cat/del", cat, function(data){//返回{cat_ids: 删除掉的id}
-										var cat_ids = data.cat_ids || [ ];
-					$rootScope.cats = $window._.filter($rootScope.cats, function(item){
-						return $window._.indexOf(cat_ids, item._id) == -1;
-					});
-					cb("分类 " + cat.title + "已删除,连带删除子分类" + (cat_ids.length - 1) + '个');
-				});
-			}else{
-				cb("分类 " + cat.title + "已删除");
-			}
+			cb = cb || angular.noop;
+			serv.post("/api/cat/del", cat, function(){//返回{cat_ids: 删除掉的id}
+				var idx = _.indexOf($rootScope.cats, function(item){return item.type == cat.type && item.key == cat.key;});
+				console.log($rootScope.cats);
+				console.log(cat);
+				console.log(idx);
+				if(idx > -1){
+					$rootScope.cats.splice(idx, 1);
+				}
+				toastr.info("分类 " + cat.title + "已删除");
+				cb();
+			});
 		},
 	};
 }])
@@ -44075,12 +44053,6 @@ mo.constant('constants', {
 					cb(data.video);
 				});
 			}
-		},
-		getListByCatKey : function(key, cb){
-			cb = cb || angular.noop;
-			if(!key){return cb($rootScope.videos);}
-			var vList = $window._.filter($rootScope.videos, function(item){ return $window._.indexOf(item.cats, key) > -1; });
-			cb(vList);
 		},
 		getMyVisitList : function(cb){
 			serv.get("/api/video/my_visit_ids", function(data){
@@ -44234,11 +44206,19 @@ mo.constant('constants', {
 			delete $window.localStorage.user;
 			cb();
 		},
+		get_users: function(cb){
+			cb = cb || angular.noop;
+			serv.get('/api/users',cb);
+		},
+		set_roles: function(data, cb){
+			cb = cb || angular.noop;
+			serv.post("/api/user/set_roles", data, cb);
+		}
 	};
 }])
 .factory('servSite', ["$rootScope", "$window", "serv", "$state", function($rootScope, $window, serv, $state) {
 	return {
-		init : function(){
+		init : function(attachments){
 			var site =  JSON.parse($window.localStorage.site || "{}");
 			angular.forEach(site, function(value, key){
 				$rootScope[key] = value;			
@@ -44251,7 +44231,7 @@ mo.constant('constants', {
 				delete $window.localStorage.user;
 				$state.go('');
 			};
-			serv.get("/api/site?attachments=slides,cats,videos",function(data){
+			serv.get("/api/site?attachments="+attachments,function(data){
 				angular.forEach(data, function(value, key){
 					$rootScope[key] = value;	
 				});
@@ -44260,10 +44240,89 @@ mo.constant('constants', {
 		},
 	};
 }])
+.factory('servVip', ["$rootScope", "$window", "serv", "$state", function($rootScope, $window, serv, $state) {
+	return {
+		get_vips : function(cb){
+			cb = cb || angular.noop;
+			serv.get('/api/vip', cb);			
+		},
+		set_vip: function(vip, cb){
+			cb = cb || angular.noop;
+			serv.post('/api/vip', vip, cb);			
+		},
+		del_vip : function(vip, cb){
+			cb = cb || angular.noop;
+			serv.post('/api/vip', vip, cb);
+		},
+	};
+}])
+.factory('servPay', ["$rootScope", "$window", "serv", "$state", function($rootScope, $window, serv, $state) {
+	return {
+		vip : function(data, cb){
+			cb = cb || angular.noop;
+			serv.post('/api/pay/vip', data, cb);
+		},
+		get_gcodes : function(cb){
+			cb = cb || angular.noop;
+			serv.get('/api/pay/gcodes', cb);
+		},
+		get_gcode : function(code, cb){
+			cb = cb || angular.noop;
+			serv.get('/api/pay/gcode/' + code, cb);
+		},
+		set_gcode : function(data, cb){
+			cb = cb || angular.noop;
+			serv.post('/api/pay/gcode', data, cb);
+		},
+		del_gcode : function(data, cb){
+			cb = cb || angular.noop;
+			serv.post('/api/pay/gcode/del', data, cb);
+		},
+		get_pays: function(cb){
+			cb = cb || angular.noop;
+			serv.get('/api/pays', cb);
+		},
+		set_fee : function(data, cb){
+			cb = cb || angular.noop;
+			serv.post('/api/pay/set_fee', data, cb);
+		},
+	};
+}])
+.factory('servAlipayGcode', ["$rootScope", "$window", "serv", "$state", function($rootScope, $window, serv, $state) {
+	return {
+		get : function(gcode, cb){
+			cb = cb || angular.noop;
+			serv.post('/api/alipay/create_direct_pay_by_user_location/qianlushuyuan', payData, function(data){
+				$window.location.href = data.location;
+				cb();
+			});			
+		},
+	};
+}])
 ;
 
 
 'use strict';
+mo.filter("filterCatType", ["$window",function($window) {
+	return function(item) {
+		if(item == "video"){
+			return "视频";
+		} else if(item == "article"){
+			return "文章";
+		}
+	};
+}])
+mo.filter("filterPayStatus", ["$window",function($window) {
+	return function(item) {
+		if(item == "open"){
+			return "未支付";
+		} else if(item == "finished"){
+			return "已支付";
+		} else if(item == "closed"){
+			return "已关闭";
+		}
+	};
+}])
 mo.filter("filterCats", ["$window",function($window) {
 	return function() {
 		var args = Array.prototype.slice.call(arguments);  

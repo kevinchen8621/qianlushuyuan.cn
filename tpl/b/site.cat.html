@@ -1,53 +1,42 @@
 <h3 class="row-fluid header smaller lighter purple">
-	<span class="span7"> <i class="icon-list"></i>分类管理 </span><!-- /span -->
+	<span class="span7"> <i class="icon-list"></i>分类管理 </span>
+	<div class="btn-group pull-right">
+		<button ng-repeat="item in ctypes" ng-click="sel_ctype(item)" class="btn">{{item | filterCatType}}</button>
+	</div>
 </h3>
 <div class="row">
 	<div class="col-md-6">
-		<div class="widget-box" data-bs-tab>
+		<div class="widget-box transparent">
 			<div class="widget-header">
-				<h5 class="smaller">分类管理</h5>
-				<div class="widget-toolbar no-border">
-					<ul class="nav nav-tabs">
-						<li class="active"><a ng-click="selCatType('video')">视频</a></li>
-						<li><a ng-click="selCatType('article')">文章</a></li>
-					</ul>
-				</div>
+				<h4 class="lighter">{{ ctype | filterCatType}}分类列表 </h4> 
 			</div>
-
 			<div class="widget-body">
 				<div class="widget-main padding-6">
-					<div class="tab-content">
-						<div id="home" class="tab-pane in active">
-							<table class="table">
-								<tr class="{{item.key | filterNestcolor}}" ng-repeat="item in cats | filter:{type:'video'} | orderBy:'key' ">
-									<td><a ng-click="editCat(item)">{{item.key | filterNestspace}} {{item.title}}</a></td>
-									<td><a ng-click="addSubCat(item)">添加子类</a></td>
-								</tr>
-							</table>
-						</div>
-
-						<div id="profile" class="tab-pane">
-							<table class="table">
-								<tr class="{{item.key | filterNestcolor}}" ng-repeat="item in cats | filter:{type:'article'} | orderBy:'key' ">
-									<td><a ng-click="editCat(item)">{{item.key | filterNestspace}} {{item.title}}</a></td>
-									<td><a ng-click="addSubCat(item)">添加子类</a></td>
-								</tr>
-							</table>
-						</div>
-					</div>
+					<table class="table">
+						<tr class="{{item.key | filterNestcolor}}" ng-repeat="item in cats | filter:{type:ctype} | orderBy:'key' ">
+							<td><a ng-click="edit(item)">{{item.key | filterNestspace}} {{item.title}}[{{item.key}}]</a></td>
+							<td><a ng-click="del(item)">删除</a></td>
+						</tr>
+					</table>
 				</div>
 			</div>
 		</div>	
 	</div>
 	<div class="col-md-6">
-		<h3 class="header smaller lighter blue">编辑分类信息 <small> {{curCatTypeCaption}}</small><span class="pull-right"><button class="btn btn-sm" ng-click="addSubCat()">添加顶级分类</button></span></h3>
+		<h3 class="header smaller lighter blue">编辑分类信息 <small> {{ctype | filterCatType}}</small><span class="pull-right"><button class="btn btn-sm" ng-click="add_top()">添加顶级分类</button></span></h3>
 		<form class="form-horizontal" role="form">
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right"> 分类编号 </label>
+				<div class="col-sm-9">
+					<input type="text" placeholder="每级分类两位数字" ng-model="cat.key">
+				</div>
+			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label no-padding-right"> 分类名称 </label>
 				<div class="col-sm-9">
-					<input type="text" placeholder="分类名称" ng-model="curCat.title">
+					<input type="text" placeholder="分类名称" ng-model="cat.title">
 					<span class="help-inline">
-						<span class="middle">{{curCatTip}}</span>
+						<span class="middle">[{{cat.key}}]{{cat_tip}}</span>
 					</span>
 				</div>
 			</div>
@@ -55,7 +44,7 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label no-padding-right"> 分类封面 </label>
 				<div class="col-sm-9">
-					<input type="text" placeholder="输入封面URL" ng-model="curCat.face">
+					<input type="text" placeholder="输入封面URL" ng-model="cat.face">
 					<span class="help-inline">
 						<span class="middle">推荐七牛云存储 qiniu.com</span>
 					</span>
@@ -65,33 +54,29 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label no-padding-right"> 封面效果 </label>
 				<div class="col-sm-9">
-					<img ng-src="{{curCat.face}}" width="180px" height="100px" class="img-thumbnail">
+					<img ng-src="{{cat.face}}" width="180px" height="100px" class="img-thumbnail">
 				</div>
 			</div>
 			<div class="space-4"></div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label no-padding-right"> 优先排序 </label>
 				<div class="col-sm-9">
-					<input class="form-control" type="number" ng-model="curCat.priority">
+					<input class="form-control" type="number" ng-model="cat.priority">
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label no-padding-right"> 分类介绍 </label>
 				<div class="col-sm-9">
-					<textarea class="form-control" rows="8" ng-model="curCat.description"></textarea>
+					<textarea class="form-control" rows="8" ng-model="cat.description"></textarea>
 				</div>
 			</div>
 			<div class="clearfix form-actions">
 				<div class="col-md-offset-3 col-md-9">
-					<button class="btn btn-info" ng-click="saveCat()"><i class="icon-ok bigger-110"></i>提交</button>
+					<button class="btn btn-info" ng-click="set()"><i class="icon-ok bigger-110"></i>提交</button>
 					&nbsp; &nbsp; &nbsp;
-					<button class="btn" ng-click="delCat()"><i class="icon-trash bigger-110"></i>删除</button>
+					<button class="btn" ng-click="del()"><i class="icon-trash bigger-110"></i>删除</button>
 				</div>
 			</div>			
 		</form>
-		<div ng-show="msg" class="alert alert-block alert-success">
-			<button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
-			<i class="icon-ok green"></i>{{msg}}
-		</div>	
 	</div>
 </div>

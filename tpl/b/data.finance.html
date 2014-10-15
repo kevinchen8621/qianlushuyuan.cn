@@ -1,3 +1,49 @@
 <div class="page-header">
 	<h1>数据管理<small><i class="icon-double-angle-right"></i> 财务管理 </small></h1>
 </div>
+<div class="row">
+	<div class="col-xs-9">
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover">
+				<thead><tr><th>类别</th><th>项目</th><th>描述</th><th>应收</th><th>折扣项目</th><th>折扣代码</th><th>折扣金额</th><th>实际应收</th><th>用户</th><th>支付状态</th><th></th></tr></thead>
+				<tbody>
+					<tr ng-repeat="item in pays">
+						<td>{{item.type}}</td>
+						<td>{{item.subject}}</td>
+						<td>{{item.body}}</td>
+						<td>{{item.fee_origin}}</td>
+						<td>{{item.fee_gtitle}}</td>
+						<td>{{item.fee_gcode}}</td>
+						<td>{{item.fee_back}}</td>
+						<td>{{item.fee_actual}}</td>
+						<td>{{item.username}}</td>
+						<td>{{item.status | filterPayStatus}}</td>
+						<td><a ng-show="{{item.status == 'open'}}" ng-click="pay_edit(item)">修改折扣</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div><!-- /.table-responsive -->
+	</div><!-- /span -->
+	<div class="col-xs-3">
+		<div class="widget-box">
+			<div class="widget-header"><h4>修改折扣</h4></div>
+			<div class="widget-body">
+				<div class="widget-main">
+					<div><label>用户: {{pay.username}}</label></div>
+					<div><label>项目:{{pay.subject}}</label></div>
+					<div><label>应收:{{pay.fee_origin}}</label></div>
+					<div><label>优惠:{{pay.fee_back}}</label></div>
+					<div><label>实际:{{pay.fee_origin - pay.fee_back}}</label></div>
+					<hr>
+					<div>
+						<label for="form-field-select-3">折扣金额</label>
+						<input class="form-control" type="text" ng-model="pay.fee_back">
+					</div>
+					<div class="form-actions center">
+						<button ng-click="pay_setfee()" class="btn btn-sm btn-success">提交<i class="icon-arrow-right icon-on-right bigger-110"></i></button>
+					</div>
+				</div>
+			</div>
+		</div>		
+	</div>
+</div><!-- /row -->

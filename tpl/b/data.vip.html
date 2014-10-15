@@ -1,0 +1,64 @@
+<div class="page-header">
+	<h1>数据管理<small><i class="icon-double-angle-right"></i> VIP管理 </small></h1>
+</div>
+<div class="row">
+	<div class="col-xs-9">
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover">
+				<thead><tr><th>VIP类别</th><th>短说明</th><th>描述</th><th>有效天数</th><th>现在价格</th><th>原始价格</th><th>优先级</th><th></th></tr></thead>
+				<tbody>
+					<tr ng-repeat="item in vips">
+						<td>{{item.title}}</td>
+						<td>{{item.subtitle}}</td>
+						<td>{{item.description}}</td>
+						<td>{{item.span}}</td>
+						<td>{{item.fee_now}}</td>
+						<td>{{item.fee_origin}}</td>
+						<td>{{item.priority}}</td>
+						<td><a ng-click="vip_edit(item)">修改</a><a ng-click="vip_del(item)">删除</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div><!-- /.table-responsive -->
+	</div><!-- /span -->
+	<div class="col-xs-3">
+		<div class="widget-box">
+			<div class="widget-header"><h4>添加VIP类别</h4></div>
+			<div class="widget-body">
+				<div class="widget-main">
+					<div>
+						<label>VIP类别</label>
+						<input class="form-control" type="text" ng-model="vip.title">
+					</div>
+					<div>
+						<label>短说明</label>
+						<input class="form-control" type="text" ng-model="vip.subtitle">
+					</div>
+					<div>
+						<label>描述</label>
+						<input class="form-control" type="text" ng-model="vip.description">
+					</div>
+					<div>
+						<label>有效天数</label>
+						<input class="form-control" type="text" ng-model="vip.span">
+					</div>
+					<div>
+						<label>现在价格</label>
+						<input class="form-control" type="number" ng-model="vip.fee_now">
+					</div>
+					<div>
+						<label>原始价格</label>
+						<input class="form-control" type="number" ng-model="vip.fee_origin">
+					</div>
+					<div>
+						<label>优先级</label>
+						<input class="form-control" type="number" ng-model="vip.priority">
+					</div>
+					<div class="form-actions center">
+						<button ng-click="vip_save()" class="btn btn-sm btn-success">提交<i class="icon-arrow-right icon-on-right bigger-110"></i></button>
+					</div>
+				</div>
+			</div>
+		</div>		
+	</div>
+</div><!-- /row -->
