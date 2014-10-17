@@ -118,7 +118,7 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 }])
 .controller("BHomeCtl",["$scope","$rootScope","$state","servVideo", function($scope,$rootScope,$state,servVideo){
 	$scope.myVideos = [];
-	servVideo.getMyVisitList(function(err, lst){
+	servVideo.get_by_visit(function(err, lst){
 		$scope.myVideos = lst;
 	});
 }])
@@ -390,6 +390,8 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		$rootScope.fromState = fromState;
 		$rootScope.fromParams = fromParams;
 		$rootScope.bodycss = $rootScope.toState.name.substr(0,2) == 's.' ? "login-layout" : "";
+		console.log($rootScope.user);
+		console.log($rootScope.is_admin);
 	});
 
 	$rootScope.sign = function(type){
@@ -434,9 +436,7 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 			}
 		});
 	}
-	$rootScope.update_gcode = function(){
-		
-	}
+
 	$rootScope.doForgotByEmail = function(){
 		servUser.forgot($rootScope.mdData, function(err, msg){
 			$scope.msg = msg;

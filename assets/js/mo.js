@@ -47782,6 +47782,7 @@ mo.constant('constants', {
 		init : function(cb){
 			cb = cb || angular.noop;
 			$rootScope.user = JSON.parse($window.sessionStorage.user || $window.localStorage.user || null);
+			$rootScope.is_admin = $rootScope.user &&  _.contains($rootScope.user.roles,"管理员");
 			cb();
 		},
 		signin : function(mdData, cb){
@@ -47908,7 +47909,7 @@ mo.constant('constants', {
 	return {
 		get_vips : function(cb){
 			cb = cb || angular.noop;
-			serv.get('/api/vip', cb);			
+			serv.get('/api/vips', cb);			
 		},
 		set_vip: function(vip, cb){
 			cb = cb || angular.noop;
@@ -47916,7 +47917,7 @@ mo.constant('constants', {
 		},
 		del_vip : function(vip, cb){
 			cb = cb || angular.noop;
-			serv.post('/api/vip', vip, cb);
+			serv.post('/api/vip/del', vip, cb);
 		},
 	};
 }])
@@ -48794,7 +48795,7 @@ mo.factory('$transition', ['$q', '$timeout', '$rootScope', function($q, $timeout
 		link:function(scope,ele){
 			var $aRest,$lists;
 			$lists=ele.find("ul").parent("li"),
-			$aRest=ele.children("li").not($lists).children("a"),
+			$rest=ele.children("li").not($lists),
 			ele.find("ul").parent("li").children("a").on("click",function(event){
 				var $li=$(this).parent("li");
 				var $li_left = $li.parent("ul").children("li").not($li);
@@ -48812,9 +48813,11 @@ mo.factory('$transition', ['$q', '$timeout', '$rootScope', function($q, $timeout
 				$li.addClass("active");
 				$li_left.removeClass("active");
 			});
-			$aRest.on("click",function(){
+			$rest.children("a").on("click",function(){
 				var $parent=$(this).parent("li");
 				$parent.addClass("active");
+				$other = $rest.not($parent);
+				$other.removeClass("active");
 				$lists.removeClass("active").find("ul").slideUp();
 			});
 		},

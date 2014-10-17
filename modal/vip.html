@@ -1,6 +1,6 @@
 <div class="modal-header"><h3 class="modal-title">欢迎成为钱路学院VIP会员</h3></div>
 <div class="modal-body">
-	<h5 class="lighter smaller">VIP会员可以学习全部课程，下载高清学习视频和资料，并享受专家老师的实操答疑</h5>
+	<h5 class="lighter smaller">VIP会员可以学习钱路书院网站全部课程</h5>
 	<div class="row">
 		<div ng-repeat="vip in vips" class="col-xs-{{12/vips.length}} col-sm-{{12/vips.length}} pricing-box">
 			<div class="widget-box">
@@ -14,7 +14,7 @@
 						</h2>
 						<div class="space-10"></div>
 						<h5>原价: ￥{{vip.fee_origin}}</h5>
-						<input ng-model="vip.gcode" ng-change="update_gcode(vip)" class="col-xs-12" type="text" placeholder="折扣码"><br><br>
+						<input ng-model="vip.gcode" ng-change="update_gcode(vip)" class="col-xs-12" type="text" placeholder="优惠码"><br><br>
 						<a ng-click="pay_vip(vip)" class="btn btn-block btn-danger"><i class="icon-shopping-cart bigger-110"></i><span>立即购买</span></a>
 					</div>
 				</div>
