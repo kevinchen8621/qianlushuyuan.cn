@@ -73,9 +73,11 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 	}
 	$scope.select(0);
 }])
-.controller("FCatCtl",["$scope","$rootScope","$stateParams","$window",function($scope,$rootScope,$stateParams,$window){
-	$scope.curCat =  $window._.find($rootScope.cats, function(cat){return cat.key == $stateParams.id;});
-	console.log($scope.curCat);
+.controller("FCatCtl",["$scope","$rootScope","$stateParams","servVideo",function($scope,$rootScope,$stateParams,servVideo){
+	$scope.curCat = _.find($rootScope.cats, function(cat){return cat._id == $stateParams.id;});
+	servVideo.get_by_catid($stateParams.id, function(videos){
+		$scope.videos = videos;
+	});
 }])
 .controller("FVideoCtl",["$scope","$rootScope","$stateParams","$window","servVideo", function($scope,$rootScope,$stateParams,$window,servVideo){
 	var regex = new RegExp("^\\d{2,12}$");
@@ -86,7 +88,7 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 			servVideo.visit($scope.curVideo._id);
 		});
 	}else{
-		servVideo.getById($stateParams.id, function(data){
+		servVideo.get_by_id($stateParams.id, function(data){
 			$scope.curVideo =  data;	
 			$scope.curVideoList = [$scope.curVideo];
 			servVideo.visit($stateParams.id);
@@ -381,7 +383,7 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 })
 .run(['$rootScope', '$location', '$modal', 'servUser', 'servSite', 'constants', function ($rootScope, $location, $modal, servUser,servSite,constants) {
 	servUser.init();
-	servSite.init("slides,cats,videos,vips");
+	servSite.init("slides,cats,video_new10,video_hot10,vips");
 	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
 		$rootScope.toState = toState;
 		$rootScope.toParams = toParams;

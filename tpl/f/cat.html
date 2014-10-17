@@ -27,12 +27,12 @@
 	<div class="row">
 		<div class="col-md-8">
 			<table class="table table-striped">
-				<thead><tr><th>序号</th><th>课程名称</th><th class="hidden-xs">内容概述</th><th>视频播放</th><tr></thead>
+				<thead><tr><th>序</th><th>课程名称</th><th class="hidden-xs">内容概述</th><th>视频播放</th><tr></thead>
 				<tbody>
-					<tr ng-repeat="item in videos | filterVideos:curCat.key">
+					<tr ng-repeat="item in videos">
 						<td>{{$index}}</td>
 						<td>{{item.title}}</td>
-						<td class="hidden-xs">{{item.brief}}</td>
+						<td class="hidden-xs">{{item.description}}</td>
 						<td><a class="btn" href="#/video/{{item._id}}">播放</a></td>
 					</tr>
 				</tbody>

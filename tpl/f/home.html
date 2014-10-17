@@ -33,7 +33,7 @@
 						<div class="subtabcon j-mainslide-subtabcon">
 						<div class="listwrap">
 							<ul class="list j-mainslide-weekrank">
-							<li ng-repeat="item in videos | orderBy : '-visits' | limitTo: 10"><a href="#/video/{{item._id}}" class="item"><i class="icon" ng-class="{icon2: $index<3}">{{$index +1}}</i><span class="ltxt f-ib f-thide">{{item.title}}<span class="subtxt"></span></span></a></li>
+							<li ng-repeat="item in video_hot10"><a href="#/video/{{item._id}}" class="item"><i class="icon" ng-class="{icon2: $index<3}">{{$index +1}}</i><span class="ltxt f-ib f-thide">{{item.title}}<span class="subtxt"></span></span></a></li>
 							</ul>
 						</div>
 						</div>
@@ -42,7 +42,7 @@
 						<div class="subtabcon j-mainslide-subtabcon">
 						<div class="listwrap">
 							<ul class="list j-mainslide-weekrank">
-							<li ng-repeat="item in videos | limitTo:10"><a href="#/video/{{item._id}}" class="item"><i class="noicon"></i><span class="ltxt f-ib f-thide">{{item.title}}<span class="subtxt"></span></span></a></li>
+							<li ng-repeat="item in video_new10"><a href="#/video/{{item._id}}" class="item"><i class="noicon"></i><span class="ltxt f-ib f-thide">{{item.title}}<span class="subtxt"></span></span></a></li>
 							</ul>
 						</div>
 						</div>
@@ -65,7 +65,7 @@
 		</div>
 		<div class="face col-xs-4 col-sm-4 col-md-3 col-lg-2 " ng-repeat="sub in cats | filterCats : 'video' : item.key | orderBy: 'key'">
 			<div class="thumbnail">
-				<a href="#/cat/{{sub.key}}" title="{{sub.title}}"><img src="{{sub.face}}" width="100%" alt="{{sub.title}}" style="display:inline;"></a>
+				<a href="#/cat/{{sub._id}}" title="{{sub.title}}"><img src="{{sub.face}}" width="100%" alt="{{sub.title}}" style="display:inline;"></a>
 				<div class-"mask abs"></div>
 				<h5 class="f-c3">{{sub.title}}</h5>
 			</div>

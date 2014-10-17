@@ -47715,25 +47715,17 @@ mo.constant('constants', {
 				cb(data);
 			});
 		},
-		getById : function(video_id, cb){
+		get_by_id : function(video_id, cb){
 			cb = cb || angular.noop;
-			var item = $window._.find($rootScope.videos,{_id: video_id}); 
-			if(item){
-				cb(item);
-			}else{
-				serv.get('/api/video/' + video_id, function(data){
-					cb(data.video);
-				});
-			}
+			serv.get('/api/video/' + video_id, cb);
 		},
-		getMyVisitList : function(cb){
-			serv.get("/api/video/my_visit_ids", function(data){
-				var video_ids = data.video_ids || [ ];
-				var myVisitVideos = $window._.filter($rootScope.videos, function(item){
-					return $window._.contains(video_ids, item._id);
-				});
-				cb(myVisitVideos);
-			});
+		get_by_visit : function(cb){
+			cb = cb || angular.noop;
+			serv.get("/api/videos/visit", cb);
+		},
+		get_by_catid : function(cat_id, cb){
+			cb = cb || angular.noop;
+			serv.get('/api/videos/catid/'+ cat_id, cb);
 		},
 		newOne : function(cb){
 			cb = cb || angular.noop;
