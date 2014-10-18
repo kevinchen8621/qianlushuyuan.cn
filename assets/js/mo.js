@@ -47897,6 +47897,7 @@ mo.constant('constants', {
 				$state.go('');
 			};
 			serv.get("/api/site?attachments="+attachments,function(data){
+				console.log(data);
 				angular.forEach(data, function(value, key){
 					$rootScope[key] = value;	
 				});

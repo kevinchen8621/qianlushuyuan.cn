@@ -390,8 +390,6 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		$rootScope.fromState = fromState;
 		$rootScope.fromParams = fromParams;
 		$rootScope.bodycss = $rootScope.toState.name.substr(0,2) == 's.' ? "login-layout" : "";
-		console.log($rootScope.user);
-		console.log($rootScope.is_admin);
 	});
 
 	$rootScope.sign = function(type){
@@ -404,48 +402,6 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 
 		})
 	};
-
-	$rootScope.toggleModal = function(key){
-		$rootScope.mdData.msg = "";
-		$rootScope.mdData.show = key;
-		console.log($rootScope.mdData);
-	}
-
-	$rootScope.sendSignSms = function(){
-		servUser.sendSignSms($rootScope.mdData, function(err, left){
-			$rootScope.mdData.smsCaption = left <= 0 ? "发送验证码" : left + " 秒后再次发送";
-		});
-	};
-	$rootScope.doSignup = function(){
-		servUser.signUp($rootScope.mdData, function(err, msg){
-			$scope.msg = msg;
-			if(!msg){
-				$rootScope.mdData.show = "";
-				$state.go("b.home");
-				$rootScope.toggleModal("");
-			}
-		});
-	};
-	$rootScope.doSignin = function(){
-		servUser.signIn($rootScope.mdData, function(err, msg){
-			$scope.msg = msg;
-			if(!msg){
-				$rootScope.mdData.show = "";
-				$state.go("b.home");
-				$rootScope.toggleModal("");
-			}
-		});
-	}
-
-	$rootScope.doForgotByEmail = function(){
-		servUser.forgot($rootScope.mdData, function(err, msg){
-			$scope.msg = msg;
-			if(!msg){
-				$rootScope.mdData.show = "";
-				$state.go("b.home");
-				$rootScope.toggleModal("");
-			}
-		});
-	}
+	console.log($rootScope.slides);
 
 }]);
