@@ -73,11 +73,10 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 	}
 	$scope.select(0);
 }])
-.controller("FCatCtl",["$scope","$rootScope","$stateParams","servVideo",function($scope,$rootScope,$stateParams,servVideo){
-	$scope.curCat = _.find($rootScope.cats, function(cat){return cat._id == $stateParams.id;});
-	servVideo.get_by_catid($stateParams.id, function(videos){
-		$scope.videos = videos;
-	});
+.controller("FCatCtl",["$scope","$rootScope","$stateParams","$rest",function($scope,$rootScope,$stateParams,$rest){
+	$scope.cat = _.find($rootScope.cats, function(item){return item._id == $stateParams.id;});
+	$rest.get_videos_by_catid($stateParams.id, function(videos){ $scope.videos = videos;});
+	$rest.get_member_by_id($scope.cat.teacher_id, function(teacher){$scope.teacher = teacher;});
 }])
 .controller("FVideoCtl",["$scope","$rootScope","$stateParams","$window","servVideo", function($scope,$rootScope,$stateParams,$window,servVideo){
 	var regex = new RegExp("^\\d{2,12}$");

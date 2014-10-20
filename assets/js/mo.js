@@ -47573,12 +47573,49 @@ Messaging = (function (global) {
         window['toastr'] = factory(window['jQuery']);
     }
 }));
-!function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/checkbox.html",'<div class="checkbox" ng-class="{\'has-error\': options.formField.$invalid}"><label><input type="checkbox" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" ng-model="result[options.key || index]"> {{options.label || \'Checkbox\'}} {{options.required ? \'*\' : \'\'}}</label><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/email.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Email\'}} {{options.required ? \'*\' : \'\'}}</label> <input type="email" class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" placeholder="{{options.placeholder}}" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" ng-model="result[options.key || index]"><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/form.html",'<form class="formly" role="form"><formly-field ng-repeat="field in fields" options="field" form-result="result" form-id="options.uniqueFormId" ng-if="!field.hide" index="$index"></formly-field><div ng-transclude=""></div></form>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/hidden.html",'<input type="hidden" ng-model="result[options.key || index]">')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/number.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Number\'}} {{options.required ? \'*\' : \'\'}}</label> <input type="number" class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" placeholder="{{options.placeholder}}" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" min="{{options.min}}" max="{{options.max}}" ng-minlength="{{options.minlength}}" ng-maxlength="{{options.maxlength}}" ng-model="result[options.key || index]"><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/password.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Password\'}} {{options.required ? \'*\' : \'\'}}</label> <input type="password" class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" ng-trim="{{options.trimWhitespace || false}}" ng-model="result[options.key || index]"><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/radio.html",'<div class="radio-group" ng-class="{\'has-error\': options.formField.$invalid}"><label class="control-label">{{options.label}} {{options.required ? \'*\' : \'\'}}</label><div class="radio" ng-repeat="(key, option) in options.options"><label><input type="radio" formly-dynamic-name="options.key" formly-custom-validation="options.validators" id="{{id + \'_\'+ $index}}" aria-describedby="{{id}}_description" ng-value="option.value" ng-required="options.required" ng-model="$parent.result[$parent.options.key || $parent.index]"> {{option.name}}</label><p id="{{id}}_description" class="help-block" ng-if="option.description">{{option.description}}</p></div></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/select.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Select\'}} {{options.required ? \'*\' : \'\'}}</label><select class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" aria-describedby="{{id}}_description" ng-model="result[options.key || index]" ng-required="options.required" ng-disabled="options.disabled" ng-options="option.value as option.name group by option.group for option in options.options"></select><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/text.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Text\'}} {{options.required ? \'*\' : \'\'}}</label> <input type="text" class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" placeholder="{{options.placeholder}}" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" ng-model="result[options.key || index]"><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/textarea.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Text\'}} {{options.required ? \'*\' : \'\'}}</label> <textarea type="text" class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" rows="{{options.lines}}" placeholder="{{options.placeholder}}" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" ng-model="result[options.key || index]">\n	</textarea><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("modal/backdrop.html",'<div class="modal-backdrop fade {{ backdropClass }}" ng-class="{in: animate}" ng-style="{\'z-index\': 1040 + (index && 1 || 0) + index*10}"></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("modal/signin.html",'<div class="modal-header"><h3 class="modal-title">登陆</h3></div><div class="modal-body"><div class="row"><div class="col-md-7 seprate"><form class="form-horizontal" role="form"><div class="form-group"><label class="col-sm-3 control-label">用户名:</label><div class="col-sm-9"><input type="text" class="form-control" ng-model="mdData.username" placeholder="用户名 , 手机号 , Email"></div></div><div class="form-group"><label class="col-sm-3 control-label">密码:</label><div class="col-sm-9"><input type="password" ng-model="mdData.password" class="form-control" placeholder="请输入您的密码"></div></div><div class="form-group"><div class="col-sm-offset-3 col-sm-9">找回密码通过 <a ng-click="toggleModal(\'forgot_by_email\')" class="control-label">邮箱</a> | <a ng-click="toggleModal(\'forgot_by_mobile\')" class="control-label">手机</a></div></div><div class="form-group"><div class="col-sm-offset-3 col-sm-9"><button ng-click="doSignin()" class="btn btn-default btn-success">登陆</button></div></div></form></div><div class="col-md-4 col-md-offset-1"><h4>还没有{{site.title}}账号？</h4><br><button ng-click="sign(\'signup_by_email\')" class="btn btn-info btn-sm">邮箱注册</button> <button ng-click="sign(\'signup_by_mobile\')" class="btn btn-info btn-sm">手机注册</button><br><br><br><h6>或使用以下账号直接登陆</h6><a ng-click="mdSignQQ()"><img src="/img/qq_login.png" alt="qq"></a></div></div></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("modal/window.html",'<div tabindex="-1" role="dialog" class="modal fade" ng-class="{in: animate}" ng-style="{\'z-index\': 1050 + index*10, display: \'block\'}" ng-click="close($event)"><div class="modal-dialog" ng-class="{\'modal-sm\': size == \'sm\', \'modal-lg\': size == \'lg\'}"><div class="modal-content" modal-transclude=""></div></div></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("tab/tab.tpl.html",'<ul class="nav" ng-class="$navClass" role="tablist"><li ng-repeat="$pane in $panes" ng-class="$index == $panes.$active ? $activeClass : \'\'"><a role="tab" data-toggle="tab" ng-click="$setActive($index)" data-index="{{ $index }}" ng-bind-html="$pane.title"></a></li></ul><div ng-transclude="" class="tab-content"></div>')}])}();
+!function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("fields/formly-field-checkbox.html",'<div class="checkbox" ng-class="{\'has-error\': options.formField.$invalid}"><label><input type="checkbox" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" ng-model="result[options.key || index]"> {{options.label || \'Checkbox\'}} {{options.required ? \'*\' : \'\'}}</label><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("fields/formly-field-email.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Email\'}} {{options.required ? \'*\' : \'\'}}</label> <input type="email" class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" placeholder="{{options.placeholder}}" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" ng-model="result[options.key || index]"><p id="{{id}}_description" lass="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("fields/formly-field-hidden.html",'<input type="hidden" ng-model="result[options.key || index]">')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("fields/formly-field-number.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Number\'}} {{options.required ? \'*\' : \'\'}}</label> <input type="number" class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" placeholder="{{options.placeholder}}" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" min="{{options.min}}" max="{{options.max}}" ng-minlength="{{options.minlength}}" ng-maxlength="{{options.maxlength}}" ng-model="result[options.key || index]"><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("fields/formly-field-password.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Password\'}} {{options.required ? \'*\' : \'\'}}</label> <input type="password" class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" ng-trim="{{options.trimWhitespace || false}}" ng-model="result[options.key || index]"><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("fields/formly-field-radio.html",'<div class="radio-group" ng-class="{\'has-error\': options.formField.$invalid}"><label class="control-label">{{options.label}} {{options.required ? \'*\' : \'\'}}</label><div class="radio" ng-repeat="(key, option) in options.options"><label><input type="radio" formly-dynamic-name="options.key" formly-custom-validation="options.validators" id="{{id + \'_\'+ $index}}" aria-describedby="{{id}}_description" ng-value="option.value" ng-required="options.required" ng-model="$parent.result[$parent.options.key || $parent.index]"> {{option.name}}</label><p id="{{id}}_description" class="help-block" ng-if="option.description">{{option.description}}</p></div></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("fields/formly-field-select.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Select\'}} {{options.required ? \'*\' : \'\'}}</label><select class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" aria-describedby="{{id}}_description" ng-model="result[options.key || index]" ng-required="options.required" ng-disabled="options.disabled" ng-options="option.value as option.name group by option.group for option in options.options"></select><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("fields/formly-field-text.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Text\'}} {{options.required ? \'*\' : \'\'}}</label> <input type="text" class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" placeholder="{{options.placeholder}}" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" ng-model="result[options.key || index]"><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("fields/formly-field-textarea.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Text\'}} {{options.required ? \'*\' : \'\'}}</label> <textarea type="text" class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" rows="{{options.lines}}" placeholder="{{options.placeholder}}" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" ng-model="result[options.key || index]">\n	</textarea><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/checkbox.html",'<div class="checkbox" ng-class="{\'has-error\': options.formField.$invalid}"><label><input type="checkbox" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" ng-model="result[options.key || index]"> {{options.label || \'Checkbox\'}} {{options.required ? \'*\' : \'\'}}</label><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/email.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Email\'}} {{options.required ? \'*\' : \'\'}}</label> <input type="email" class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" placeholder="{{options.placeholder}}" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" ng-model="result[options.key || index]"><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/form.html",'<form class="formly" role="form"><formly-field ng-repeat="field in fields" options="field" form-result="result" form-id="options.uniqueFormId" ng-if="!field.hide" index="$index"></formly-field><div ng-transclude=""></div></form>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/hidden.html",'<input type="hidden" ng-model="result[options.key || index]">')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/number.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Number\'}} {{options.required ? \'*\' : \'\'}}</label> <input type="number" class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" placeholder="{{options.placeholder}}" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" min="{{options.min}}" max="{{options.max}}" ng-minlength="{{options.minlength}}" ng-maxlength="{{options.maxlength}}" ng-model="result[options.key || index]"><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/password.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Password\'}} {{options.required ? \'*\' : \'\'}}</label> <input type="password" class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" ng-trim="{{options.trimWhitespace || false}}" ng-model="result[options.key || index]"><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/radio.html",'<div class="radio-group" ng-class="{\'has-error\': options.formField.$invalid}"><label class="control-label">{{options.label}} {{options.required ? \'*\' : \'\'}}</label><div class="radio" ng-repeat="(key, option) in options.options"><label><input type="radio" formly-dynamic-name="options.key" formly-custom-validation="options.validators" id="{{id + \'_\'+ $index}}" aria-describedby="{{id}}_description" ng-value="option.value" ng-required="options.required" ng-model="$parent.result[$parent.options.key || $parent.index]"> {{option.name}}</label><p id="{{id}}_description" class="help-block" ng-if="option.description">{{option.description}}</p></div></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/select.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Select\'}} {{options.required ? \'*\' : \'\'}}</label><select class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" aria-describedby="{{id}}_description" ng-model="result[options.key || index]" ng-required="options.required" ng-disabled="options.disabled" ng-options="option.value as option.name group by option.group for option in options.options"></select><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/text.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Text\'}} {{options.required ? \'*\' : \'\'}}</label> <input type="text" class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" placeholder="{{options.placeholder}}" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" ng-model="result[options.key || index]"><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("formly/textarea.html",'<div class="form-group" ng-class="{\'has-error\': options.formField.$invalid}"><label for="{{id}}">{{options.label || \'Text\'}} {{options.required ? \'*\' : \'\'}}</label> <textarea type="text" class="form-control" id="{{id}}" formly-dynamic-name="options.key" formly-custom-validation="options.validators" rows="{{options.lines}}" placeholder="{{options.placeholder}}" aria-describedby="{{id}}_description" ng-required="options.required" ng-disabled="options.disabled" ng-model="result[options.key || index]">\n	</textarea><p id="{{id}}_description" class="help-block" ng-if="options.description">{{options.description}}</p></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("modal/backdrop.html",'<div class="modal-backdrop fade {{ backdropClass }}" ng-class="{in: animate}" ng-style="{\'z-index\': 1040 + (index && 1 || 0) + index*10}"></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("modal/signin.html",'<div class="modal-header"><h3 class="modal-title">登陆</h3></div><div class="modal-body"><div class="row"><div class="col-md-7 seprate"><form class="form-horizontal" role="form"><div class="form-group"><label class="col-sm-3 control-label">用户名:</label><div class="col-sm-9"><input type="text" class="form-control" ng-model="mdData.username" placeholder="用户名 , 手机号 , Email"></div></div><div class="form-group"><label class="col-sm-3 control-label">密码:</label><div class="col-sm-9"><input type="password" ng-model="mdData.password" class="form-control" placeholder="请输入您的密码"></div></div><div class="form-group"><div class="col-sm-offset-3 col-sm-9">找回密码通过 <a ng-click="toggleModal(\'forgot_by_email\')" class="control-label">邮箱</a> | <a ng-click="toggleModal(\'forgot_by_mobile\')" class="control-label">手机</a></div></div><div class="form-group"><div class="col-sm-offset-3 col-sm-9"><button ng-click="doSignin()" class="btn btn-default btn-success">登陆</button></div></div></form></div><div class="col-md-4 col-md-offset-1"><h4>还没有{{site.title}}账号？</h4><br><button ng-click="sign(\'signup_by_email\')" class="btn btn-info btn-sm">邮箱注册</button> <button ng-click="sign(\'signup_by_mobile\')" class="btn btn-info btn-sm">手机注册</button><br><br><br><h6>或使用以下账号直接登陆</h6><a ng-click="mdSignQQ()"><img src="/img/qq_login.png" alt="qq"></a></div></div></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("modal/window.html",'<div tabindex="-1" role="dialog" class="modal fade" ng-class="{in: animate}" ng-style="{\'z-index\': 1050 + index*10, display: \'block\'}" ng-click="close($event)"><div class="modal-dialog" ng-class="{\'modal-sm\': size == \'sm\', \'modal-lg\': size == \'lg\'}"><div class="modal-content" modal-transclude=""></div></div></div>')}])}(),function(o){try{o=angular.module("mo")}catch(i){o=angular.module("mo",[])}o.run(["$templateCache",function(o){o.put("tab/tab.tpl.html",'<ul class="nav" ng-class="$navClass" role="tablist"><li ng-repeat="$pane in $panes" ng-class="$index == $panes.$active ? $activeClass : \'\'"><a role="tab" data-toggle="tab" ng-click="$setActive($index)" data-index="{{ $index }}" ng-bind-html="$pane.title"></a></li></ul><div ng-transclude="" class="tab-content"></div>')}])}();
 'use strict';
 
 var mo = angular.module("mo",["ui.router","ngGrid","angularCharts"]);
 mo.constant('constants', {
 	tpl_url: 'http://xinziji.com/assets/',
+})
+.service('utils', function () {
+	this.applyToSet = function(obj, sets){
+		var idx = _.indexOf(sets, function(item){return item._id == obj._id});
+		if(idx == -1){sets.push(obj);}else{sets.splice(idx, 1, cat);}
+	};
+	this.delFromSet = function(obj, sets){
+		var idx = _.indexOf(sets, function(item){return item._id == obj._id});
+		if(idx !== -1){sets.splice(idx, 1);}
+	};
+	this.getAddAllGroupOptions = function (scope, attrs, classes) {return getAddAllOptions(scope, attrs, "Group", classes);};
+	this.getAddAllFieldOptions = function (scope, attrs, classes) {return getAddAllOptions(scope, attrs, "Field", classes);};
+	this.getAddAllLabelOptions = function (scope, attrs, classes) {return getAddAllOptions(scope, attrs, "Label", classes);};
+	function getAddAllOptions(scope, attrs, type, classes) {
+		var addAllOptions = [],classList = [],tmp, i, options;
+		type = "addAll" + type;
+		if (typeof(classes) === 'string') { tmp = classes.split(' '); for (i = 0; i < tmp.length; i++) {classList.push(tmp[i]);}}
+		function getAllOptions(obj) {
+			for (var key in obj) {
+				if (key === type) {addAllOptions.push(obj[key]);}
+				if (key === "$parent") {getAllOptions(obj[key]);}
+			}
+		}
+		getAllOptions(scope);
+		if (attrs[type] !== undefined) {
+			if (typeof(attrs[type]) === "object") {
+			} else if (typeof(attrs[type]) === "string") {
+				tmp = attrs[type].split(' ');
+				for (i = 0; i < tmp.length; i++) {
+					if (tmp[i].indexOf('class=') === 0) {classList.push(tmp[i].substring(6, tmp[i].length));} else {addAllOptions.push(tmp[i]);}
+				}
+			}
+		}
+		if (classList.length > 0) { classes = ' class="' + classList.join(" ") + '" '; } else { classes = " ";}
+		if (addAllOptions.length > 0) {options = addAllOptions.join(" ") + " ";} else {options = "";}
+		return classes + options;
+	}
 })
 .factory('authInterceptor', ["$rootScope", "$q", "$window", function ($rootScope, $q, $window) {
 	return {
@@ -47963,6 +48000,128 @@ mo.constant('constants', {
 				cb();
 			});			
 		},
+	};
+}])
+.factory('$dist', ["$rootScope", "$window", "$rest", function($rootScope, $window, $rest) {
+	var taobao_dists;
+	if($window.localStorage.taobao_dists){
+		taobao_dists =  JSON.parse($window.localStorage.taobao_dists || "{}");
+	}else{
+		$rest.get_taobao_dists(function(dists){
+			$window.localStorage.taobao_dists = JSON.stringify(dists);
+			taobao_dists = dists;
+		});
+	}
+	return {
+		get_by_code: function(distcode){
+			var  result = {countrys: _.filter(taobao_dists, function(item){ return item.parent_id == 0;})}, 
+				cur = distcode ? _.find(taobao_dists, function(item){ return item._id == distcode;}) : 0;
+			if(!cur){
+				result.country = 1; result.provinces = 310000; result.city = 310100; result.town = 310115;
+				result.provinces = _.filter(taobao_dists, function(item){ return item.parent_id == 1});
+				result.citys = _.filter(taobao_dists, function(item){ return item.parent_id == 310000});
+				result.towns = _.filter(taobao_dists, function(item){ return item.parent_id == 310100});
+			}else if(cur.type == 4){
+				var c = _.find(taobao_dists, function(item){ return item._id == cur.parent_id});
+				var p = _.find(taobao_dists, function(item){ return item._id == c.parent_id});
+				var u = _.find(taobao_dists, function(item){ return item._id == p.parent_id});
+				result.town = cur._id; result.city = c._id; result.province = p._id; result.country = p.parent_id;
+				result.towns = _.filter(taobao_dists, function(item){ return item.parent_id == cur.parent_id});
+				result.citys = _.filter(taobao_dists, function(item){ return item.parent_id == c.parent_id});
+				result.provinces = _.filter(taobao_dists, function(item){ return item.parent_id == p.parent_id});
+			}else if(cur.type == 3){
+				var p = _.find(taobao_dists, function(item){ return item._id == cur.parent_id;});
+				result.town = 0; result.city = cur._id; result.province = p._id; result.country = p.parent_id;
+				result.towns = _.filter(taobao_dists, function(item){ return item.parent_id == cur._id;});
+				result.citys = _.filter(taobao_dists, function(item){ return item.parent_id == cur.parent_id;});
+				result.provinces = _.filter(taobao_dists, function(item){ return item.parent_id == p.parent_id;});
+			}else if(cur.type == 2){
+				var u = _.find(taobao_dists, function(item){ return item._id == cur.parent_id});
+				result.town = 0; result.city = 0; result.province = cur._id; result.country = cur.parent_id;
+				result.towns = [];
+				result.citys = _.filter(taobao_dists, function(item){ return item.parent_id == cur._id;});
+				result.provinces = _.filter(taobao_dists, function(item){ return item.parent_id == cur.parent_id});
+			}else if(cur.type == 1){
+				var country = _.find(taobao_dists, function(item){ return item._id == cur.parent_id});
+				result.town = 0; result.city = 0; result.province = 0; result.country = cur._id;
+				result.towns = [];
+				result.citys = [];
+				result.provinces = _.filter(taobao_dists, function(item){ return item.parent_id == cur._id});
+			}
+			return result;
+		},
+		caption_by_code: function(distcode){
+			var  cur = distcode ? _.find(taobao_dists, function(item){ return item._id == distcode;}) : 0;
+			if(!cur){
+				return "";
+			}else if(cur.type == 4){
+				var 	t = _.find(taobao_dists, function(item){item._id == cur._id;}),
+					c = _.find(taobao_dists, function(item){item._id == t.parent_id;}),
+					p = _.find(taobao_dists, function(item){item._id == c.parent_id;}),
+					u = _.find(taobao_dists, function(item){item._id == p.parent_id;});
+				return u.name + " " + p.name + " " + c.name + " " + t.name + " ";
+			}else if(cur.type == 3){
+				var 	c = _.find(taobao_dists, function(item){item._id == t.parent_id;}),
+					p = _.find(taobao_dists, function(item){item._id == c.parent_id;}),
+					u = _.find(taobao_dists, function(item){item._id == p.parent_id;});
+				return u.name + " " + p.name + " " + c.name + " ";
+			}else if(cur.type == 2){
+				var 	p = _.find(taobao_dists, function(item){item._id == c.parent_id;}),
+					u = _.find(taobao_dists, function(item){item._id == p.parent_id;});
+				return u.name + " " + p.name + " ";
+			}else if(cur.type == 1){
+				var 	u = _.find(taobao_dists, function(item){item._id == p.parent_id;});
+				return u.name + " ";
+			}
+		},
+	}
+}])
+.factory('$rest', ["$rootScope", "$window", "$http", "$state", function($rootScope, $window, $http, $state) {
+	function get(url, param, cb){
+		if(typeof(param) == "function"){cb = param;param = {};}
+		param = param || {};
+		cb = cb || angular.noop;
+		$http.get(url, param)
+			.success(function(data, status, headers, config){
+				if(data.error){toastr.error(data.error);return;} cb(data)
+			})
+			.error(function(data, status, headers, config){
+				var err = {status:status, title:"未知错误!",message:""};
+				if($rootScope.user && $rootScope.user.username == "kevinchen8621"){ err.message = "[url:"+config.url+"]" + "[method:"+config.method+"]"+ "[data:"+JSON.stringify(config.data)+"]";}
+				if(status == 502){err.message = "远程服务器访问失败，检查网络或联系管理员！\n" + err.message;}
+				toastr.error(err.message, err.title);
+			});
+	}
+	function post(url, param, cb){
+		if(typeof(param) == "function"){cb = param;param = {};}
+		cb = cb || angular.noop;
+		$http.post(url, param)
+			.success(function(data, status, headers, config){
+				if(data.error){toastr.error(data.error);return;}
+				cb(data)
+			})
+			.error(function(data, status, headers, config){
+				var err = {title:"未知错误!" + status, message:""};
+				if($rootScope.user && $rootScope.user.username == "kevinchen8621"){ err.message = "[url:"+config.url+"]" + "[method:"+config.method+"]"+ "[data:"+JSON.stringify(config.data)+"]";}
+				if(status == 502){err.message = "远程服务器访问失败，检查网络或联系管理员！\n" + err.message;}
+				toastr.error(err.message, err.title);
+			});
+	}
+	return {
+		get_members:function(cb){get("/api/members", cb);},
+		get_member_by_id:function(id, cb){get("/api/member/" + id, cb);},
+		del_member_by_id:function(id, cb){get("/api/member/del/" + id, cb);},
+		set_member:function(obj, cb){post("/api/member", obj, cb);},
+
+		get_videos_by_catid:function(catid, cb){get("/api/videos/catid/"+catid, cb);},
+		get_cust_orgs: function(cb){ get("/api/cust/orgs", cb);},
+		get_taobao_dists: function(cb){ get("/api/taobao/dists", cb);},
+		del_cust_org: function(custOrg, cb){ post("/api/cust/org/del", custOrg, cb);},
+		set_cust_org: function(custOrg, cb){ post("/api/cust/org", custOrg, cb);},
+		get_cust_orgs: function(cb){ get("/api/cust/orgs", cb);},
+		del_cust_contact: function(custContact, cb){ post("/api/cust/contact/del", custContact, cb);},
+		set_cust_contact: function(custContact, cb){ post("/api/cust/contact", custContact, cb);},
+		get_cust_contacts: function(cb){ get("/api/cust/contacts", cb);},
 	};
 }])
 ;
@@ -48530,6 +48689,550 @@ mo.factory('$transition', ['$q', '$timeout', '$rootScope', function($q, $timeout
 		}
 	};
 })
+.directive('formlyForm', function formlyForm($timeout) {
+	'use strict';
+	return {
+		restrict: 'E',
+		template: '<form class="formly" role="form"><formly-field ng-repeat="field in fields" options="field" form-result="result" form-id="options.uniqueFormId" ng-if="!field.hide" index="$index"></formly-field><div ng-transclude></div></form>',
+		replace: true,
+		transclude: true,
+		scope: {
+			fields: '=',
+			options: '=?',
+			result: '=',
+			formOnParentScope: '=name'
+		},
+		compile: function () {
+			return {
+				post: function (scope, ele, attr) {scope.formOnParentScope = scope[attr.name];}
+			};
+		},
+		controller: function($scope, $element, $parse) {
+			angular.forEach($scope.fields, function(field) {
+				if (angular.isDefined(field.watch) &&
+					angular.isDefined(field.watch.expression) &&
+					angular.isDefined(field.watch.listener)) {
+					var watchExpression = field.watch.expression;
+					if (angular.isFunction(watchExpression)) {
+						watchExpression = function() {
+							var args = Array.prototype.slice.call(arguments, 0);
+							args.unshift(field);
+							return field.watch.expression.apply(this, args);
+						};
+					}
+					$scope.$watch(watchExpression, function() {
+						var args = Array.prototype.slice.call(arguments, 0);
+						args.unshift(field);
+						return field.watch.listener.apply(this, args);
+					});
+				}
+			});
+			$scope.$watch('result', function onResultUpdate() {
+				angular.forEach($scope.fields, function(field) {
+					if (field.hideExpression) {
+						field.hide = $parse(field.hideExpression)($scope.result);
+					}
+					if (field.requiredExpression) {
+						field.required = $parse(field.requiredExpression)($scope.result);
+					}
+				});
+			}, true);
+			$scope.$on('formly-dynamic-name-update', function(e) {
+				e.stopPropagation();
+				if (!$scope.formOnParentScope) {
+					return;
+				}
+				$timeout(function() {
+					angular.forEach($scope.fields, function(field) {
+						var formField = $scope.formOnParentScope[field.key];
+						if (formField) {
+							field.formField = formField;
+						}
+					});
+				});
+			});
+		}
+	};
+})
+.directive('formlyField', function formlyField($http, $compile, $templateCache) {
+	'use strict';
+	return {
+		restrict: 'AE',
+		transclude: true,
+		scope: {
+			optionsData: '&options',
+			formId: '=formId',
+			index: '=index',
+			result: '=formResult'
+		},
+		link: function fieldLink($scope, $element) {
+			var templateOptions = 0;
+			templateOptions += $scope.options.template ? 1 : 0;
+			templateOptions += $scope.options.type ? 1 : 0;
+			if (templateOptions === 0) {
+				console.warn('Formly Error: template type \'' + $scope.options.type + '\' not supported. On element:', $element);
+				return;
+			} else if (templateOptions > 1) {
+				console.warn('Formly Error: You must only provide a type, template, or templateUrl for a field. On element:', $element);
+			}
+			//return $http.get(options.templateUrl,{cache: $templateCache}).then(function (result) {return result.data;});
+			var url = "fields/formly-field-" + $scope.options.type + ".html";
+			console.log(url);
+			var templateData = angular.element($templateCache.get("fields/formly-field-" + $scope.options.type + ".html"));
+			console.log("mydebug");
+			console.log(templateData);
+			$http.get("fields/formly-field-" + $scope.options.type + ".html", {cache: $templateCache}).then(function(response) {
+				setElementTemplate(response.data);
+			}, function(error) {
+				console.warn('Formly Error: Problem loading template for ' + $scope.options.type, error);
+			});
+			function setElementTemplate(templateData) {
+				$element.html(templateData);
+				$compile($element.contents())($scope);
+			}
+		},
+		controller: function fieldController($scope) {
+			$scope.options = $scope.optionsData();
+			var type = $scope.options.type;
+			if (!type && $scope.options.template) {
+				type = 'template';
+			} else if (!type && $scope.options.templateUrl) {
+				type = 'templateUrl';
+			}
+			$scope.id = $scope.formId + type + $scope.index;
+		}
+	};
+})
+.directive('formInput', ['$compile', '$rootScope', '$filter', 'utils', function ($compile, $rootScope, $filter, utils) {
+	return {
+		restrict: 'EA',
+		link: function (scope, element, attrs) {
+//                generate markup for bootstrap forms
+//
+//                Bootstrap 3
+//                Horizontal (default)
+//                <div class="form-group">
+//                    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+//                    <div class="col-sm-10">
+//                        <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+//                    </div>
+//                 </div>
+//
+//                Vertical
+//                <div class="form-group">
+//                    <label for="exampleInputEmail1">Email address</label>
+//                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+//                </div>
+//
+//                Inline
+//                <div class="form-group">
+//                    <label class="sr-only" for="exampleInputEmail2">Email address</label>
+//                    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+//                </div>
+			var sizeMapping = [1, 2, 4, 6, 8, 10, 12], 
+				sizeDescriptions = ['mini', 'small', 'medium', 'large', 'xlarge', 'xxlarge', 'block-level'],
+				defaultSizeOffset = 5, 
+				subkeys = [],
+				tabsSetup = false;
+			var isHorizontalStyle = function (formStyle) { return (!formStyle || formStyle === 'undefined' || ['vertical', 'inline'].indexOf(formStyle) === -1);};
+			var generateNgShow = function (showWhen, model) {
+				function evaluateSide(side) {
+					var result = side;
+					if (typeof side === 'string') {
+						if (side.slice(0, 1) === '$') {
+							result = (model || 'record') + '.';
+							var parts = side.slice(1).split('.');
+							if (parts.length > 1) {
+								var lastBit = parts.pop();result += parts.join('.') + '[$index].' + lastBit;
+							} else {
+								result += side.slice(1);
+							}
+						} else {
+							result = '\'' + side + '\'';
+						}
+					}
+					return result;
+				}
+				var conditionText = ['eq', 'ne', 'gt', 'gte', 'lt', 'lte'],
+				conditionSymbols = ['===', '!==', '>', '>=', '<', '<='],
+				conditionPos = conditionText.indexOf(showWhen.comp);
+				if (conditionPos === -1) {throw new Error('Invalid comparison in showWhen');}
+				return evaluateSide(showWhen.lhs) + conditionSymbols[conditionPos] + evaluateSide(showWhen.rhs);
+			};
+			var generateDefault = function (common, options, fieldInfo) {return '<input ' + common + 'type="' + fieldInfo.type + '" />';};
+			var generateInput = function (fieldInfo, modelString, isRequired, idString, options) {
+				var nameString;
+				if (!modelString) {
+					var modelBase = (options.model || 'record') + '.';
+					modelString = modelBase;
+					if (options.subschema && fieldInfo.name.indexOf('.') !== -1) {
+						var compoundName = fieldInfo.name;
+						var root = options.subschemaRoot;
+						var lastPart = compoundName.slice(root.length+1);
+						if (options.index) {
+							modelString += root + '[' + options.index + '].' + lastPart;
+							idString = 'f_' + modelString.slice(modelBase.length).replace(/(\.|\[|\]\.)/g, '-');
+						} else {
+							modelString += root;
+							if (options.subkey) {
+								modelString += '[' + '$_arrayOffset_' + root.replace(/\./g, '_') + '_' + options.subkeyno + '].' + lastPart;
+								idString = modelString.slice(modelBase.length);
+							} else {
+								modelString += '[$index].' + lastPart;
+								idString = null;
+								nameString = compoundName.replace(/\./g, '-');
+							}
+						}
+					} else {
+						modelString += fieldInfo.name;
+					}
+				}
+				var value, 
+					requiredStr = (isRequired || fieldInfo.required) ? ' required' : '',
+					readonlyStr = fieldInfo.readonly ? ' readonly' : '',
+					placeHolder = fieldInfo.placeHolder,compactClass = '',
+					sizeClassBS3 = '',
+					formControl = '';
+				compactClass = (['horizontal', 'vertical', 'inline'].indexOf(options.formstyle) === -1) ? ' input-sm' : '';
+				sizeClassBS3 = 'col-sm-' + sizeMapping[fieldInfo.size ? sizeDescriptions.indexOf(fieldInfo.size) : defaultSizeOffset];
+				formControl = ' form-control';
+				if (options.formstyle === 'inline') {placeHolder = placeHolder || fieldInfo.label;}
+				var common = 'ng-model="' + modelString + '"' + (idString ? ' id="' + idString + '" name="' + idString + '" ' : ' name="' + nameString + '" ');
+				common += (placeHolder ? ('placeholder="' + placeHolder + '" ') : '');
+				if (fieldInfo.popup) {common += 'title="' + fieldInfo.popup + '" ';}
+				common += addAll('Field', null, options);
+				switch (fieldInfo.type) {
+					case 'select' :
+						common += (fieldInfo.readonly ? 'disabled ' : '');
+						if (fieldInfo.select2) {
+							common += 'class="fng-select2' + formControl + compactClass + sizeClassBS3 + '"';
+							if (fieldInfo.select2.fngAjax) {
+								value = '<div class="input-group">';
+								value += '<input ui-select2="' + fieldInfo.select2.fngAjax + '" ' + common + '>';
+								value += '<span class="input-group-addon' + compactClass + '" data-select2-open="' + idString + '" ';
+								value += '    ng-click="openSelect2($event)"><i class="glyphicon glyphicon-search"></i></span>';
+								value += '</div>';
+							} else if (fieldInfo.select2) {
+								value = '<input ui-select2="' + fieldInfo.select2.s2query + '" ' + (fieldInfo.readonly ? 'disabled ' : '') + common + '>';
+							}
+						} else {
+							value = '<select ' + common + 'class="' + formControl.trim() + compactClass + sizeClassBS3 + '">';
+							if (!isRequired) {value += '<option></option>';}
+							if (angular.isArray(fieldInfo.options)) {
+								angular.forEach(fieldInfo.options, function (optValue) {
+									if (_.isObject(optValue)) {
+										value += '<option value="' + (optValue.val || optValue.id) + '">' + (optValue.label || optValue.text) + '</option>';
+									} else {
+										value += '<option>' + optValue + '</option>';
+									}
+								});
+							} else {
+								value += '<option ng-repeat="option in ' + fieldInfo.options + '">{{option}}</option>';
+							}
+							value += '</select>';
+						}
+						break;
+					case 'radio' :
+						value = '';
+						var separateLines = (options.formstyle !== 'inline' && !fieldInfo.inlineRadio);
+						if (angular.isArray(fieldInfo.options)) {
+							if (options.subschema) {common = common.replace('name="', 'name="{{$index}}-');}
+							angular.forEach(fieldInfo.options, function (optValue) {
+								value += '<input ' + common + 'type="radio"';
+								value += ' value="' + optValue + '">' + optValue;
+								if (separateLines) {value += '<br />';}
+							});
+						} else {
+							var tagType = separateLines ? 'div' : 'span';
+							if (options.subschema) {common = common.replace('$index', '$parent.$index').replace('name="', 'name="{{$parent.$index}}-');}
+							value += '<' + tagType + ' ng-repeat="option in ' + fieldInfo.options + '"><input ' + common + ' type="radio" value="{{option}}"> {{option}} </' + tagType + '> ';
+						}
+						break;
+					case 'checkbox' :
+						value = '<div class="checkbox"><input ' + common + 'type="checkbox"></div>';
+						break;
+					default:
+						var setClass = formControl.trim() + compactClass + sizeClassBS3 + (fieldInfo.class ? ' ' + fieldInfo.class : '');
+						if (setClass.length !== 0) {common += 'class="' + setClass + '"';}
+						if (fieldInfo.add) {common += ' ' + fieldInfo.add + ' ';}
+						common += 'ng-model="' + modelString + '"' + (idString ? ' id="' + idString + '" name="' + idString + '"' : '') + requiredStr + readonlyStr + ' ';
+						if (fieldInfo.type === 'textarea') {
+							if (fieldInfo.rows) {
+								if (fieldInfo.rows === 'auto') {common += 'msd-elastic="\n" class="ng-animate" ';} else {common += 'rows = "' + fieldInfo.rows + '" ';}
+							}
+							if (fieldInfo.editor === 'ckEditor') {
+								common += 'ckeditor = "" ';
+								sizeClassBS3 = 'col-xs-12';
+							}
+							value = '<textarea ' + common + ' />';
+						} else {
+							value = generateDefault(common, options, fieldInfo);
+						}
+				}
+				if (isHorizontalStyle(options.formstyle) && fieldInfo.type !== 'checkbox') {value = '<div class="' + sizeClassBS3 + '">' + value + '</div>';}
+				if (fieldInfo.helpInline && fieldInfo.type !== 'checkbox') {value += '<span class="help-inline">' + fieldInfo.helpInline + '</span>';}
+				if (fieldInfo.help) {value += '<span class="help-block ' + sizeClassBS3 + '">' + fieldInfo.help + '</span>';}
+				return value;
+			};
+			var convertFormStyleToClass = function (aFormStyle) {
+				var result;
+				switch (aFormStyle) {
+					case 'horizontal' : result = 'form-horizontal'; break;
+					case 'vertical' :result = '';break;
+					case 'inline' :result = 'form-inline';break;
+					case 'horizontalCompact' :result = 'form-horizontal compact';break;
+					default:result = 'form-horizontal compact';break;
+				}
+				return result;
+			};
+			var containerInstructions = function (info) {
+				var result = {before: '', after: ''};
+				if (typeof info.containerType === 'function') {
+					result = info.containerType(info);
+				} else {
+					switch (info.containerType) {
+						case 'tab' :result.before = '<tab heading="' + info.title + '">';result.after = '</tab>';break;
+						case 'tabset' :result.before = '<tabset>';result.after = '</tabset>';break;
+						case 'well' :result.before = '<div class="well">';if (info.title) {result.before += '<h4>' + info.title + '</h4>';}result.after = '</div>';break;
+						case 'well-large' :result.before = '<div class="well well-lg well-large">';result.after = '</div>';break;
+						case 'well-small' :result.before = '<div class="well well-sm well-small">';result.after = '</div>';break;
+						case 'fieldset' :result.before = '<fieldset>';if (info.title) {result.before += '<legend>' + info.title + '</legend>';}result.after = '</fieldset>';break;
+						case undefined:break;
+						case null:break;
+						case '':break;
+						default:
+							result.before = '<div class="' + info.containerType + '">';
+							if (info.title) {
+								var titleLook = info.titleTagOrClass || 'h4';
+								if (titleLook.match(/h[1-6]/)) {
+									result.before += '<' + titleLook + '>' + info.title + '</' + titleLook + '>';
+								} else {
+									result.before += '<p class="' + titleLook + '">' + info.title + '</p>';
+								}
+							}
+							result.after = '</div>';
+							break;
+					}
+				}
+				return result;
+			};
+			var generateLabel = function (fieldInfo, addButtonMarkup, options) {
+				var labelHTML = '<label', classes = 'control-label';
+				if (isHorizontalStyle(options.formstyle)) {
+					labelHTML += ' for="' + fieldInfo.id + '"';
+					classes += ' col-sm-2';
+				} else if (options.formstyle === 'inline') {
+					labelHTML += ' for="' + fieldInfo.id + '"';
+					classes += ' sr-only';
+				}
+				labelHTML += addAll('Label', null, options) + ' class="' + classes + '">' + fieldInfo.label + (addButtonMarkup || '') + '</label>';
+				return labelHTML;
+			};
+			var handleField = function (info, options) {
+				info.type = info.type || 'text';
+				info.id = info.id || 'f_' + info.name.replace(/\./g, '_');
+				info.label = (info.label !== undefined) ? (info.label === null ? '' : info.label) : "";
+				var template = '', closeTag = '</div>', classes = 'form-group';
+				if (options.formstyle === 'vertical' && info.size !== 'block-level') {
+					template += '<div class="row">';
+					classes += ' col-sm-' + sizeMapping[info.size ? sizeDescriptions.indexOf(info.size) : defaultSizeOffset];
+				}
+				template += '<div' + addAll('Group', classes, options);
+				var includeIndex = false;
+				if (options.index) {
+					try {
+						parseInt(options.index);
+						includeIndex = true;
+					} catch (err) {
+					}
+				}
+				if (info.showWhen) {
+					if (typeof info.showWhen === 'string') {template += 'ng-show="' + info.showWhen + '"';} else {template += 'ng-show="' + generateNgShow(info.showWhen, options.model) + '"';}
+				}
+				if (includeIndex) {template += ' id="cg_' + info.id.replace('_', '-' + attrs.index + '-') + '">';} else {template += ' id="cg_' + info.id.replace(/\./g, '-') + '">';}
+				if (info.schema) {
+					var niceName = info.name.replace(/\./g, '_');
+					var schemaDefName = '$_schema_' + niceName;
+					scope[schemaDefName] = info.schema;
+					if (info.subkey) {
+						info.subkey.path = info.name;
+						scope[schemaDefName + '_subkey'] = info.subkey;
+						var subKeyArray = angular.isArray(info.subkey) ? info.subkey : [info.subkey];
+						for (var arraySel = 0; arraySel < subKeyArray.length; arraySel++) {
+							var topAndTail = containerInstructions(subKeyArray[arraySel]);
+							template += topAndTail.before;
+							template += processInstructions(info.schema, null, {
+								subschema: true,
+								formStyle: options.formstyle,
+								subschemaRoot: info.name,
+								subkey: schemaDefName + '_subkey',
+								subkeyno: arraySel
+							});
+							template += topAndTail.after;
+						}
+						subkeys.push(info);
+					} else {
+						template += '<div class="schema-head">' + info.label +'</div>' +
+						'<div ng-form class="' + 
+						convertFormStyleToClass(info.formStyle) + '" name="form_' + niceName + '_{{$index}}" class="sub-doc well" id="' + info.id + 'List_{{$index}}" ' +
+							' ng-repeat="subDoc in ' + (options.model || 'record') + '.' + info.name + ' track by $index">' +
+							'   <div class="row' + ' sub-doc">' +
+							'      <div class="pull-left">' + processInstructions(info.schema, false, {subschema: true,subschemaRoot: info.name,formstyle: info.formStyle,model: options.model}) +'</div>';
+						if (!info.noRemove || info.customSubDoc) {
+							template += '   <div class="pull-left sub-doc-btns">';
+							if (info.customSubDoc) {template += info.customSubDoc;}
+							if (!info.noRemove) {template += '      <button name="remove_' + info.id + '_btn" class="remove-btn btn btn-default btn-xs form-btn" ng-click="remove(\'' + info.name + '\',$index,$event)"><i class="glyphicon glyphicon-minus"></i> Remove</button>';}
+							template += '  </div> ';
+						}
+						template += '   </div>' +
+						'</div>';
+						if (!info.noAdd || info.customFooter) {
+							template += '<div class = "schema-foot">';
+							if (info.customFooter) {template += info.customFooter;}
+							if (!info.noAdd) {template += '    <button id="add_' + info.id + '_btn" class="add-btn btn btn-default btn-xs form-btn" ng-click="add(\'' + info.name + '\',$event)"><i class="glyphicon glyphicon-plus"></i> Add</button>';}
+							template += '</div>';
+						}
+					}
+				} else {
+					var controlClass = [];
+					if (isHorizontalStyle(options.formstyle)) {controlClass.push('col-sm-10');}
+					if (info.array) {
+						controlClass.push('fng-array');
+						if (options.formstyle === 'inline') {throw 'Cannot use arrays in an inline form';}
+						var glyphClass = 'glyphicon glyphicon',ngClassString = 'ng-class="skipCols($index)" ';
+						template += generateLabel(info, ' <i id="add_' + info.id + '" ng-click="add(\'' + info.name + '\',$event)" class="' + glyphClass + '-plus-sign"></i>', options) + '<div ' + ngClassString + 'class="' + controlClass.join(' ') + '" id="' + info.id + 'List" ng-repeat="arrayItem in ' +
+							(options.model || 'record') + '.' + info.name + '">' + generateInput(info, 'arrayItem.x', true, info.id + '_{{$index}}', options) +
+							'<i ng-click="remove(\'' + info.name + '\',$index,$event)" id="remove_' + info.id + '_{{$index}}" class="' + glyphClass + '-minus-sign"></i></div>';
+					} else {
+						template += generateLabel(info, null, options);
+						if (controlClass.length > 0) {template += '<div class="' + controlClass.join(' ') + '">';}
+						template += generateInput(info, null, options.required, info.id, options);
+						if (controlClass.length > 0) {template += '</div>';}
+					}
+				}
+				template += closeTag;
+				return template;
+			};
+			var processInstructions = function (instructionsArray, topLevel, options) {
+				var result = '';
+				if (instructionsArray) {
+					for (var anInstruction = 0; anInstruction < instructionsArray.length; anInstruction++) {
+						var info = instructionsArray[anInstruction];
+						if (anInstruction === 0 && topLevel && !options.schema.match(/$_schema_/)) {
+							info.add = info.add ? ' ' + info.add + ' ' : '';
+							if (info.add.indexOf('ui-date') === -1 && !options.noautofocus && !info.containerType) {info.add = info.add + 'autofocus ';}
+						}
+						var callHandleField = true;
+						if (info.directive) {
+							var directiveName = info.directive;
+							var newElement = '<' + directiveName + ' model="' + (options.model || 'record') + '"';
+							var thisElement = element[0];
+							for (var i = 0; i < thisElement.attributes.length; i++) {
+								var thisAttr = thisElement.attributes[i];
+								switch (thisAttr.nodeName) {
+									case 'class' :var classes = thisAttr.nodeValue.replace('ng-scope', '');if (classes.length > 0) {newElement += ' class="' + classes + '"';}break;
+									case 'schema' :var bespokeSchemaDefName = ('bespoke_' + info.name).replace(/\./g, '_');scope[bespokeSchemaDefName] = angular.copy(info);delete scope[bespokeSchemaDefName].directive;newElement += ' schema="' + bespokeSchemaDefName + '"';break;
+									default :newElement += ' ' + thisAttr.nodeName + '="' + thisAttr.nodeValue + '"';
+								}
+							}
+							if (info.add) {newElement += ' ' + info.add;}
+							newElement += '></' + directiveName + '>';
+							result += newElement;
+							callHandleField = false;
+						} else if (info.containerType) {
+							var parts = containerInstructions(info);
+							switch (info.containerType) {
+								case 'tab' :if (!tabsSetup) {tabsSetup = 'forced';result += '<tabset>';}result += parts.before + processInstructions(info.content, null, options) + parts.after;break;
+								case 'tabset' :tabsSetup = true;result += parts.before + processInstructions(info.content, null, options) + parts.after;break;
+								default:result += parts.before + processInstructions(info.content, null, options) + parts.after;break;
+							}
+							callHandleField = false;
+						} else if (options.subkey) {
+							var objectToSearch = angular.isArray(scope[options.subkey]) ? scope[options.subkey][0].keyList : scope[options.subkey].keyList;
+							if (_.find(objectToSearch, function (value, key) {return scope[options.subkey].path + '.' + key === info.name;})) {
+								callHandleField = false;
+							}
+						}
+						if (callHandleField) {result += handleField(info, options);}
+					}
+				} else {
+					console.log('Empty array passed to processInstructions');
+					result = '';
+				}
+				return result;
+			};
+			var unwatch = scope.$watch(attrs.schema, function (newValue) {
+				if (newValue) {
+					newValue = angular.isArray(newValue) ? newValue : [newValue];   // otherwise some old tests stop working for no real reason
+					if (newValue.length > 0) {
+						unwatch();
+						var elementHtml = '';
+						var theRecord = scope[attrs.model || 'record'];      // By default data comes from scope.record
+						theRecord = theRecord || {};
+						if ((attrs.subschema || attrs.model) && !attrs.forceform) {
+							elementHtml = '';
+						} else {
+							scope.topLevelFormName = attrs.name || 'myForm';     // Form name defaults to myForm
+							var customAttrs = '';
+							for (var thisAttr in attrs) {
+								if (attrs.hasOwnProperty(thisAttr)) {
+									if (thisAttr[0] !== '$' && ['name', 'formstyle', 'schema', 'subschema', 'model'].indexOf(thisAttr) === -1) {customAttrs += ' ' + attrs.$attr[thisAttr] + '="' + attrs[thisAttr] + '"';}
+								}
+							}
+							elementHtml = '<form name="' + scope.topLevelFormName + '" class="' + convertFormStyleToClass(attrs.formstyle) + ' novalidate"' + customAttrs + '>';
+						}
+						if (theRecord === scope.topLevelFormName) {throw new Error('Model and Name must be distinct - they are both ' + theRecord);}
+						elementHtml += processInstructions(newValue, true, attrs);
+						if (tabsSetup === 'forced') {elementHtml += '</tabset>';}
+						elementHtml += attrs.subschema ? '' : '</form>';
+						element.replaceWith($compile(elementHtml)(scope));
+						if (subkeys.length > 0) {
+							var unwatch2 = scope.$watch('phase', function (newValue) {
+								if (newValue === 'ready') {
+									unwatch2();
+									for (var subkeyCtr = 0; subkeyCtr < subkeys.length; subkeyCtr++) {
+										var info = subkeys[subkeyCtr],arrayOffset,matching;
+										var arrayToProcess = angular.isArray(info.subkey) ? info.subkey : [info.subkey];
+										var parts = info.name.split('.');
+										var dataVal = theRecord;
+										while (parts.length > 1) {dataVal = dataVal[parts.shift()] || {};}
+										dataVal = dataVal[parts[0]] = dataVal[parts[0]] || [];
+										for (var thisOffset = 0; thisOffset < arrayToProcess.length; thisOffset++) {
+											if (arrayToProcess[thisOffset].selectFunc) {
+												arrayOffset = scope[arrayToProcess[thisOffset].selectFunc](theRecord, info);
+											} else if (arrayToProcess[thisOffset].keyList) {
+												var thisSubkeyList = arrayToProcess[thisOffset].keyList;
+												for (arrayOffset = 0; arrayOffset < dataVal.length; arrayOffset++) {
+													matching = true;
+													for (var keyField in thisSubkeyList) {
+														if (thisSubkeyList.hasOwnProperty(keyField)) {
+															if (dataVal[arrayOffset][keyField] !== thisSubkeyList[keyField] && (!dataVal[arrayOffset][keyField].text || dataVal[arrayOffset][keyField].text !== thisSubkeyList[keyField])) {matching = false;break;}
+														}
+													}
+													if (matching) {break;}
+												}
+												if (!matching) {arrayOffset = theRecord[info.name].push(thisSubkeyList) - 1;}
+											} else {
+												throw new Error('Invalid subkey setup for ' + info.name);
+											}
+											scope['$_arrayOffset_' + info.name.replace(/\./g, '_') + '_' + thisOffset] = arrayOffset;
+										}
+									}
+								}
+							});
+						}
+						$rootScope.$broadcast('formInputDone');
+						if (scope.updateDataDependentDisplay && theRecord && Object.keys(theRecord).length > 0) {scope.updateDataDependentDisplay(theRecord, null, true);}
+					}
+				}
+			}, true);
+			function addAll(type, additionalClasses, options) {
+				var action = 'getAddAll' + type + 'Options';
+				return utils[action](scope, options, additionalClasses) || [];
+			}
+		}
+	};
+}])
 .directive('dynamicForm', ['$q', '$parse', '$http', '$templateCache', '$compile', '$document', '$timeout', function ($q, $parse, $http, $templateCache, $compile, $document, $timeout) {
 	var supported = {
 		'text': {element: 'input', type: 'text', editable: true, textBased: true},
