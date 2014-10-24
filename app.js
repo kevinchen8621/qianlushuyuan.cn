@@ -5,6 +5,7 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 	$stateProvider
 		.state("f", {abstract: true, templateUrl: 'tpl/f/layout', controller:"FCtl"})
 		.state("f.home", {url:'/',  templateUrl: 'tpl/f/home', controller:"FHomeCtl"})
+		.state("f.sign", {url:'/sign', templateUrl: 'tpl/f/sign',controller:'FSignCtl'})
 		.state("f.cat", {url:'/cat/:id', templateUrl: 'tpl/f/cat',controller:'FCatCtl'})
 		.state("f.video", {url:'/video/:id', templateUrl: 'tpl/f/video',controller:'FVideoCtl'})
 		.state("f.vip", {url:'/vip', templateUrl: 'tpl/f/vip',controller:'FCtl'})
@@ -36,6 +37,8 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 	$state.transitionTo('f.home');	
 }])
 .controller("FCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
+}])
+.controller("FSignCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
 }])
 .controller("FHomeCtl",["$scope","$rootScope","$http","$window","$timeout", function($scope,$rootScope,$http,$window,$timeout){
 	var slides = $rootScope.slides, currentTimeout, isPlaying=true, destroyed = false;

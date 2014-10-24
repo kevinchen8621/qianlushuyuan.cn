@@ -47581,12 +47581,15 @@ mo.constant('constants', {
 	tpl_url: 'http://xinziji.com/assets/',
 })
 .service('utils', function () {
-	this.applyToSet = function(obj, sets){
-		var idx = _.indexOf(sets, function(item){return item._id == obj._id});
-		if(idx == -1){sets.push(obj);}else{sets.splice(idx, 1, cat);}
+	this.applyToSet = function(sets, obj){
+		var idx = _.findIndex(sets, function(item){return item._id == obj._id;});
+		console.log(sets);
+		console.log(obj);
+		console.log(idx);
+		if(idx == -1){sets.unshift(obj);}else{sets.splice(idx, 1, obj);}
 	};
-	this.delFromSet = function(obj, sets){
-		var idx = _.indexOf(sets, function(item){return item._id == obj._id});
+	this.delFromSet = function(sets, oid){
+		var idx = _.findIndex(sets, function(item){return item._id == oid;});
 		if(idx !== -1){sets.splice(idx, 1);}
 	};
 	this.getAddAllGroupOptions = function (scope, attrs, classes) {return getAddAllOptions(scope, attrs, "Group", classes);};
@@ -48016,8 +48019,9 @@ mo.constant('constants', {
 		get_by_code: function(distcode){
 			var  result = {countrys: _.filter(taobao_dists, function(item){ return item.parent_id == 0;})}, 
 				cur = distcode ? _.find(taobao_dists, function(item){ return item._id == distcode;}) : 0;
+			console.log(cur);
 			if(!cur){
-				result.country = 1; result.provinces = 310000; result.city = 310100; result.town = 310115;
+				result.country = 1; result.province = 310000; result.city = 310100; result.town = 310115;
 				result.provinces = _.filter(taobao_dists, function(item){ return item.parent_id == 1});
 				result.citys = _.filter(taobao_dists, function(item){ return item.parent_id == 310000});
 				result.towns = _.filter(taobao_dists, function(item){ return item.parent_id == 310100});
@@ -48052,28 +48056,29 @@ mo.constant('constants', {
 		},
 		caption_by_code: function(distcode){
 			var  cur = distcode ? _.find(taobao_dists, function(item){ return item._id == distcode;}) : 0;
+			console.log(cur);
 			if(!cur){
 				return "";
 			}else if(cur.type == 4){
-				var 	t = _.find(taobao_dists, function(item){item._id == cur._id;}),
-					c = _.find(taobao_dists, function(item){item._id == t.parent_id;}),
-					p = _.find(taobao_dists, function(item){item._id == c.parent_id;}),
-					u = _.find(taobao_dists, function(item){item._id == p.parent_id;});
-				return u.name + " " + p.name + " " + c.name + " " + t.name + " ";
+				var c = _.find(taobao_dists, function(item){return item._id == cur.parent_id;});
+				var p = _.find(taobao_dists, function(item){return item._id == c.parent_id;});
+				var u = _.find(taobao_dists, function(item){return item._id == p.parent_id;});
+				return u.name + " " + p.name + " " + c.name + " " + cur.name + " ";
 			}else if(cur.type == 3){
-				var 	c = _.find(taobao_dists, function(item){item._id == t.parent_id;}),
-					p = _.find(taobao_dists, function(item){item._id == c.parent_id;}),
-					u = _.find(taobao_dists, function(item){item._id == p.parent_id;});
-				return u.name + " " + p.name + " " + c.name + " ";
+				var 	p = _.find(taobao_dists, function(item){return item._id == cur.parent_id;}),
+					u = _.find(taobao_dists, function(item){return item._id == p.parent_id;});
+				return u.name + " " + p.name + " " + cur.name + " ";
 			}else if(cur.type == 2){
-				var 	p = _.find(taobao_dists, function(item){item._id == c.parent_id;}),
-					u = _.find(taobao_dists, function(item){item._id == p.parent_id;});
-				return u.name + " " + p.name + " ";
+				var 	u = _.find(taobao_dists, function(item){return item._id == cur.parent_id;});
+				return u.name + " " + cur.name + " ";
 			}else if(cur.type == 1){
-				var 	u = _.find(taobao_dists, function(item){item._id == p.parent_id;});
-				return u.name + " ";
+				return cur.name + " ";
 			}
 		},
+		get_subs: function(pid){
+			var 	result = _.find(taobao_dists, function(item){item.parent_id == pid;});
+			return result;
+		}
 	}
 }])
 .factory('$rest', ["$rootScope", "$window", "$http", "$state", function($rootScope, $window, $http, $state) {
@@ -48114,14 +48119,34 @@ mo.constant('constants', {
 		set_member:function(obj, cb){post("/api/member", obj, cb);},
 
 		get_videos_by_catid:function(catid, cb){get("/api/videos/catid/"+catid, cb);},
-		get_cust_orgs: function(cb){ get("/api/cust/orgs", cb);},
+
 		get_taobao_dists: function(cb){ get("/api/taobao/dists", cb);},
-		del_cust_org: function(custOrg, cb){ post("/api/cust/org/del", custOrg, cb);},
-		set_cust_org: function(custOrg, cb){ post("/api/cust/org", custOrg, cb);},
-		get_cust_orgs: function(cb){ get("/api/cust/orgs", cb);},
-		del_cust_contact: function(custContact, cb){ post("/api/cust/contact/del", custContact, cb);},
-		set_cust_contact: function(custContact, cb){ post("/api/cust/contact", custContact, cb);},
-		get_cust_contacts: function(cb){ get("/api/cust/contacts", cb);},
+		get_logistics_cars: function(cb){ get("/api/logistics/cars", cb);},
+
+		del_addr: function(aid, cb){ get("/api/addr/" + aid + "/del", cb);},
+		set_addr: function(addr, cb){ post("/api/addr", addr, cb);},
+		get_addrs_by_owner: function(oid, cb){ get("/api/addrs/owner/"+oid, cb);},
+
+		del_order: function(oid, cb){ get("/api/order/" + oid + "/del", cb);},
+		set_order: function(order, cb){ post("/api/order", order, cb);},
+		get_orders_by_cust: function(cid, cb){ get("/api/orders/cust/"+cid, cb);},
+		get_orders: function(cb){ get("/api/orders", cb);},
+
+		del_cust: function(cid, cb){ get("/api/cust/"+ cid +"/del", cb);},
+		set_cust: function(cust, cb){ post("/api/cust", cust, cb);},
+		get_custs: function(cb){ get("/api/custs", cb);},
+		del_cust_mem: function(mid, cb){ get("/api/cust/mem/" + mid + "/del", cb);},
+		set_cust_mem: function(mem, cb){ post("/api/cust/mem", mem, cb);},
+		get_cust_mems: function(cid, cb){ get("/api/cust/"+cid+"/mems", cb);},
+		del_cust_waybill: function(wid, cb){ get("/api/cust/waybill/" + wid + "/del", cb);},
+		set_cust_waybill: function(waybill, cb){ post("/api/cust/waybill", waybill, cb);},
+		get_cust_waybills: function(cid, cb){ get("/api/cust/"+cid+"/waybills", cb);},
+		del_cust_voucher: function(vid, cb){ get("/api/cust/voucher/" + vid + "/del", cb);},
+		set_cust_voucher: function(voucher, cb){ post("/api/cust/voucher", voucher, cb);},
+		get_cust_vouchers: function(cid, cb){ get("/api/cust/"+cid+"/vouchers", cb);},
+		del_cust_bill: function(bid, cb){ get("/api/cust/bill/" + bid + "/del", cb);},
+		set_cust_bill: function(bill, cb){ post("/api/cust/bill", bill, cb);},
+		get_cust_bills: function(cid, cb){ get("/api/cust/"+cid+"/bills", cb);},
 	};
 }])
 ;
