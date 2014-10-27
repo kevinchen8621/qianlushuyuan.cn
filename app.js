@@ -36,11 +36,29 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 .controller("AppCtl",["$scope", "$state", function($scope, $state){
 	$state.transitionTo('f.home');	
 }])
-.controller("FCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
+.controller("FCtl",["$scope","$rootScope","$window", function($scope,$rootScope,$window){
 }])
-.controller("FSignCtl",["$scope","$rootScope","$http","$window", function($scope,$rootScope,$http,$window){
+.controller("FSignCtl",["$scope","$rootScope","$rest","$window","$state", function($scope,$rootScope,$rest,$window,$state){
+	$scope.mdData = {
+		org: "钱路书院",
+		email:"",
+		username:"",
+		password:"",
+		promcode: "",
+		msg: "",
+	};
+	$scope.signup_by_email_and_promcode = function(){
+		console.log("signup");
+		$rest.signup_by_email_and_promcode($scope.mdData, function(data){
+			console.log(data);
+			$rootScope.user = data;
+			$window.localStorage.token = data.token;
+			$window.localStorage.user = JSON.stringify(data);
+			$state.go("f.home");
+		});
+	};
 }])
-.controller("FHomeCtl",["$scope","$rootScope","$http","$window","$timeout", function($scope,$rootScope,$http,$window,$timeout){
+.controller("FHomeCtl",["$scope","$rootScope","$window","$timeout", function($scope,$rootScope,$window,$timeout){
 	var slides = $rootScope.slides, currentTimeout, isPlaying=true, destroyed = false;
 	var currentIndex = $scope.currentIndex = -1;
 
@@ -52,7 +70,6 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 			if (!isNaN(interval) && interval>=0) { 
 				currentTimeout = $timeout(function(){
 					if (isPlaying) { 
-						console.log("here");
 						var newIndex = $rootScope.slides ?  (currentIndex + 1) % $rootScope.slides.length : 1;
 						$scope.select(newIndex);
 					} else if (!$scope.noPause) { 
@@ -81,19 +98,21 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 	$rest.get_videos_by_catid($stateParams.id, function(videos){ $scope.videos = videos;});
 	$rest.get_member_by_id($scope.cat.teacher_id, function(teacher){$scope.teacher = teacher;});
 }])
-.controller("FVideoCtl",["$scope","$rootScope","$stateParams","$window","servVideo", function($scope,$rootScope,$stateParams,$window,servVideo){
+.controller("FVideoCtl",["$scope","$rootScope","$stateParams","$window","$rest", function($scope,$rootScope,$stateParams,$window,$rest){
 	var regex = new RegExp("^\\d{2,12}$");
 	if(regex.test($stateParams.id)){
-		servVideo.getListByCatKey($stateParams.id, function(data){
+		$rest.get_videos_by_catid($stateParams.id, function(data){
 			$scope.curVideoList = data;
 			$scope.curVideo = $scope.curVideoList[0];
-			servVideo.visit($scope.curVideo._id);
+			$rest.set_visit({type:"video", _id: $scope.curVideo._id});
 		});
 	}else{
-		servVideo.get_by_id($stateParams.id, function(data){
+		$rest.get_video_by_id($stateParams.id, function(data){
 			$scope.curVideo =  data;	
 			$scope.curVideoList = [$scope.curVideo];
-			servVideo.visit($stateParams.id);
+			$rest.set_visit({_id: $stateParams.id});
+			$rest.set_visit({_id: $stateParams.id});
+			$rest.set_visit({type:"video", _id: $stateParams.id});
 		}); 
 	}
 }])
@@ -118,32 +137,32 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 	];
 	//Socket.connect(host,port,data._id,$rootScope.token);
 }])
-.controller("BHomeCtl",["$scope","$rootScope","$state","servVideo", function($scope,$rootScope,$state,servVideo){
+.controller("BHomeCtl",["$scope","$rootScope","$state","$rest", function($scope,$rootScope,$state,$rest){
 	$scope.myVideos = [];
-	servVideo.get_by_visit(function(err, lst){
-		$scope.myVideos = lst;
+	$rest.get_visit_videos(function(data){
+		$scope.myVideos = data;
 	});
 }])
 .controller("BFaqCtl",["$scope","$rootScope","$state", function($scope,$rootScope,$state){
 }])
 .controller("BAccountCtl",["$scope","$rootScope","$state", function($scope,$rootScope,$state){
 }])
-.controller("BProfileCtl",["$scope","$rootScope","servUser", function($scope,$rootScope,servUser){
+.controller("BProfileCtl",["$scope","$rootScope","$rest", function($scope,$rootScope,$rest){
+	$scope.profile = {};
 	$scope.doSubmit = function(){
-		servUser.saveProfile(function(err, msg){
-			$scope.msg = msg;
+		$rest.set_user_profile($scope.profile, function(){
+
 		});
 	}
 }])
-.controller("BUppwdCtl",["$scope", "$rootScope","servUser", function($scope,$rootScope,servUser){
+.controller("BUppwdCtl",["$scope", "$rootScope","$rest", function($scope,$rootScope,$rest){
 	$scope.doSubmit = function(){
 		if(!$scope.oldpassword || !$scope.password){
 			$scope.msg = "密码不能为空，请正确输入！";
 		}else if($scope.password !== $scope.password2){
 			$scope.msg = "新密码两次输入不一致，请正确输入！";
 		}else{
-			servUser.changePass($scope.oldpassword, $scope.password, function(err, msg){
-				$scope.msg = msg;
+			$rest.user_set_password({password: $scope.password}, function(){
 			});
 		}
 	};
@@ -172,11 +191,12 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 }])
 .controller("BGcodeCtl",["$scope","$rootScope","$state", function($scope,$rootScope,$state){
 }])
-.controller("BDataCtl",["$scope","$rootScope","$state", "servVip", "servPay", "servUser", function($scope,$rootScope,$state,servVip,servPay,servUser){
+.controller("BDataCtl",["$scope","$rootScope","$state", "$rest", function($scope,$rootScope,$state,$rest){
 	$scope.pmt_types = ["vip"]; //promotion
 	$scope.pmt_type = "";
 	$scope.pmt_fors = []; 
 	$scope.pmt_for_idx = -1;
+
 
 	servPay.get_gcodes(function(data){
 		$scope.pmt_gcodes = data;
@@ -280,9 +300,9 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		servPay.set_fee($scope.pay);
 	}
 }])
-.controller("BSiteCtl",["$scope","$rootScope","$http","$window","servCat","servVideo", function($scope,$rootScope,$http,$window,servCat,servVideo){
+.controller("BSiteCtl",["$scope","$rootScope","$window", function($scope,$rootScope,$window){
 }])
-.controller("BSiteCatCtl",["$scope","$rootScope","$http","$window","servCat","servVideo", function($scope,$rootScope,$http,$window,servCat,servVideo){
+.controller("BSiteCatCtl",["$scope","$rootScope","$window","$rest", function($scope,$rootScope,$window,$rest){
 	$scope.ctypes = ["video","article"];
 	$scope.sel_ctype = function(t){
 		$scope.ctype = t;
@@ -307,7 +327,7 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		servCat.del(item, function(){$scope.add_top();}); 
 	}
 }])
-.controller("BSiteVideoCtl",["$scope","$rootScope","$http","$window","servCat","servVideo", function($scope,$rootScope,$http,$window,servCat,servVideo){
+.controller("BSiteVideoCtl",["$scope","$rootScope","$window","$rest", function($scope,$rootScope,$window,$rest){
 	$scope.cat = null;
 	$scope.sel_cat = function(ckey){
 		if(ckey){
@@ -321,8 +341,8 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		if($scope.cat){ $scope.video.cats.push(cat); }
 	}
 	$scope.edit = function(item){$scope.video = item;}
-	$scope.save = function(){servVideo.save($scope.video, function(){toastr.info("视频信息已保存！");});}
-	$scope.del = function(){servVideo.del($scope.video, function(){toastr.info("视频信息已删除！");}); $scope.new();}
+	$scope.save = function(){ $rest.set_video($scope.video, function(){toastr.info("视频信息已保存！");});}
+	$scope.del = function(){$rest.del_video_by_id($scope.video._id, function(){toastr.info("视频信息已删除！");}); $scope.new();}
 	$scope.set_cat = function(ckey){
 		var idx = _.indexOf($scope.video.cats, ckey);
 		if(idx == -1){
@@ -333,7 +353,7 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		$scope.save();
 	}
 }])
-.controller("SignCtl", function($scope,$rootScope,$window,$modalInstance,$state,servUser,servSms,servPay){
+.controller("SignCtl", function($scope,$rootScope,$window,$modalInstance,$state,$rest){
 	$scope.mdData = {
 		org: "钱路书院",
 		show: "", //显示哪个Modal
@@ -350,22 +370,22 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		msg: "",
 	};
 	$scope.sendSms = function(){
-		servSms.verify($scope.mdData, function(left){$scope.smsCaption = left <= 0 ? "发送验证码" : left + " 秒后再次发送";});
+		$rest.sms_verify($scope.mdData, function(left){$scope.smsCaption = left <= 0 ? "发送验证码" : left + " 秒后再次发送";});
 	};
 	$scope.signin = function(){
-		servUser.signin($scope.mdData, function(msg){$modalInstance.close();});
+		$rest.user_signin($scope.mdData, function(msg){$modalInstance.close();});
 	};
 	$scope.signup_simple = function(){
-		servUser.signup_simple($scope.mdData, function(user){$modalInstance.close();});
+		$rest.user_signup_simple($scope.mdData, function(user){$modalInstance.close();});
 	};
 	$scope.signup_by_mobile = function(){
-		servUser.signup_by_mobile($scope.mdData, function(user){$modalInstance.close();});
+		$rest.user_signup_by_mobile($scope.mdData, function(user){$modalInstance.close();});
 	};
 	$scope.signup_by_email = function(){
-		servUser.signup_by_email($scope.mdData, function(user){$modalInstance.close();});
+		$rest.user_signup_by_email($scope.mdData, function(user){$modalInstance.close();});
 	};
 	$scope.pay_vip = function(vip){
-		servPay.vip(vip, function(data){
+		$rest.pay_vip(vip, function(data){
 			if(data.status == "finished"){
 				$state.go("b.pays");	
 			}else{
@@ -373,8 +393,8 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 			}
 		});
 	};
-	$scope.update_gcode = function(vip){
-		servPay.get_gcode(vip.gcode, function(data){
+	$scope.update_ecoupon_code = function(vip){
+		$rest.get_ecoupon_by_code(vip.ecoupon_code, function(data){
 			if(!data || data.type !== "vip"){
 				vip.subtitle = "折扣码错误！";
 			}else{
@@ -383,16 +403,24 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		});
 	}
 })
-.run(['$rootScope', '$location', '$modal', 'servUser', 'servSite', 'constants', function ($rootScope, $location, $modal, servUser,servSite,constants) {
-	servUser.init();
-	servSite.init("slides,cats,video_new10,video_hot10,vips");
-	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
-		$rootScope.toState = toState;
-		$rootScope.toParams = toParams;
-		$rootScope.fromState = fromState;
-		$rootScope.fromParams = fromParams;
-		$rootScope.bodycss = $rootScope.toState.name.substr(0,2) == 's.' ? "login-layout" : "";
+.run(['$rootScope', '$location', '$modal', '$window', '$rest', function ($rootScope, $location, $modal, $window, $rest) {
+	var site =  JSON.parse($window.localStorage.site || "{}");
+	angular.forEach(site, function(value, key){ $rootScope[key] = value;});
+	$rootScope.signOut = function(){
+		delete $rootScope.user;
+		delete $window.sessionStorage.token;
+		delete $window.sessionStorage.user;
+		delete $window.localStorage.token;
+		delete $window.localStorage.user;
+		$state.go('f.home');
+	};
+	$rest.get_site("slides,cats,video_new10,video_hot10,vips", function(data){
+		angular.forEach(data, function(value, key){
+			$rootScope[key] = value;
+		});
+		$window.localStorage.site = JSON.stringify(data);
 	});
+	$rootScope.user =  JSON.parse($window.localStorage.user || "{}");
 
 	$rootScope.sign = function(type){
 		var modalInstance = $modal.open({
@@ -404,6 +432,4 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 
 		})
 	};
-	console.log($rootScope.slides);
-
 }]);

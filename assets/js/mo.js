@@ -47624,8 +47624,9 @@ mo.constant('constants', {
 	return {
 		request: function (config) {
 			config.headers = config.headers || {};
-			if ($window.sessionStorage.token) {
-				config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token;
+			var token = $window.sessionStorage.token || $window.localStorage.token;
+			if (token) {
+				config.headers.Authorization = 'Bearer ' + token;
 			}
 			return config;
 		},
@@ -47663,347 +47664,6 @@ mo.constant('constants', {
 		service.callback = callback;
 	}
 	return service;
-}])
-.factory('serv', ["$rootScope", "$window", "$http", "$state", function($rootScope, $window, $http, $state) {
-	return {
-		get: function(url, param, cb){
-			if(typeof(param) == "function"){
-				cb = param;
-				param = {};
-			}
-			$http.get(url, param).success(function(data, status, headers, config){
-				if(data.error){
-					toastr.error(data.error);
-					return;
-				}
-				cb(data)
-			}).error(function(data, status, headers, config){
-				var err = {status:status, title:"未知错误!",message:""};
-				if($rootScope.user && $rootScope.user.username == "kevinchen8621"){ 
-					err.message = "[url:"+config.url+"]" + "[method:"+config.method+"]"+ "[data:"+JSON.stringify(config.data)+"]";
-				}
-				if(status == 502){
-					err.title = "网关错误!";
-					err.message = "远程服务器访问失败，检查网络或联系管理员！\n" + err.message;
-				}
-				toastr.error(err.message, err.title);
-			});
-		},
-		post: function(url, param, cb){
-			if(typeof(param) == "function"){
-				cb = param;
-				param = {};
-			}
-			$http.post(url, param).success(function(data, status, headers, config){
-				if(data.error){
-					toastr.error(data.error);
-					return;
-				}
-				cb(data)
-			}).error(function(data, status, headers, config){
-				var err = {title:"未知错误!" + status, message:""};
-				if($rootScope.user && $rootScope.user.username == "kevinchen8621"){ 
-					err.message = "[url:"+config.url+"]" + "[method:"+config.method+"]"+ "[data:"+JSON.stringify(config.data)+"]";
-				}
-				if(status == 502){
-					err.title = "网关错误!";
-					err.message = "远程服务器访问失败，检查网络或联系管理员！\n" + err.message;
-				}
-				toastr.error(err.message, err.title);
-			});
-		},
-	}
-}])
-.factory('servCat', ["$rootScope", "$window", "serv", function($rootScope, $window, serv) {
-	return {
-		save : function(cat, cb){
-			cb = cb || angular.noop;
-			if(cat.key.length<2){return cb();}
-			serv.post("/api/cat", cat, function(){
-				var idx = _.indexOf($rootScope.cats, function(item){return item.type == cat.type && item.key == cat.key;});
-				if(idx == -1){
-					$rootScope.cats.push(cat);
-				}else{
-					$rootScope.cats.splice(idx, 1, cat);
-				}
-				toastr.info("分类 " + cat.title + "已提交");
-				cb();
-			});
-		},
-		del : function(cat, cb){
-			cb = cb || angular.noop;
-			serv.post("/api/cat/del", cat, function(){//返回{cat_ids: 删除掉的id}
-				var idx = _.indexOf($rootScope.cats, function(item){return item.type == cat.type && item.key == cat.key;});
-				console.log($rootScope.cats);
-				console.log(cat);
-				console.log(idx);
-				if(idx > -1){
-					$rootScope.cats.splice(idx, 1);
-				}
-				toastr.info("分类 " + cat.title + "已删除");
-				cb();
-			});
-		},
-	};
-}])
-.factory('servVideo', ["$rootScope", "$window", "serv", function($rootScope, $window, serv) {
-	return {
-		visit : function(video_id, cb){
-			cb = cb || angular.noop;
-			var visitObj = $rootScope.user ? {user_id:$rootScope.user._id, video_id: video_id} : {video_id: video_id};
-			serv.post('/api/video/visit',visitObj, function(data){
-				cb(data);
-			});
-		},
-		get_by_id : function(video_id, cb){
-			cb = cb || angular.noop;
-			serv.get('/api/video/' + video_id, cb);
-		},
-		get_by_visit : function(cb){
-			cb = cb || angular.noop;
-			serv.get("/api/videos/visit", cb);
-		},
-		get_by_catid : function(cat_id, cb){
-			cb = cb || angular.noop;
-			serv.get('/api/videos/catid/'+ cat_id, cb);
-		},
-		newOne : function(cb){
-			cb = cb || angular.noop;
-			var item = {
-				hostname:$rootScope.site._id,
-				title:"", 
-				url:"",
-				cats:[],
-				face: "/img/0202.jpg",
-				visits: 50,
-				create_at: Date.now(),
-				description:"",
-			};
-			cb(item);
-		},
-		save : function(video, cb){
-			serv.post("/api/video", video, function(data){
-								var idx = $window._.findIndex($rootScope.videos, function(item){return item._id == data._id;});
-				if(idx > -1){
-					$rootScope.videos.splice(idx,1,data);
-					cb("视频[" + data.title + "]的修改信息已提交");
-				}else{
-					$rootScope.videos.push(data);
-					cb("新视频[" + data.title + "]已提交");
-				}
-			});
-		},
-		del : function(video, cb){
-			if(video._id){
-				serv.post("/api/video/del", video, function(data){
-										var idx = $window._.findIndex($rootScope.videos, function(item){
-						return item._id == video._id;
-					});
-					if(idx > -1){$rootScope.videos.splice(idx,1);}
-					cb("视频信息 " + video.title + "已删除");
-				});
-			}else{
-				cb("视频信息 " + video.title + "已删除");
-			}
-		},
-	};
-}])
-.factory('servSms',['serv', function(serv){
-	return {
-		verify: function(mdData, cb){
-			var seconds = mdData.smsInterval;
-			function leftCount(){cb(seconds--);$timeout(leftCount, 1000);}
-			serv.post('/api/sms/verify',{_id:mdData.mobile, org:org}, function(data){leftCount();});
-		}
-	}
-}])
-.factory('servUser', ["$rootScope", "$window", "serv", "$state", function($rootScope, $window, serv, $state) {
-	return {
-		init : function(cb){
-			cb = cb || angular.noop;
-			$rootScope.user = JSON.parse($window.sessionStorage.user || $window.localStorage.user || null);
-			$rootScope.is_admin = $rootScope.user &&  _.contains($rootScope.user.roles,"管理员");
-			cb();
-		},
-		signin : function(mdData, cb){
-			cb = cb || angular.noop;
-			var u = $window._.pick(mdData, "username","password");
-			serv.post('/api/user/signin', u, function(data){
-				$rootScope.user = data;
-				var storage = mdData.remember ? $window.localStorage : $window.sessionStorage;
-				storage.token = data.token;
-				storage.user = JSON.stringify(data);
-				cb(data);
-			});			
-		},
-		user_by_token: function(mdData, cb){
-			cb = cb || angular.noop;
-			var u = $window._.pick(mdData, "username","token");
-			serv.post('/api/user/user_by_token', u, function(data){
-				$rootScope.user = data;
-				var storage = mdData.remember ? $window.localStorage : $window.sessionStorage;
-				storage.token = data.token;
-				storage.user = JSON.stringify(data);
-				cb(data);
-			});			
-		},
-		signup_simple : function(mdData, cb){
-			cb = cb || angular.noop;
-			var u = $window._.pick(mdData, "username","password");
-			serv.post('/api/user/signup_simple', u, function(data){
-				$rootScope.user = data;
-				$window.localStorage.token = data.token;
-				$window.localStorage.user = JSON.stringify(data);
-				cb(data);
-			});
-		},
-		signup_by_mobile : function(mdData, cb){
-			cb = cb || angular.noop;
-			var u = $window._.pick(mdData, "mobile","sms","username","password");
-			serv.post('/api/user/signup_by_mobile', u, function(data){
-				$rootScope.user = data;
-				$window.localStorage.token = data.token;
-				$window.localStorage.user = JSON.stringify(data);
-				cb(data);
-			});
-		},
-		signup_by_email : function(mdData, cb){
-			cb = cb || angular.noop;
-			var u = $window._.pick(mdData, "email","username","password");
-			serv.post('/api/user/signup_by_email', u, function(data){
-				$rootScope.user = data;
-				$window.localStorage.token = data.token;
-				$window.localStorage.user = JSON.stringify(data);
-				cb(data);
-			});
-		},
-		set_password : function(mdData, cb){
-			cb = cb || angular.noop;
-			var u = $window._.pick(mdData, "password");
-			serv.post('/api/user/set_password', u, function(data){
-				cb();
-			});
-		},
-		set_profile: function(profile, cb){
-			cb = cb || angular.noop;
-			serv.post('/api/user/set_profile',profile,function(data){
-				$rootScope.user = data;
-				$window.localStorage.token = data.token;
-				$window.localStorage.user = JSON.stringify(data);
-				cb(data);
-			});
-		},
-		me: function(cb){
-			cb = cb || angular.noop;
-			serv.get('/api/user/me',function(data){
-				$rootScope.user = data;
-				$window.localStorage.token = data.token;
-				$window.localStorage.user = JSON.stringify(data);
-				cb(data);
-			});
-		},
-		signout: function(){
-			cb = cb || angular.noop;
-			delete $rootScope.user;
-			delete $window.sessionStorage.token;
-			delete $window.sessionStorage.user;
-			delete $window.localStorage.token;
-			delete $window.localStorage.user;
-			cb();
-		},
-		get_users: function(cb){
-			cb = cb || angular.noop;
-			serv.get('/api/users',cb);
-		},
-		set_roles: function(data, cb){
-			cb = cb || angular.noop;
-			serv.post("/api/user/set_roles", data, cb);
-		}
-	};
-}])
-.factory('servSite', ["$rootScope", "$window", "serv", "$state", function($rootScope, $window, serv, $state) {
-	return {
-		init : function(attachments){
-			var site =  JSON.parse($window.localStorage.site || "{}");
-			angular.forEach(site, function(value, key){
-				$rootScope[key] = value;			
-			});
-			$rootScope.signOut = function(){
-				delete $rootScope.user;
-				delete $window.sessionStorage.token;
-				delete $window.sessionStorage.user;
-				delete $window.localStorage.token;
-				delete $window.localStorage.user;
-				$state.go('');
-			};
-			serv.get("/api/site?attachments="+attachments,function(data){
-				console.log(data);
-				angular.forEach(data, function(value, key){
-					$rootScope[key] = value;	
-				});
-				$window.localStorage.site = JSON.stringify(data);	
-			});
-		},
-	};
-}])
-.factory('servVip', ["$rootScope", "$window", "serv", "$state", function($rootScope, $window, serv, $state) {
-	return {
-		get_vips : function(cb){
-			cb = cb || angular.noop;
-			serv.get('/api/vips', cb);			
-		},
-		set_vip: function(vip, cb){
-			cb = cb || angular.noop;
-			serv.post('/api/vip', vip, cb);			
-		},
-		del_vip : function(vip, cb){
-			cb = cb || angular.noop;
-			serv.post('/api/vip/del', vip, cb);
-		},
-	};
-}])
-.factory('servPay', ["$rootScope", "$window", "serv", "$state", function($rootScope, $window, serv, $state) {
-	return {
-		vip : function(data, cb){
-			cb = cb || angular.noop;
-			serv.post('/api/pay/vip', data, cb);
-		},
-		get_gcodes : function(cb){
-			cb = cb || angular.noop;
-			serv.get('/api/pay/gcodes', cb);
-		},
-		get_gcode : function(code, cb){
-			cb = cb || angular.noop;
-			serv.get('/api/pay/gcode/' + code, cb);
-		},
-		set_gcode : function(data, cb){
-			cb = cb || angular.noop;
-			serv.post('/api/pay/gcode', data, cb);
-		},
-		del_gcode : function(data, cb){
-			cb = cb || angular.noop;
-			serv.post('/api/pay/gcode/del', data, cb);
-		},
-		get_pays: function(cb){
-			cb = cb || angular.noop;
-			serv.get('/api/pays', cb);
-		},
-		set_fee : function(data, cb){
-			cb = cb || angular.noop;
-			serv.post('/api/pay/set_fee', data, cb);
-		},
-	};
-}])
-.factory('servAlipayGcode', ["$rootScope", "$window", "serv", "$state", function($rootScope, $window, serv, $state) {
-	return {
-		get : function(gcode, cb){
-			cb = cb || angular.noop;
-			serv.post('/api/alipay/create_direct_pay_by_user_location/qianlushuyuan', payData, function(data){
-				$window.location.href = data.location;
-				cb();
-			});			
-		},
-	};
 }])
 .factory('$dist', ["$rootScope", "$window", "$rest", function($rootScope, $window, $rest) {
 	var taobao_dists;
@@ -48088,7 +47748,8 @@ mo.constant('constants', {
 		cb = cb || angular.noop;
 		$http.get(url, param)
 			.success(function(data, status, headers, config){
-				if(data.error){toastr.error(data.error);return;} cb(data)
+				if(data.error){toastr.error(data.error);return;} 
+				cb(data);
 			})
 			.error(function(data, status, headers, config){
 				var err = {status:status, title:"未知错误!",message:""};
@@ -48113,12 +47774,54 @@ mo.constant('constants', {
 			});
 	}
 	return {
+		get_site: function(attachments, cb){get("/api/site?attachments="+attachments, cb);},
+
+		sms_verify: function(obj, cb){ post("/api/sms/verify", obj, cb);},
+		user_signin: function(obj, cb){post("/api/user/signin", obj, cb);},
+		user_verify_by_emailtoken: function(obj, cb){post("/api/user/verify_by_emailtoken", obj, cb);},
+		user_signin_by_mobile: function(obj, cb){ post("/api/user/signin_by_mobile", obj, cb);},
+		user_signup_simple: function(obj, cb){ post("/api/user/signup_simple", obj, cb);},
+		user_signup_by_mobile: function(obj, cb){ post("/api/user/signup_by_mobile", obj, cb);},
+		user_signup_by_email: function(obj, cb){ post("/api/user/signup_by_email", obj, cb);},
+		user_signup_by_email_and_promcode: function(obj, cb){ post("/api/user/signup_by_email_and_promcode", obj, cb);},
+		user_set_password: function(obj, cb){ post("/api/user/set_password", obj, cb);},
+		user_me: function(cb){ get("/api/user/me", cb);},
+		get_users: function(cb){ get("/api/users", cb);},
+		set_user_profile: function(obj, cb){ post("/api/user/profile", obj, cb);},
+		set_user_roles: function(obj, cb){ post("/api/user/roles", obj, cb);},
+
+		get_cats: function(cb){ get("/api/cats", cb);},
+		set_cat: function(obj, cb){post("/api/cat", obj, cb);},
+		del_cat_by_id: function(id, cb){get("/api/cat/del/"+id, cb);},
+
+		get_video_by_id: function(id, cb){ get("/api/video/"+id, cb); },
+		get_videos_by_catid: function(id, cb) { get("/api/videos/catid/" + id, cb); },
+		del_video_by_id: function(id, cb) { get("/api/video/del/"+id, cb);},
+		set_video: function(obj, cb){ post("/api/video", obj, cb);},
+
+		set_visit: function(obj, cb){ post("/api/visit", obj, cb); },
+		get_visit_videos: function(cb){ get("/api/visit/videos", cb); },
+		get_visit_articles: function(cb){ get("/api/visit/articles", cb); },
+
+		get_vips: function(cb){ get("/api/vips", cb);},
+		del_vip_by_id: function(id, cb){get("/api/vip/del/"+id, cb);},
+		set_vip: function(obj, cb){post("/api/vip", obj, cb);},
+
+		get_ecoupons: function(cb){ get("/api/ecoupons", cb);},
+		get_ecoupon_by_code: function(code, cb){ get("/api/ecoupon/code/"+code, cb); },
+		get_ecoupon_by_id: function(id, cb){ get("/api/ecoupon/"+id, cb); },
+		set_ecoupon: function(obj, cb){ post("/api/ecoupon", obj, cb);},
+		del_ecoupon_by_id: function(id, cb){ get("/api/ecoupon/del/"+ id, cb); },
+
+		pay_vip: function(obj, cb){ post("/api/pay/vip", obj, cb);},
+		get_pays: function(cb){ get("/api/pays", cb); },
+		set_pay: function(obj, cb){ post("/api/pay", cb); },
+
 		get_members:function(cb){get("/api/members", cb);},
 		get_member_by_id:function(id, cb){get("/api/member/" + id, cb);},
 		del_member_by_id:function(id, cb){get("/api/member/del/" + id, cb);},
 		set_member:function(obj, cb){post("/api/member", obj, cb);},
 
-		get_videos_by_catid:function(catid, cb){get("/api/videos/catid/"+catid, cb);},
 
 		get_taobao_dists: function(cb){ get("/api/taobao/dists", cb);},
 		get_logistics_cars: function(cb){ get("/api/logistics/cars", cb);},
