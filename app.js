@@ -373,16 +373,12 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		$rest.sms_verify($scope.mdData, function(left){$scope.smsCaption = left <= 0 ? "发送验证码" : left + " 秒后再次发送";});
 	};
 	$scope.signin = function(){
-		$rest.user_signin($scope.mdData, function(msg){$modalInstance.close();});
-	};
-	$scope.signup_simple = function(){
-		$rest.user_signup_simple($scope.mdData, function(user){$modalInstance.close();});
-	};
-	$scope.signup_by_mobile = function(){
-		$rest.user_signup_by_mobile($scope.mdData, function(user){$modalInstance.close();});
-	};
-	$scope.signup_by_email = function(){
-		$rest.user_signup_by_email($scope.mdData, function(user){$modalInstance.close();});
+		$rest.user_signin($scope.mdData, function(user){
+			$rootScope.user = user;
+			$window.localStorage.user = JSON.stringify(user);
+			$window.localStorage.token = user.token;
+			$modalInstance.close();
+		});
 	};
 	$scope.pay_vip = function(vip){
 		$rest.pay_vip(vip, function(data){
