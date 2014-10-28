@@ -399,7 +399,7 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		});
 	}
 })
-.run(['$rootScope', '$location', '$modal', '$window', '$rest', function ($rootScope, $location, $modal, $window, $rest) {
+.run(['$rootScope', '$location', '$modal', '$window','$state', '$rest', function ($rootScope, $location, $modal, $window, $state, $rest) {
 	var site =  JSON.parse($window.localStorage.site || "{}");
 	angular.forEach(site, function(value, key){ $rootScope[key] = value;});
 	$rootScope.signOut = function(){
