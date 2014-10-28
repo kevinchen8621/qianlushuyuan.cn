@@ -5,7 +5,9 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 	$stateProvider
 		.state("f", {abstract: true, templateUrl: 'tpl/f/layout', controller:"FCtl"})
 		.state("f.home", {url:'/',  templateUrl: 'tpl/f/home', controller:"FHomeCtl"})
-		.state("f.sign", {url:'/sign', templateUrl: 'tpl/f/sign',controller:'FSignCtl'})
+		.state("f.search", {url:'/search/:keyword',  templateUrl: 'tpl/f/search', controller:"FSearchCtl"})
+		.state("f.signup", {url:'/signup', templateUrl: 'tpl/f/signup',controller:'FSignupCtl'})
+		.state("f.privacy", {url:'/privacy', templateUrl: 'tpl/f/privacy'})
 		.state("f.cat", {url:'/cat/:id', templateUrl: 'tpl/f/cat',controller:'FCatCtl'})
 		.state("f.video", {url:'/video/:id', templateUrl: 'tpl/f/video',controller:'FVideoCtl'})
 		.state("f.vip", {url:'/vip', templateUrl: 'tpl/f/vip',controller:'FCtl'})
@@ -36,9 +38,23 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 .controller("AppCtl",["$scope", "$state", function($scope, $state){
 	$state.transitionTo('f.home');	
 }])
-.controller("FCtl",["$scope","$rootScope","$window", function($scope,$rootScope,$window){
+.controller("FCtl",["$scope","$rootScope","$window" ,"$modal","$rest","$state", function($scope,$rootScope,$window,$modal,$rest,$state){
+	$scope.mdData = {username: "",password: "",};
+	var signinModal = $modal({scope: $scope, template: 'tpl/t/signin', show: false});
+	$scope.modal_signin = function() {signinModal.$promise.then(signinModal.show);};
+	$scope.signin = function(){
+		$rest.user_signin($scope.mdData, function(user){
+			$rootScope.user = user;
+			$window.localStorage.user = JSON.stringify(user);
+			$window.localStorage.token = user.token;
+			signinModal.toggle();
+		});
+	};
+	$scope.search = function() {
+		$state.go("f.search",{keyword: $scope.keyword});
+	}
 }])
-.controller("FSignCtl",["$scope","$rootScope","$rest","$window","$state", function($scope,$rootScope,$rest,$window,$state){
+.controller("FSignupCtl",["$scope","$rootScope","$rest","$window","$state", function($scope,$rootScope,$rest,$window,$state){
 	$scope.mdData = {
 		org: "钱路书院",
 		email:"",
@@ -98,23 +114,15 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 	$rest.get_videos_by_catid($stateParams.id, function(videos){ $scope.videos = videos;});
 	$rest.get_member_by_id($scope.cat.teacher_id, function(teacher){$scope.teacher = teacher;});
 }])
+.controller("FSearchCtl",["$scope","$rootScope","$stateParams","$rest",function($scope,$rootScope,$stateParams,$rest){
+	$rest.get_videos_by_keyword($stateParams.keyword, function(videos){ $scope.videos = videos;});
+}])
 .controller("FVideoCtl",["$scope","$rootScope","$stateParams","$window","$rest", function($scope,$rootScope,$stateParams,$window,$rest){
-	var regex = new RegExp("^\\d{2,12}$");
-	if(regex.test($stateParams.id)){
-		$rest.get_videos_by_catid($stateParams.id, function(data){
-			$scope.curVideoList = data;
-			$scope.curVideo = $scope.curVideoList[0];
-			$rest.set_visit({type:"video", _id: $scope.curVideo._id});
-		});
-	}else{
-		$rest.get_video_by_id($stateParams.id, function(data){
-			$scope.curVideo =  data;	
-			$scope.curVideoList = [$scope.curVideo];
-			$rest.set_visit({_id: $stateParams.id});
-			$rest.set_visit({_id: $stateParams.id});
-			$rest.set_visit({type:"video", _id: $stateParams.id});
-		}); 
-	}
+	$rest.get_video_by_id($stateParams.id, function(data){
+		$scope.curVideo =  data;	
+		$scope.curVideoList = [$scope.curVideo];
+		$rest.set_visit({type:"video", _id: $stateParams.id});
+	}); 
 }])
 .controller("BCtl",["$scope", "$rootScope","$state", function($scope,$rootScope,$state){
 	if(!$rootScope.user){$state.go("f.home");}
@@ -145,13 +153,18 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 }])
 .controller("BFaqCtl",["$scope","$rootScope","$state", function($scope,$rootScope,$state){
 }])
-.controller("BAccountCtl",["$scope","$rootScope","$state", function($scope,$rootScope,$state){
+.controller("BAccountCtl",["$scope","$rootScope","$state","$rest", "utils", function($scope,$rootScope,$state,$rest,utils){
+	$rest.get_pays(function(pays){$scope.pays = pays});
+	$scope.del_pay = function(pay){
+		$rest.del_pay_by_id(pay._id, function(){
+			utils.delFromSet($scope.pays, pay._id);
+		});
+	};
 }])
 .controller("BProfileCtl",["$scope","$rootScope","$rest", function($scope,$rootScope,$rest){
-	$scope.profile = {};
 	$scope.doSubmit = function(){
-		$rest.set_user_profile($scope.profile, function(){
-
+		$rest.set_user_profile($rootScope.user.profile, function(data){
+			console.log(data);
 		});
 	}
 }])
@@ -353,52 +366,6 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		$scope.save();
 	}
 }])
-.controller("SignCtl", function($scope,$rootScope,$window,$modalInstance,$state,$rest){
-	$scope.mdData = {
-		org: "钱路书院",
-		show: "", //显示哪个Modal
-		mobile:"",
-		email:"",
-		sms:"",
-		username:"",
-		password:"",
-		smsCaption: "发送验证码",
-		smsDisable: false,
-		smsInterval: 60,
-		rememberme: true,
-		agree: true,
-		msg: "",
-	};
-	$scope.sendSms = function(){
-		$rest.sms_verify($scope.mdData, function(left){$scope.smsCaption = left <= 0 ? "发送验证码" : left + " 秒后再次发送";});
-	};
-	$scope.signin = function(){
-		$rest.user_signin($scope.mdData, function(user){
-			$rootScope.user = user;
-			$window.localStorage.user = JSON.stringify(user);
-			$window.localStorage.token = user.token;
-			$modalInstance.close();
-		});
-	};
-	$scope.pay_vip = function(vip){
-		$rest.pay_vip(vip, function(data){
-			if(data.status == "finished"){
-				$state.go("b.pays");	
-			}else{
-				$window.location.href = data.location;
-			}
-		});
-	};
-	$scope.update_ecoupon_code = function(vip){
-		$rest.get_ecoupon_by_code(vip.ecoupon_code, function(data){
-			if(!data || data.type !== "vip"){
-				vip.subtitle = "折扣码错误！";
-			}else{
-				vip.subtitle = "享受折扣" + data.fee_back + "元";
-			}
-		});
-	}
-})
 .run(['$rootScope', '$location', '$modal', '$window','$state', '$rest', function ($rootScope, $location, $modal, $window, $state, $rest) {
 	var site =  JSON.parse($window.localStorage.site || "{}");
 	angular.forEach(site, function(value, key){ $rootScope[key] = value;});
@@ -417,15 +384,19 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		$window.localStorage.site = JSON.stringify(data);
 	});
 	$rootScope.user =  JSON.parse($window.localStorage.user || "{}");
+	$rootScope.is_admin = function(user){
+		return user && _.contains(user.roles, "管理员");
+	}
+	$rootScope.user.is_vip = $rootScope.user && _.contains($rootScope.user.roles, "VIP");
 
-	$rootScope.sign = function(type){
-		var modalInstance = $modal.open({
-			templateUrl: "modal/"+type+".html",
-			controller: "SignCtl",
-			size: null,
+	$rest.get_vips(function(data){$rootScope.vips = data;});
+	var vipModal = $modal({scope: $rootScope, template: 'tpl/t/vip', show: false});
+	$rootScope.modal_vip = function() {vipModal.$promise.then(vipModal.show);};
+	$rootScope.pay_vip = function(vip){
+		$rest.pay_vip(vip, function(){
+			vipModal.toggle();
+			$state.go("b.account");
 		});
-		modalInstance.result.then(function(){
-
-		})
 	};
+	$rootScope.keyword = "";
 }]);

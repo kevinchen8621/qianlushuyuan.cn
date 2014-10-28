@@ -158,16 +158,6 @@ line-height: 1;
 .videowrap {background: #262a2d url(/img/playstage.jpg) center bottom no-repeat; margin-bottom: 15px; padding-top: 25px; }
 .videowrap .container {margin:0px auto}
 
-.ng-modal {position: fixed;z-index: 9999;top: 0;left: 0;width: 100%;height: 100%;}
-.ng-modal-overlay {position: absolute;z-index: 9999;top: 0;left: 0;width: 100%;height: 100%;background-color: #000000;opacity: 0.7;}
-.ng-modal-dialog {z-index: 10000;position: absolute;top: 50%;left: 50%;width: 50%;transform: translate(-50%, -50%);-webkit-transform: translate(-50%, -50%);-moz-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);-o-transform: translate(-50%, -50%);background-color: #fff;box-shadow: 4px 4px 80px #000;-webkit-box-shadow: 4px 4px 80px #000;-moz-box-shadow: 4px 4px 80px #000;-ms-box-shadow: 4px 4px 80px #000;-o-box-shadow: 4px 4px 80px #000;padding: 10px;}
-.ng-modal-dialog-content {overflow: hidden;height: 100%; padding: 25px 20px 20px}
-.ng-modal-close {position: absolute;top: 3px;right: 5px;cursor: pointer;font-size: 120%;padding: 5px;display: inline-block;}
-.ng-modal-close-x {float: right;font-size: 21px;font-weight: bold;line-height: 1;color: #000;text-shadow: 0 1px 0 #fff;opacity: .2;padding: 5px 5px;cursor: pointer;background: transparent;border: 0;-webkit-appearance: none;margin-top: -2px;}
-.ng-modal-title {font-size: 20px;margin: 0;line-height: 1.428571429;font-weight: normal;display: block;margin-bottom: 10px;padding: 0 0 7px 7px;border-bottom: solid 1px #666;}
-.ng-modal-dialog-content .control-label{font-size: 14px; font-weight: normal;}
-.dashed-right{border-right: 1px #CCCCCC dashed;}
-
 .face .thumbnail {border-radius: 0;border: 0; height: 145px;}
 .face .thumbnail.cat {background: #7d9519;text-align: center;}
 .face .thumbnail img{height: 100px;}
@@ -176,33 +166,6 @@ line-height: 1;
 
 .bg-wrap{padding-bottom:30px;min-height:650px;background:url(https://dn-jinshuju-assets.qbox.me/assets/site/bg_home-a56ac13c1f3ca652fbf49fd2c715c038.jpg) no-repeat center 0}
 .bg-wrap h1{margin:45px 0 20px 0;font-size:26px}
-.bg-login{background:url(https://dn-jinshuju-assets.qbox.me/assets/site/bg_login-4e63cfbc2e2c7a44e2729de21ac20cb7.jpg) no-repeat center -100px}
-.login-box,.login-page,#result_view_password_modal{background:#FFF;-webkit-box-shadow:0px 3px 10px #555555;-moz-box-shadow:0px 3px 10px #555555;box-shadow:0px 3px 10px #555555}
-.login-box h1,.login-page h1,#result_view_password_modal h1{margin:20px;text-align:center}
-.login-box a,.login-page a,#result_view_password_modal a{color:#ff8533}
-.login-box a:hover,.login-page a:hover,#result_view_password_modal a:hover{color:#ff6700}
-.login-box .span11,.login-page .span11,#result_view_password_modal .span11{border-right:1px solid #eee}
-.login-box .alert,.login-page .alert,#result_view_password_modal .alert{border-radius:0;padding:3px 0 5px 35px;margin-right:20px;color:#f30000;background:transparent url(https://dn-jinshuju-assets.qbox.me/assets/site/icon_cry-a32bb9402355290a36d2afeec5f35fc5.png) no-repeat 0 0;text-align:left;min-height:0;border:0;text-shadow:none;font-size:16px;display:inline-block;zoom:1;*display:inline}
-.login-box .social-login,.login-page .social-login,#result_view_password_modal .social-login{text-align:center;margin:14px auto 34px}
-.login-box .social-login h5,.login-page .social-login h5,#result_view_password_modal .social-login h5{font-size:14px;font-weight:normal;color:#333}
-.login-box .social-login .social-account,.login-page .social-login .social-account,#result_view_password_modal .social-login .social-account{color:#666;margin:5px;width:50px;height:50px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;display:inline-block;zoom:1;*display:inline;border:1px solid #D7D7D7;-webkit-border-radius:32px;-moz-border-radius:32px;border-radius:32px}
-.login-box .social-login .social-account:hover,.login-page .social-login .social-account:hover,#result_view_password_modal .social-login .social-account:hover{border:2px solid #ff8533}
-.login-box .social-login .social-account.account-qq,.login-page .social-login .social-account.account-qq,#result_view_password_modal .social-login .social-account.account-qq{background:#fff url(https://dn-jinshuju-assets.qbox.me/assets/site/sns_qq-9927df7c9960d0617144cab934bd5249.png) no-repeat center center}
-.login-box .social-login .social-account.account-sina,.login-page .social-login .social-account.account-sina,#result_view_password_modal .social-login .social-account.account-sina{background:#fff url(https://dn-jinshuju-assets.qbox.me/assets/site/sns_sina-a1da7fb625d4fc67967618cd750a12f8.png) no-repeat center center}
-.login-box .social-login .social-account.account-renren,.login-page .social-login .social-account.account-renren,#result_view_password_modal .social-login .social-account.account-renren{background:#fff url(https://dn-jinshuju-assets.qbox.me/assets/site/sns_renren-bb4579d1481d7bbc82286edb9d386e31.png) no-repeat center center}
-.login-box .social-login .social-account.account-mingdao,.login-page .social-login .social-account.account-mingdao,#result_view_password_modal .social-login .social-account.account-mingdao{background:#fff url(https://dn-jinshuju-assets.qbox.me/assets/site/sns_mingdao-3bcec7c9919a2f3346a29026e0bc2ca3.png) no-repeat center center}
-.login-box form,.login-page form,#result_view_password_modal form{margin:20px 0 0;padding-left:20px;text-align:center;border-bottom:1px dashed #A1A1A1}
-.login-box form input,.login-page form input,#result_view_password_modal form input{border-radius:0px;box-shadow:none;height:25px;width:245px}
-.login-box form input#remember_me,.login-page form input#remember_me,#result_view_password_modal form input#remember_me{width:auto}
-.login-box form label,.login-page form label,#result_view_password_modal form label{font-size:18px;display:inline-block;zoom:1;*display:inline;width:164px;text-align:right}
-.login-box form label.auto-login,.login-page form label.auto-login,#result_view_password_modal form label.auto-login{display:block;font-size:14px;color:#999;text-align:left;margin-left:167px}
-.login-box form label.auto-login input,.login-page form label.auto-login input,#result_view_password_modal form label.auto-login input{margin-top:-4px}
-.login-box form .large-btn,.login-page form .large-btn,#result_view_password_modal form .large-btn{height:auto;width:260px;border:none;background:#ff8533;color:white;padding:7px 0;font-size:18px}
-.login-box form .large-btn:hover,.login-page form .large-btn:hover,#result_view_password_modal form .large-btn:hover{background-color:#ff6700}
-.login-box form .form-bottom,.login-page form .form-bottom,#result_view_password_modal form .form-bottom{color:#999;padding-top:10px;padding-bottom:30px}
-.login-box form .field,.login-page form .field,#result_view_password_modal form .field{margin-bottom:10px;text-align:left}
-.login-box form .agreement,.login-page form .agreement,#result_view_password_modal form .agreement{font-size:14px;color:#808080}
-.login-page{margin:50px auto 0}
 
 .panel-sign{margin-top: 50px}
 .panel-sign form label {font-size: 16px;}

@@ -29,10 +29,9 @@
 		</div>
 		<div class="col-md-5">
 			<h4>还没有{{site.title}}账号？</h4><br>
-			<button ng-click="sign('signup_simple')" class="btn btn-info btn-sm">注&nbsp;&nbsp;&nbsp;&nbsp;册</button>
+			<a ng-show="mdData.signup_url" href="{{mdData.signup_url}}" class="btn btn-info">注&nbsp;&nbsp;&nbsp;&nbsp;册</a>
+			<a ng-hide="mdData.signup_url" ng-click="sign('signup_simple')" class="btn btn-info">注&nbsp;&nbsp;&nbsp;&nbsp;册</a>
 			<br><br>
-			<h6>或使用以下账号直接登陆</h6>
-			<a ng-click="mdSignQQ()"><img src="/img/qq_login.png" alt="qq"></a>
 		</div>
 	</div>
 </div>

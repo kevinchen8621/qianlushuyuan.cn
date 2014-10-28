@@ -1,0 +1,45 @@
+<div class="modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" ng-click="$hide()">&times;</button>
+				<h4 class="modal-title">登陆</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-7 dashed-right">
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label class="col-sm-3 control-label">用户名:</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" ng-model="mdData.username" placeholder="用户名 , 手机号 , Email">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">密码:</label>
+								<div class="col-sm-9">
+									<input type="password" ng-model="mdData.password" class="form-control" placeholder="请输入您的密码">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-offset-3 col-sm-9">
+									<a ng-click="sign('forgot')" class="control-label">找回密码</a>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-offset-3 col-sm-9">
+									<button ng-click="signin()" class="btn btn-default btn-success">登陆</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="col-md-5">
+						<h4>还没有{{site.title}}账号？</h4><br>
+						<a href="#/signup" class="btn btn-info">注&nbsp;&nbsp;&nbsp;&nbsp;册</a>
+						<br><br>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

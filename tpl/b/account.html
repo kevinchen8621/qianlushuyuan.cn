@@ -2,6 +2,49 @@
 	<h1>我的账户<small><i class="icon-double-angle-right"></i> 会员记录</small></h1>
 </div>
 <div class="row">
+	<div class="col-xs-12">
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>
+						<th><i class="icon-bookmark-empty bigger-110"></i> 收款方</th>
+						<th>支付方</th>
+						<th>支付项目</th>
+						<th><i class="icon-flag bigger-110"> 描述</i></th>
+						<th>原价</th>
+						<th>优惠项目</th>
+						<th>优惠码</th>
+						<th>优惠金额</th>
+						<th>实际应付</th>
+						<th>当前状态</th>
+						<th>创建日期</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="item in pays">
+						<td>{{item.to_name}}</td>
+						<td>{{item.from_name}}</td>
+						<td>{{item.subject}}</td>
+						<td>{{item.body}}</td>
+						<td>{{item.fee_origin}}</td>
+						<td>{{item.fee_ecoupon}}</td>
+						<td>{{item.fee_ecoupon_code}}</td>
+						<td>{{item.fee_back}}</td>
+						<td>{{item.fee_actual}}</td>
+						<td>{{item.status | filterPayStatus}}</td>
+						<td>{{item.create_at | date : 'yyyy-MM-dd'}}</td>
+						<td>
+							<a class="btn btn-success btn-minier" href="{{item.location}}">支付</a>
+							<a class="btn btn-warning btn-minier" ng-click="del_pay(item)">删除</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div><!-- /.table-responsive -->
+	</div><!-- /span -->
+</div>
+<div class="row">
 <div class="col-xs-12 col-sm-10 col-sm-offset-1">
 		<div class="timeline-container">
 			<div class="timeline-label">

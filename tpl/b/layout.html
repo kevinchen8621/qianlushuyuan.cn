@@ -105,7 +105,7 @@
 				<li><a href="#/b/profile"><i class="icon-cog"></i><span class="menu-text"> 个人设置 </span></a></li>
 				<li><a href="#/b/uppwd"><i class="icon-key"></i><span class="menu-text"> 修改密码 </span></a></li>
 				<li><a href="#/b/getvip"><i class="icon-bullhorn"></i><span class="menu-text"> 免费VIP </span></a></li>
-				<li><a href ng-click="sign('vip')"><i class="icon-fire"></i><span class="menu-text"> 购买VIP </span></a></li>
+				<li><a href ng-click="modal_vip()"><i class="icon-fire"></i><span class="menu-text"> 购买VIP </span></a></li>
 				<li><a href="#/b/gcode"><i class="icon-film"></i><span class="menu-text"> Q码兑换 </span></a></li>
 				<li ng-show="is_admin">
 					<a href="#"><i class="icon-inbox"></i><span class="menu-text"> 数据管理 </span><b class="arrow icon-angle-down"></b></a>
@@ -116,7 +116,7 @@
 						<li><a href="#/b/data/promotion"><i class="icon-double-angle-right"></i>推广管理</a></li>
 					</ul>
 				</li>
-				<li ng-show="is_admin">
+				<li ng-show="is_admin(user)">
 					<a href="#"><i class="icon-globe"></i><span class="menu-text"> 网站管理 </span><b class="arrow icon-angle-down"></b></a>
 					<ul class="submenu">
 						<li><a href="#/b/site/home"><i class="icon-double-angle-right"></i>网站设置</a></li>
