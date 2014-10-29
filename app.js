@@ -65,7 +65,7 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 	};
 	$scope.signup_by_email_and_promcode = function(){
 		console.log("signup");
-		$rest.signup_by_email_and_promcode($scope.mdData, function(data){
+		$rest.user_signup_by_email_and_promcode($scope.mdData, function(data){
 			console.log(data);
 			$rootScope.user = data;
 			$window.localStorage.token = data.token;
