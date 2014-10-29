@@ -50,6 +50,10 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 			signinModal.toggle();
 		});
 	};
+	$scope.toSignup = function(){
+		$state.go("f.signup");
+		signinModal.toggle();
+	}
 	$scope.search = function() {
 		$state.go("f.search",{keyword: $scope.keyword});
 	}
@@ -117,7 +121,8 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 .controller("FSearchCtl",["$scope","$rootScope","$stateParams","$rest",function($scope,$rootScope,$stateParams,$rest){
 	$rest.get_videos_by_keyword($stateParams.keyword, function(videos){ $scope.videos = videos;});
 }])
-.controller("FVideoCtl",["$scope","$rootScope","$stateParams","$window","$rest", function($scope,$rootScope,$stateParams,$window,$rest){
+.controller("FVideoCtl",["$scope","$rootScope","$stateParams","$state","$window","$rest", function($scope,$rootScope,$stateParams,$state,$window,$rest){
+	if(!$rootScope.user._id){ $state.go("f.signup"); }
 	$rest.get_video_by_id($stateParams.id, function(data){
 		$scope.curVideo =  data;	
 		$scope.curVideoList = [$scope.curVideo];
