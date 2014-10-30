@@ -1,0 +1,65 @@
+<div class="u-breadnav">
+	<div class="container">
+		<a href="/" target="_blank" class="link f-c9">钱路书院</a>
+        <span class="f-icon sp"></span>
+        <span class="pos f-f0 f-c3">解密钱路学108讲</span>
+    </div>
+</div>
+<div class="mainwrap">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-5">
+				<img width="100%" height="340px" src="http://qianluxue.qiniudn.com/drsqlx04.jpg" alt="解密钱路学108讲">
+			</div>
+			<div class="col-md-7 hidden-xs">
+				<h2>解密钱路学108讲</h2>
+				<p>本栏目详细介绍钱路学， 内容正马不停蹄的完善更新中，敬请保持关注！</p>
+				<span class="blank20"></span>
+				<p>栏目介绍</p>
+				<h5>什么是钱路学？</h5>
+			</div>
+		</div>
+	</div>
+</div>	
+<div class="container">
+	<div class="row">
+		<div class="col-md-8">
+			<table class="table table-striped">
+				<thead><tr><th>序</th><th>解密内容</th><tr></thead>
+				<tbody>
+					<% for(var i=0; i<articles.length; i++) {%>
+					<tr>
+						<td><%= i %></td>
+						<td><a href="/a_108/<%= articles[i]._id %>.do" target="_blank"><%= articles[i].title %></a></td>
+					</tr>
+					<%}%>
+				</tbody>
+			</table>
+		</div>	
+		<div class="col-md-4">
+			<div class="m-cteacher">
+				<h3>讲师介绍</h3>
+				<span class="blank9"></span>
+				<div class="rightContent">   
+					<div class="picText">
+						<img src="<%=teacher.face%>" width="120" height="90" style="border:1px  solid #484848">
+						<span class="blank9"></span>
+						<h4>讲师：<span class="fB cdY"><%=teacher.title%></span></h4> 
+						<h5>简介：<span class="fB"><%=teacher.subtitle%></span></h5> 
+						<h5><span class="fB f-c6"><%=teacher.description%></span></h5> 
+						<span class="blank9"></span>
+						<span class="cdblan"></span>
+					</div>
+				</div>
+			</div>
+			<div class="m-ccollege">
+				<h3>学院介绍</h3>
+				<span class="blank9"></span>
+				<h5 class="f-c6">学赚钱，到钱路书院！</h5>
+				<span class="blank9"></span>
+				<h5 class="f-c6">钱路书院是由李谦诚先生创立的一家专注传播钱路学（汇融金融、资本、商业等世上所有的赚钱策略的一门学问）的互联网教育平台，书院愿景是逐步将世上所有的赚钱策略研发出来，包括但不限于商业领域、金融、资本领域的赚钱策略、资本运营技巧（资本财技），再通过钱路书院的平台一一呈现给我们的学员，让你只要在钱路书院的这一个平台就可以系统的学习企业从成立到上市究竟有哪些钱路可以将资金引进企业，即企业会有哪些赚钱策略，然后再逐步将企业做强做大，从此在钱路上淡定从容。</h5>
+			</div>
+		</div>
+	</div>
+</div>
+

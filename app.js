@@ -6,6 +6,7 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		.state("f", {abstract: true, templateUrl: 'tpl/f/layout', controller:"FCtl"})
 		.state("f.home", {url:'/',  templateUrl: 'tpl/f/home', controller:"FHomeCtl"})
 		.state("f.search", {url:'/search/:keyword',  templateUrl: 'tpl/f/search', controller:"FSearchCtl"})
+		.state("f.signin", {url:'/signin', templateUrl: 'tpl/f/signin',controller:'FSigninCtl'})
 		.state("f.signup", {url:'/signup', templateUrl: 'tpl/f/signup',controller:'FSignupCtl'})
 		.state("f.privacy", {url:'/privacy', templateUrl: 'tpl/f/privacy'})
 		.state("f.cat", {url:'/cat/:id', templateUrl: 'tpl/f/cat',controller:'FCatCtl'})
@@ -58,6 +59,21 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		$state.go("f.search",{keyword: $scope.keyword});
 	}
 }])
+.controller("FSigninCtl",["$scope","$rootScope","$rest","$window","$state", function($scope,$rootScope,$rest,$window,$state){
+	$scope.mdData = {
+		username:"",
+		password:"",
+		msg: "",
+	};
+	$scope.signin = function(){
+		$rest.user_signin($scope.mdData, function(data){
+			$rootScope.user = data;
+			$window.localStorage.token = data.token;
+			$window.localStorage.user = JSON.stringify(data);
+			$state.go("f.home");
+		});
+	};
+}])
 .controller("FSignupCtl",["$scope","$rootScope","$rest","$window","$state", function($scope,$rootScope,$rest,$window,$state){
 	$scope.mdData = {
 		org: "钱路书院",
@@ -68,7 +84,6 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		msg: "",
 	};
 	$scope.signup_by_email_and_promcode = function(){
-		console.log("signup");
 		$rest.user_signup_by_email_and_promcode($scope.mdData, function(data){
 			$rootScope.user = data;
 			$window.localStorage.token = data.token;
