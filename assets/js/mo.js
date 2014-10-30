@@ -42946,6 +42946,3484 @@ angular.module('ui.router.compat')
   if (typeof define === "function" && define.amd) define(d3); else if (typeof module === "object" && module.exports) module.exports = d3;
   this.d3 = d3;
 }();
+/*
+ Rangy, a cross-browser JavaScript range and selection library
+ http://code.google.com/p/rangy/
+
+ Copyright 2012, Tim Down
+ Licensed under the MIT license.
+ Version: 1.2.3
+ Build date: 26 February 2012
+*/
+window.rangy=function(){function l(p,u){var w=typeof p[u];return w=="function"||!!(w=="object"&&p[u])||w=="unknown"}function K(p,u){return!!(typeof p[u]=="object"&&p[u])}function H(p,u){return typeof p[u]!="undefined"}function I(p){return function(u,w){for(var B=w.length;B--;)if(!p(u,w[B]))return false;return true}}function z(p){return p&&A(p,x)&&v(p,t)}function C(p){window.alert("Rangy not supported in your browser. Reason: "+p);c.initialized=true;c.supported=false}function N(){if(!c.initialized){var p,
+u=false,w=false;if(l(document,"createRange")){p=document.createRange();if(A(p,n)&&v(p,i))u=true;p.detach()}if((p=K(document,"body")?document.body:document.getElementsByTagName("body")[0])&&l(p,"createTextRange")){p=p.createTextRange();if(z(p))w=true}!u&&!w&&C("Neither Range nor TextRange are implemented");c.initialized=true;c.features={implementsDomRange:u,implementsTextRange:w};u=k.concat(f);w=0;for(p=u.length;w<p;++w)try{u[w](c)}catch(B){K(window,"console")&&l(window.console,"log")&&window.console.log("Init listener threw an exception. Continuing.",
+B)}}}function O(p){this.name=p;this.supported=this.initialized=false}var i=["startContainer","startOffset","endContainer","endOffset","collapsed","commonAncestorContainer","START_TO_START","START_TO_END","END_TO_START","END_TO_END"],n=["setStart","setStartBefore","setStartAfter","setEnd","setEndBefore","setEndAfter","collapse","selectNode","selectNodeContents","compareBoundaryPoints","deleteContents","extractContents","cloneContents","insertNode","surroundContents","cloneRange","toString","detach"],
+t=["boundingHeight","boundingLeft","boundingTop","boundingWidth","htmlText","text"],x=["collapse","compareEndPoints","duplicate","getBookmark","moveToBookmark","moveToElementText","parentElement","pasteHTML","select","setEndPoint","getBoundingClientRect"],A=I(l),q=I(K),v=I(H),c={version:"1.2.3",initialized:false,supported:true,util:{isHostMethod:l,isHostObject:K,isHostProperty:H,areHostMethods:A,areHostObjects:q,areHostProperties:v,isTextRange:z},features:{},modules:{},config:{alertOnWarn:false,preferTextRange:false}};
+c.fail=C;c.warn=function(p){p="Rangy warning: "+p;if(c.config.alertOnWarn)window.alert(p);else typeof window.console!="undefined"&&typeof window.console.log!="undefined"&&window.console.log(p)};if({}.hasOwnProperty)c.util.extend=function(p,u){for(var w in u)if(u.hasOwnProperty(w))p[w]=u[w]};else C("hasOwnProperty not supported");var f=[],k=[];c.init=N;c.addInitListener=function(p){c.initialized?p(c):f.push(p)};var r=[];c.addCreateMissingNativeApiListener=function(p){r.push(p)};c.createMissingNativeApi=
+function(p){p=p||window;N();for(var u=0,w=r.length;u<w;++u)r[u](p)};O.prototype.fail=function(p){this.initialized=true;this.supported=false;throw Error("Module '"+this.name+"' failed to load: "+p);};O.prototype.warn=function(p){c.warn("Module "+this.name+": "+p)};O.prototype.createError=function(p){return Error("Error in Rangy "+this.name+" module: "+p)};c.createModule=function(p,u){var w=new O(p);c.modules[p]=w;k.push(function(B){u(B,w);w.initialized=true;w.supported=true})};c.requireModules=function(p){for(var u=
+0,w=p.length,B,V;u<w;++u){V=p[u];B=c.modules[V];if(!B||!(B instanceof O))throw Error("Module '"+V+"' not found");if(!B.supported)throw Error("Module '"+V+"' not supported");}};var L=false;q=function(){if(!L){L=true;c.initialized||N()}};if(typeof window=="undefined")C("No window found");else if(typeof document=="undefined")C("No document found");else{l(document,"addEventListener")&&document.addEventListener("DOMContentLoaded",q,false);if(l(window,"addEventListener"))window.addEventListener("load",
+q,false);else l(window,"attachEvent")?window.attachEvent("onload",q):C("Window does not have required addEventListener or attachEvent method");return c}}();
+rangy.createModule("DomUtil",function(l,K){function H(c){for(var f=0;c=c.previousSibling;)f++;return f}function I(c,f){var k=[],r;for(r=c;r;r=r.parentNode)k.push(r);for(r=f;r;r=r.parentNode)if(v(k,r))return r;return null}function z(c,f,k){for(k=k?c:c.parentNode;k;){c=k.parentNode;if(c===f)return k;k=c}return null}function C(c){c=c.nodeType;return c==3||c==4||c==8}function N(c,f){var k=f.nextSibling,r=f.parentNode;k?r.insertBefore(c,k):r.appendChild(c);return c}function O(c){if(c.nodeType==9)return c;
+else if(typeof c.ownerDocument!="undefined")return c.ownerDocument;else if(typeof c.document!="undefined")return c.document;else if(c.parentNode)return O(c.parentNode);else throw Error("getDocument: no document found for node");}function i(c){if(!c)return"[No node]";return C(c)?'"'+c.data+'"':c.nodeType==1?"<"+c.nodeName+(c.id?' id="'+c.id+'"':"")+">["+c.childNodes.length+"]":c.nodeName}function n(c){this._next=this.root=c}function t(c,f){this.node=c;this.offset=f}function x(c){this.code=this[c];
+this.codeName=c;this.message="DOMException: "+this.codeName}var A=l.util;A.areHostMethods(document,["createDocumentFragment","createElement","createTextNode"])||K.fail("document missing a Node creation method");A.isHostMethod(document,"getElementsByTagName")||K.fail("document missing getElementsByTagName method");var q=document.createElement("div");A.areHostMethods(q,["insertBefore","appendChild","cloneNode"])||K.fail("Incomplete Element implementation");A.isHostProperty(q,"innerHTML")||K.fail("Element is missing innerHTML property");
+q=document.createTextNode("test");A.areHostMethods(q,["splitText","deleteData","insertData","appendData","cloneNode"])||K.fail("Incomplete Text Node implementation");var v=function(c,f){for(var k=c.length;k--;)if(c[k]===f)return true;return false};n.prototype={_current:null,hasNext:function(){return!!this._next},next:function(){var c=this._current=this._next,f;if(this._current)if(f=c.firstChild)this._next=f;else{for(f=null;c!==this.root&&!(f=c.nextSibling);)c=c.parentNode;this._next=f}return this._current},
+detach:function(){this._current=this._next=this.root=null}};t.prototype={equals:function(c){return this.node===c.node&this.offset==c.offset},inspect:function(){return"[DomPosition("+i(this.node)+":"+this.offset+")]"}};x.prototype={INDEX_SIZE_ERR:1,HIERARCHY_REQUEST_ERR:3,WRONG_DOCUMENT_ERR:4,NO_MODIFICATION_ALLOWED_ERR:7,NOT_FOUND_ERR:8,NOT_SUPPORTED_ERR:9,INVALID_STATE_ERR:11};x.prototype.toString=function(){return this.message};l.dom={arrayContains:v,isHtmlNamespace:function(c){var f;return typeof c.namespaceURI==
+"undefined"||(f=c.namespaceURI)===null||f=="http://www.w3.org/1999/xhtml"},parentElement:function(c){c=c.parentNode;return c.nodeType==1?c:null},getNodeIndex:H,getNodeLength:function(c){var f;return C(c)?c.length:(f=c.childNodes)?f.length:0},getCommonAncestor:I,isAncestorOf:function(c,f,k){for(f=k?f:f.parentNode;f;)if(f===c)return true;else f=f.parentNode;return false},getClosestAncestorIn:z,isCharacterDataNode:C,insertAfter:N,splitDataNode:function(c,f){var k=c.cloneNode(false);k.deleteData(0,f);
+c.deleteData(f,c.length-f);N(k,c);return k},getDocument:O,getWindow:function(c){c=O(c);if(typeof c.defaultView!="undefined")return c.defaultView;else if(typeof c.parentWindow!="undefined")return c.parentWindow;else throw Error("Cannot get a window object for node");},getIframeWindow:function(c){if(typeof c.contentWindow!="undefined")return c.contentWindow;else if(typeof c.contentDocument!="undefined")return c.contentDocument.defaultView;else throw Error("getIframeWindow: No Window object found for iframe element");
+},getIframeDocument:function(c){if(typeof c.contentDocument!="undefined")return c.contentDocument;else if(typeof c.contentWindow!="undefined")return c.contentWindow.document;else throw Error("getIframeWindow: No Document object found for iframe element");},getBody:function(c){return A.isHostObject(c,"body")?c.body:c.getElementsByTagName("body")[0]},getRootContainer:function(c){for(var f;f=c.parentNode;)c=f;return c},comparePoints:function(c,f,k,r){var L;if(c==k)return f===r?0:f<r?-1:1;else if(L=z(k,
+c,true))return f<=H(L)?-1:1;else if(L=z(c,k,true))return H(L)<r?-1:1;else{f=I(c,k);c=c===f?f:z(c,f,true);k=k===f?f:z(k,f,true);if(c===k)throw Error("comparePoints got to case 4 and childA and childB are the same!");else{for(f=f.firstChild;f;){if(f===c)return-1;else if(f===k)return 1;f=f.nextSibling}throw Error("Should not be here!");}}},inspectNode:i,fragmentFromNodeChildren:function(c){for(var f=O(c).createDocumentFragment(),k;k=c.firstChild;)f.appendChild(k);return f},createIterator:function(c){return new n(c)},
+DomPosition:t};l.DOMException=x});
+rangy.createModule("DomRange",function(l){function K(a,e){return a.nodeType!=3&&(g.isAncestorOf(a,e.startContainer,true)||g.isAncestorOf(a,e.endContainer,true))}function H(a){return g.getDocument(a.startContainer)}function I(a,e,j){if(e=a._listeners[e])for(var o=0,E=e.length;o<E;++o)e[o].call(a,{target:a,args:j})}function z(a){return new Z(a.parentNode,g.getNodeIndex(a))}function C(a){return new Z(a.parentNode,g.getNodeIndex(a)+1)}function N(a,e,j){var o=a.nodeType==11?a.firstChild:a;if(g.isCharacterDataNode(e))j==
+e.length?g.insertAfter(a,e):e.parentNode.insertBefore(a,j==0?e:g.splitDataNode(e,j));else j>=e.childNodes.length?e.appendChild(a):e.insertBefore(a,e.childNodes[j]);return o}function O(a){for(var e,j,o=H(a.range).createDocumentFragment();j=a.next();){e=a.isPartiallySelectedSubtree();j=j.cloneNode(!e);if(e){e=a.getSubtreeIterator();j.appendChild(O(e));e.detach(true)}if(j.nodeType==10)throw new S("HIERARCHY_REQUEST_ERR");o.appendChild(j)}return o}function i(a,e,j){var o,E;for(j=j||{stop:false};o=a.next();)if(a.isPartiallySelectedSubtree())if(e(o)===
+false){j.stop=true;return}else{o=a.getSubtreeIterator();i(o,e,j);o.detach(true);if(j.stop)return}else for(o=g.createIterator(o);E=o.next();)if(e(E)===false){j.stop=true;return}}function n(a){for(var e;a.next();)if(a.isPartiallySelectedSubtree()){e=a.getSubtreeIterator();n(e);e.detach(true)}else a.remove()}function t(a){for(var e,j=H(a.range).createDocumentFragment(),o;e=a.next();){if(a.isPartiallySelectedSubtree()){e=e.cloneNode(false);o=a.getSubtreeIterator();e.appendChild(t(o));o.detach(true)}else a.remove();
+if(e.nodeType==10)throw new S("HIERARCHY_REQUEST_ERR");j.appendChild(e)}return j}function x(a,e,j){var o=!!(e&&e.length),E,T=!!j;if(o)E=RegExp("^("+e.join("|")+")$");var m=[];i(new q(a,false),function(s){if((!o||E.test(s.nodeType))&&(!T||j(s)))m.push(s)});return m}function A(a){return"["+(typeof a.getName=="undefined"?"Range":a.getName())+"("+g.inspectNode(a.startContainer)+":"+a.startOffset+", "+g.inspectNode(a.endContainer)+":"+a.endOffset+")]"}function q(a,e){this.range=a;this.clonePartiallySelectedTextNodes=
+e;if(!a.collapsed){this.sc=a.startContainer;this.so=a.startOffset;this.ec=a.endContainer;this.eo=a.endOffset;var j=a.commonAncestorContainer;if(this.sc===this.ec&&g.isCharacterDataNode(this.sc)){this.isSingleCharacterDataNode=true;this._first=this._last=this._next=this.sc}else{this._first=this._next=this.sc===j&&!g.isCharacterDataNode(this.sc)?this.sc.childNodes[this.so]:g.getClosestAncestorIn(this.sc,j,true);this._last=this.ec===j&&!g.isCharacterDataNode(this.ec)?this.ec.childNodes[this.eo-1]:g.getClosestAncestorIn(this.ec,
+j,true)}}}function v(a){this.code=this[a];this.codeName=a;this.message="RangeException: "+this.codeName}function c(a,e,j){this.nodes=x(a,e,j);this._next=this.nodes[0];this._position=0}function f(a){return function(e,j){for(var o,E=j?e:e.parentNode;E;){o=E.nodeType;if(g.arrayContains(a,o))return E;E=E.parentNode}return null}}function k(a,e){if(G(a,e))throw new v("INVALID_NODE_TYPE_ERR");}function r(a){if(!a.startContainer)throw new S("INVALID_STATE_ERR");}function L(a,e){if(!g.arrayContains(e,a.nodeType))throw new v("INVALID_NODE_TYPE_ERR");
+}function p(a,e){if(e<0||e>(g.isCharacterDataNode(a)?a.length:a.childNodes.length))throw new S("INDEX_SIZE_ERR");}function u(a,e){if(h(a,true)!==h(e,true))throw new S("WRONG_DOCUMENT_ERR");}function w(a){if(D(a,true))throw new S("NO_MODIFICATION_ALLOWED_ERR");}function B(a,e){if(!a)throw new S(e);}function V(a){return!!a.startContainer&&!!a.endContainer&&!(!g.arrayContains(ba,a.startContainer.nodeType)&&!h(a.startContainer,true))&&!(!g.arrayContains(ba,a.endContainer.nodeType)&&!h(a.endContainer,
+true))&&a.startOffset<=(g.isCharacterDataNode(a.startContainer)?a.startContainer.length:a.startContainer.childNodes.length)&&a.endOffset<=(g.isCharacterDataNode(a.endContainer)?a.endContainer.length:a.endContainer.childNodes.length)}function J(a){r(a);if(!V(a))throw Error("Range error: Range is no longer valid after DOM mutation ("+a.inspect()+")");}function ca(){}function Y(a){a.START_TO_START=ia;a.START_TO_END=la;a.END_TO_END=ra;a.END_TO_START=ma;a.NODE_BEFORE=na;a.NODE_AFTER=oa;a.NODE_BEFORE_AND_AFTER=
+pa;a.NODE_INSIDE=ja}function W(a){Y(a);Y(a.prototype)}function da(a,e){return function(){J(this);var j=this.startContainer,o=this.startOffset,E=this.commonAncestorContainer,T=new q(this,true);if(j!==E){j=g.getClosestAncestorIn(j,E,true);o=C(j);j=o.node;o=o.offset}i(T,w);T.reset();E=a(T);T.detach();e(this,j,o,j,o);return E}}function fa(a,e,j){function o(m,s){return function(y){r(this);L(y,$);L(d(y),ba);y=(m?z:C)(y);(s?E:T)(this,y.node,y.offset)}}function E(m,s,y){var F=m.endContainer,Q=m.endOffset;
+if(s!==m.startContainer||y!==m.startOffset){if(d(s)!=d(F)||g.comparePoints(s,y,F,Q)==1){F=s;Q=y}e(m,s,y,F,Q)}}function T(m,s,y){var F=m.startContainer,Q=m.startOffset;if(s!==m.endContainer||y!==m.endOffset){if(d(s)!=d(F)||g.comparePoints(s,y,F,Q)==-1){F=s;Q=y}e(m,F,Q,s,y)}}a.prototype=new ca;l.util.extend(a.prototype,{setStart:function(m,s){r(this);k(m,true);p(m,s);E(this,m,s)},setEnd:function(m,s){r(this);k(m,true);p(m,s);T(this,m,s)},setStartBefore:o(true,true),setStartAfter:o(false,true),setEndBefore:o(true,
+false),setEndAfter:o(false,false),collapse:function(m){J(this);m?e(this,this.startContainer,this.startOffset,this.startContainer,this.startOffset):e(this,this.endContainer,this.endOffset,this.endContainer,this.endOffset)},selectNodeContents:function(m){r(this);k(m,true);e(this,m,0,m,g.getNodeLength(m))},selectNode:function(m){r(this);k(m,false);L(m,$);var s=z(m);m=C(m);e(this,s.node,s.offset,m.node,m.offset)},extractContents:da(t,e),deleteContents:da(n,e),canSurroundContents:function(){J(this);w(this.startContainer);
+w(this.endContainer);var m=new q(this,true),s=m._first&&K(m._first,this)||m._last&&K(m._last,this);m.detach();return!s},detach:function(){j(this)},splitBoundaries:function(){J(this);var m=this.startContainer,s=this.startOffset,y=this.endContainer,F=this.endOffset,Q=m===y;g.isCharacterDataNode(y)&&F>0&&F<y.length&&g.splitDataNode(y,F);if(g.isCharacterDataNode(m)&&s>0&&s<m.length){m=g.splitDataNode(m,s);if(Q){F-=s;y=m}else y==m.parentNode&&F>=g.getNodeIndex(m)&&F++;s=0}e(this,m,s,y,F)},normalizeBoundaries:function(){J(this);
+var m=this.startContainer,s=this.startOffset,y=this.endContainer,F=this.endOffset,Q=function(U){var R=U.nextSibling;if(R&&R.nodeType==U.nodeType){y=U;F=U.length;U.appendData(R.data);R.parentNode.removeChild(R)}},qa=function(U){var R=U.previousSibling;if(R&&R.nodeType==U.nodeType){m=U;var sa=U.length;s=R.length;U.insertData(0,R.data);R.parentNode.removeChild(R);if(m==y){F+=s;y=m}else if(y==U.parentNode){R=g.getNodeIndex(U);if(F==R){y=U;F=sa}else F>R&&F--}}},ga=true;if(g.isCharacterDataNode(y))y.length==
+F&&Q(y);else{if(F>0)(ga=y.childNodes[F-1])&&g.isCharacterDataNode(ga)&&Q(ga);ga=!this.collapsed}if(ga)if(g.isCharacterDataNode(m))s==0&&qa(m);else{if(s<m.childNodes.length)(Q=m.childNodes[s])&&g.isCharacterDataNode(Q)&&qa(Q)}else{m=y;s=F}e(this,m,s,y,F)},collapseToPoint:function(m,s){r(this);k(m,true);p(m,s);if(m!==this.startContainer||s!==this.startOffset||m!==this.endContainer||s!==this.endOffset)e(this,m,s,m,s)}});W(a)}function ea(a){a.collapsed=a.startContainer===a.endContainer&&a.startOffset===
+a.endOffset;a.commonAncestorContainer=a.collapsed?a.startContainer:g.getCommonAncestor(a.startContainer,a.endContainer)}function ha(a,e,j,o,E){var T=a.startContainer!==e||a.startOffset!==j,m=a.endContainer!==o||a.endOffset!==E;a.startContainer=e;a.startOffset=j;a.endContainer=o;a.endOffset=E;ea(a);I(a,"boundarychange",{startMoved:T,endMoved:m})}function M(a){this.startContainer=a;this.startOffset=0;this.endContainer=a;this.endOffset=0;this._listeners={boundarychange:[],detach:[]};ea(this)}l.requireModules(["DomUtil"]);
+var g=l.dom,Z=g.DomPosition,S=l.DOMException;q.prototype={_current:null,_next:null,_first:null,_last:null,isSingleCharacterDataNode:false,reset:function(){this._current=null;this._next=this._first},hasNext:function(){return!!this._next},next:function(){var a=this._current=this._next;if(a){this._next=a!==this._last?a.nextSibling:null;if(g.isCharacterDataNode(a)&&this.clonePartiallySelectedTextNodes){if(a===this.ec)(a=a.cloneNode(true)).deleteData(this.eo,a.length-this.eo);if(this._current===this.sc)(a=
+a.cloneNode(true)).deleteData(0,this.so)}}return a},remove:function(){var a=this._current,e,j;if(g.isCharacterDataNode(a)&&(a===this.sc||a===this.ec)){e=a===this.sc?this.so:0;j=a===this.ec?this.eo:a.length;e!=j&&a.deleteData(e,j-e)}else a.parentNode&&a.parentNode.removeChild(a)},isPartiallySelectedSubtree:function(){return K(this._current,this.range)},getSubtreeIterator:function(){var a;if(this.isSingleCharacterDataNode){a=this.range.cloneRange();a.collapse()}else{a=new M(H(this.range));var e=this._current,
+j=e,o=0,E=e,T=g.getNodeLength(e);if(g.isAncestorOf(e,this.sc,true)){j=this.sc;o=this.so}if(g.isAncestorOf(e,this.ec,true)){E=this.ec;T=this.eo}ha(a,j,o,E,T)}return new q(a,this.clonePartiallySelectedTextNodes)},detach:function(a){a&&this.range.detach();this.range=this._current=this._next=this._first=this._last=this.sc=this.so=this.ec=this.eo=null}};v.prototype={BAD_BOUNDARYPOINTS_ERR:1,INVALID_NODE_TYPE_ERR:2};v.prototype.toString=function(){return this.message};c.prototype={_current:null,hasNext:function(){return!!this._next},
+next:function(){this._current=this._next;this._next=this.nodes[++this._position];return this._current},detach:function(){this._current=this._next=this.nodes=null}};var $=[1,3,4,5,7,8,10],ba=[2,9,11],aa=[1,3,4,5,7,8,10,11],b=[1,3,4,5,7,8],d=g.getRootContainer,h=f([9,11]),D=f([5,6,10,12]),G=f([6,10,12]),P=document.createElement("style"),X=false;try{P.innerHTML="<b>x</b>";X=P.firstChild.nodeType==3}catch(ta){}l.features.htmlParsingConforms=X;var ka=["startContainer","startOffset","endContainer","endOffset",
+"collapsed","commonAncestorContainer"],ia=0,la=1,ra=2,ma=3,na=0,oa=1,pa=2,ja=3;ca.prototype={attachListener:function(a,e){this._listeners[a].push(e)},compareBoundaryPoints:function(a,e){J(this);u(this.startContainer,e.startContainer);var j=a==ma||a==ia?"start":"end",o=a==la||a==ia?"start":"end";return g.comparePoints(this[j+"Container"],this[j+"Offset"],e[o+"Container"],e[o+"Offset"])},insertNode:function(a){J(this);L(a,aa);w(this.startContainer);if(g.isAncestorOf(a,this.startContainer,true))throw new S("HIERARCHY_REQUEST_ERR");
+this.setStartBefore(N(a,this.startContainer,this.startOffset))},cloneContents:function(){J(this);var a,e;if(this.collapsed)return H(this).createDocumentFragment();else{if(this.startContainer===this.endContainer&&g.isCharacterDataNode(this.startContainer)){a=this.startContainer.cloneNode(true);a.data=a.data.slice(this.startOffset,this.endOffset);e=H(this).createDocumentFragment();e.appendChild(a);return e}else{e=new q(this,true);a=O(e);e.detach()}return a}},canSurroundContents:function(){J(this);w(this.startContainer);
+w(this.endContainer);var a=new q(this,true),e=a._first&&K(a._first,this)||a._last&&K(a._last,this);a.detach();return!e},surroundContents:function(a){L(a,b);if(!this.canSurroundContents())throw new v("BAD_BOUNDARYPOINTS_ERR");var e=this.extractContents();if(a.hasChildNodes())for(;a.lastChild;)a.removeChild(a.lastChild);N(a,this.startContainer,this.startOffset);a.appendChild(e);this.selectNode(a)},cloneRange:function(){J(this);for(var a=new M(H(this)),e=ka.length,j;e--;){j=ka[e];a[j]=this[j]}return a},
+toString:function(){J(this);var a=this.startContainer;if(a===this.endContainer&&g.isCharacterDataNode(a))return a.nodeType==3||a.nodeType==4?a.data.slice(this.startOffset,this.endOffset):"";else{var e=[];a=new q(this,true);i(a,function(j){if(j.nodeType==3||j.nodeType==4)e.push(j.data)});a.detach();return e.join("")}},compareNode:function(a){J(this);var e=a.parentNode,j=g.getNodeIndex(a);if(!e)throw new S("NOT_FOUND_ERR");a=this.comparePoint(e,j);e=this.comparePoint(e,j+1);return a<0?e>0?pa:na:e>0?
+oa:ja},comparePoint:function(a,e){J(this);B(a,"HIERARCHY_REQUEST_ERR");u(a,this.startContainer);if(g.comparePoints(a,e,this.startContainer,this.startOffset)<0)return-1;else if(g.comparePoints(a,e,this.endContainer,this.endOffset)>0)return 1;return 0},createContextualFragment:X?function(a){var e=this.startContainer,j=g.getDocument(e);if(!e)throw new S("INVALID_STATE_ERR");var o=null;if(e.nodeType==1)o=e;else if(g.isCharacterDataNode(e))o=g.parentElement(e);o=o===null||o.nodeName=="HTML"&&g.isHtmlNamespace(g.getDocument(o).documentElement)&&
+g.isHtmlNamespace(o)?j.createElement("body"):o.cloneNode(false);o.innerHTML=a;return g.fragmentFromNodeChildren(o)}:function(a){r(this);var e=H(this).createElement("body");e.innerHTML=a;return g.fragmentFromNodeChildren(e)},toHtml:function(){J(this);var a=H(this).createElement("div");a.appendChild(this.cloneContents());return a.innerHTML},intersectsNode:function(a,e){J(this);B(a,"NOT_FOUND_ERR");if(g.getDocument(a)!==H(this))return false;var j=a.parentNode,o=g.getNodeIndex(a);B(j,"NOT_FOUND_ERR");
+var E=g.comparePoints(j,o,this.endContainer,this.endOffset);j=g.comparePoints(j,o+1,this.startContainer,this.startOffset);return e?E<=0&&j>=0:E<0&&j>0},isPointInRange:function(a,e){J(this);B(a,"HIERARCHY_REQUEST_ERR");u(a,this.startContainer);return g.comparePoints(a,e,this.startContainer,this.startOffset)>=0&&g.comparePoints(a,e,this.endContainer,this.endOffset)<=0},intersectsRange:function(a,e){J(this);if(H(a)!=H(this))throw new S("WRONG_DOCUMENT_ERR");var j=g.comparePoints(this.startContainer,
+this.startOffset,a.endContainer,a.endOffset),o=g.comparePoints(this.endContainer,this.endOffset,a.startContainer,a.startOffset);return e?j<=0&&o>=0:j<0&&o>0},intersection:function(a){if(this.intersectsRange(a)){var e=g.comparePoints(this.startContainer,this.startOffset,a.startContainer,a.startOffset),j=g.comparePoints(this.endContainer,this.endOffset,a.endContainer,a.endOffset),o=this.cloneRange();e==-1&&o.setStart(a.startContainer,a.startOffset);j==1&&o.setEnd(a.endContainer,a.endOffset);return o}return null},
+union:function(a){if(this.intersectsRange(a,true)){var e=this.cloneRange();g.comparePoints(a.startContainer,a.startOffset,this.startContainer,this.startOffset)==-1&&e.setStart(a.startContainer,a.startOffset);g.comparePoints(a.endContainer,a.endOffset,this.endContainer,this.endOffset)==1&&e.setEnd(a.endContainer,a.endOffset);return e}else throw new v("Ranges do not intersect");},containsNode:function(a,e){return e?this.intersectsNode(a,false):this.compareNode(a)==ja},containsNodeContents:function(a){return this.comparePoint(a,
+0)>=0&&this.comparePoint(a,g.getNodeLength(a))<=0},containsRange:function(a){return this.intersection(a).equals(a)},containsNodeText:function(a){var e=this.cloneRange();e.selectNode(a);var j=e.getNodes([3]);if(j.length>0){e.setStart(j[0],0);a=j.pop();e.setEnd(a,a.length);a=this.containsRange(e);e.detach();return a}else return this.containsNodeContents(a)},createNodeIterator:function(a,e){J(this);return new c(this,a,e)},getNodes:function(a,e){J(this);return x(this,a,e)},getDocument:function(){return H(this)},
+collapseBefore:function(a){r(this);this.setEndBefore(a);this.collapse(false)},collapseAfter:function(a){r(this);this.setStartAfter(a);this.collapse(true)},getName:function(){return"DomRange"},equals:function(a){return M.rangesEqual(this,a)},isValid:function(){return V(this)},inspect:function(){return A(this)}};fa(M,ha,function(a){r(a);a.startContainer=a.startOffset=a.endContainer=a.endOffset=null;a.collapsed=a.commonAncestorContainer=null;I(a,"detach",null);a._listeners=null});l.rangePrototype=ca.prototype;
+M.rangeProperties=ka;M.RangeIterator=q;M.copyComparisonConstants=W;M.createPrototypeRange=fa;M.inspect=A;M.getRangeDocument=H;M.rangesEqual=function(a,e){return a.startContainer===e.startContainer&&a.startOffset===e.startOffset&&a.endContainer===e.endContainer&&a.endOffset===e.endOffset};l.DomRange=M;l.RangeException=v});
+rangy.createModule("WrappedRange",function(l){function K(i,n,t,x){var A=i.duplicate();A.collapse(t);var q=A.parentElement();z.isAncestorOf(n,q,true)||(q=n);if(!q.canHaveHTML)return new C(q.parentNode,z.getNodeIndex(q));n=z.getDocument(q).createElement("span");var v,c=t?"StartToStart":"StartToEnd";do{q.insertBefore(n,n.previousSibling);A.moveToElementText(n)}while((v=A.compareEndPoints(c,i))>0&&n.previousSibling);c=n.nextSibling;if(v==-1&&c&&z.isCharacterDataNode(c)){A.setEndPoint(t?"EndToStart":"EndToEnd",
+i);if(/[\r\n]/.test(c.data)){q=A.duplicate();t=q.text.replace(/\r\n/g,"\r").length;for(t=q.moveStart("character",t);q.compareEndPoints("StartToEnd",q)==-1;){t++;q.moveStart("character",1)}}else t=A.text.length;q=new C(c,t)}else{c=(x||!t)&&n.previousSibling;q=(t=(x||t)&&n.nextSibling)&&z.isCharacterDataNode(t)?new C(t,0):c&&z.isCharacterDataNode(c)?new C(c,c.length):new C(q,z.getNodeIndex(n))}n.parentNode.removeChild(n);return q}function H(i,n){var t,x,A=i.offset,q=z.getDocument(i.node),v=q.body.createTextRange(),
+c=z.isCharacterDataNode(i.node);if(c){t=i.node;x=t.parentNode}else{t=i.node.childNodes;t=A<t.length?t[A]:null;x=i.node}q=q.createElement("span");q.innerHTML="&#feff;";t?x.insertBefore(q,t):x.appendChild(q);v.moveToElementText(q);v.collapse(!n);x.removeChild(q);if(c)v[n?"moveStart":"moveEnd"]("character",A);return v}l.requireModules(["DomUtil","DomRange"]);var I,z=l.dom,C=z.DomPosition,N=l.DomRange;if(l.features.implementsDomRange&&(!l.features.implementsTextRange||!l.config.preferTextRange)){(function(){function i(f){for(var k=
+t.length,r;k--;){r=t[k];f[r]=f.nativeRange[r]}}var n,t=N.rangeProperties,x,A;I=function(f){if(!f)throw Error("Range must be specified");this.nativeRange=f;i(this)};N.createPrototypeRange(I,function(f,k,r,L,p){var u=f.endContainer!==L||f.endOffset!=p;if(f.startContainer!==k||f.startOffset!=r||u){f.setEnd(L,p);f.setStart(k,r)}},function(f){f.nativeRange.detach();f.detached=true;for(var k=t.length,r;k--;){r=t[k];f[r]=null}});n=I.prototype;n.selectNode=function(f){this.nativeRange.selectNode(f);i(this)};
+n.deleteContents=function(){this.nativeRange.deleteContents();i(this)};n.extractContents=function(){var f=this.nativeRange.extractContents();i(this);return f};n.cloneContents=function(){return this.nativeRange.cloneContents()};n.surroundContents=function(f){this.nativeRange.surroundContents(f);i(this)};n.collapse=function(f){this.nativeRange.collapse(f);i(this)};n.cloneRange=function(){return new I(this.nativeRange.cloneRange())};n.refresh=function(){i(this)};n.toString=function(){return this.nativeRange.toString()};
+var q=document.createTextNode("test");z.getBody(document).appendChild(q);var v=document.createRange();v.setStart(q,0);v.setEnd(q,0);try{v.setStart(q,1);x=true;n.setStart=function(f,k){this.nativeRange.setStart(f,k);i(this)};n.setEnd=function(f,k){this.nativeRange.setEnd(f,k);i(this)};A=function(f){return function(k){this.nativeRange[f](k);i(this)}}}catch(c){x=false;n.setStart=function(f,k){try{this.nativeRange.setStart(f,k)}catch(r){this.nativeRange.setEnd(f,k);this.nativeRange.setStart(f,k)}i(this)};
+n.setEnd=function(f,k){try{this.nativeRange.setEnd(f,k)}catch(r){this.nativeRange.setStart(f,k);this.nativeRange.setEnd(f,k)}i(this)};A=function(f,k){return function(r){try{this.nativeRange[f](r)}catch(L){this.nativeRange[k](r);this.nativeRange[f](r)}i(this)}}}n.setStartBefore=A("setStartBefore","setEndBefore");n.setStartAfter=A("setStartAfter","setEndAfter");n.setEndBefore=A("setEndBefore","setStartBefore");n.setEndAfter=A("setEndAfter","setStartAfter");v.selectNodeContents(q);n.selectNodeContents=
+v.startContainer==q&&v.endContainer==q&&v.startOffset==0&&v.endOffset==q.length?function(f){this.nativeRange.selectNodeContents(f);i(this)}:function(f){this.setStart(f,0);this.setEnd(f,N.getEndOffset(f))};v.selectNodeContents(q);v.setEnd(q,3);x=document.createRange();x.selectNodeContents(q);x.setEnd(q,4);x.setStart(q,2);n.compareBoundaryPoints=v.compareBoundaryPoints(v.START_TO_END,x)==-1&v.compareBoundaryPoints(v.END_TO_START,x)==1?function(f,k){k=k.nativeRange||k;if(f==k.START_TO_END)f=k.END_TO_START;
+else if(f==k.END_TO_START)f=k.START_TO_END;return this.nativeRange.compareBoundaryPoints(f,k)}:function(f,k){return this.nativeRange.compareBoundaryPoints(f,k.nativeRange||k)};if(l.util.isHostMethod(v,"createContextualFragment"))n.createContextualFragment=function(f){return this.nativeRange.createContextualFragment(f)};z.getBody(document).removeChild(q);v.detach();x.detach()})();l.createNativeRange=function(i){i=i||document;return i.createRange()}}else if(l.features.implementsTextRange){I=function(i){this.textRange=
+i;this.refresh()};I.prototype=new N(document);I.prototype.refresh=function(){var i,n,t=this.textRange;i=t.parentElement();var x=t.duplicate();x.collapse(true);n=x.parentElement();x=t.duplicate();x.collapse(false);t=x.parentElement();n=n==t?n:z.getCommonAncestor(n,t);n=n==i?n:z.getCommonAncestor(i,n);if(this.textRange.compareEndPoints("StartToEnd",this.textRange)==0)n=i=K(this.textRange,n,true,true);else{i=K(this.textRange,n,true,false);n=K(this.textRange,n,false,false)}this.setStart(i.node,i.offset);
+this.setEnd(n.node,n.offset)};N.copyComparisonConstants(I);var O=function(){return this}();if(typeof O.Range=="undefined")O.Range=I;l.createNativeRange=function(i){i=i||document;return i.body.createTextRange()}}if(l.features.implementsTextRange)I.rangeToTextRange=function(i){if(i.collapsed)return H(new C(i.startContainer,i.startOffset),true);else{var n=H(new C(i.startContainer,i.startOffset),true),t=H(new C(i.endContainer,i.endOffset),false);i=z.getDocument(i.startContainer).body.createTextRange();
+i.setEndPoint("StartToStart",n);i.setEndPoint("EndToEnd",t);return i}};I.prototype.getName=function(){return"WrappedRange"};l.WrappedRange=I;l.createRange=function(i){i=i||document;return new I(l.createNativeRange(i))};l.createRangyRange=function(i){i=i||document;return new N(i)};l.createIframeRange=function(i){return l.createRange(z.getIframeDocument(i))};l.createIframeRangyRange=function(i){return l.createRangyRange(z.getIframeDocument(i))};l.addCreateMissingNativeApiListener(function(i){i=i.document;
+if(typeof i.createRange=="undefined")i.createRange=function(){return l.createRange(this)};i=i=null})});
+rangy.createModule("WrappedSelection",function(l,K){function H(b){return(b||window).getSelection()}function I(b){return(b||window).document.selection}function z(b,d,h){var D=h?"end":"start";h=h?"start":"end";b.anchorNode=d[D+"Container"];b.anchorOffset=d[D+"Offset"];b.focusNode=d[h+"Container"];b.focusOffset=d[h+"Offset"]}function C(b){b.anchorNode=b.focusNode=null;b.anchorOffset=b.focusOffset=0;b.rangeCount=0;b.isCollapsed=true;b._ranges.length=0}function N(b){var d;if(b instanceof k){d=b._selectionNativeRange;
+if(!d){d=l.createNativeRange(c.getDocument(b.startContainer));d.setEnd(b.endContainer,b.endOffset);d.setStart(b.startContainer,b.startOffset);b._selectionNativeRange=d;b.attachListener("detach",function(){this._selectionNativeRange=null})}}else if(b instanceof r)d=b.nativeRange;else if(l.features.implementsDomRange&&b instanceof c.getWindow(b.startContainer).Range)d=b;return d}function O(b){var d=b.getNodes(),h;a:if(!d.length||d[0].nodeType!=1)h=false;else{h=1;for(var D=d.length;h<D;++h)if(!c.isAncestorOf(d[0],
+d[h])){h=false;break a}h=true}if(!h)throw Error("getSingleElementFromRange: range "+b.inspect()+" did not consist of a single element");return d[0]}function i(b,d){var h=new r(d);b._ranges=[h];z(b,h,false);b.rangeCount=1;b.isCollapsed=h.collapsed}function n(b){b._ranges.length=0;if(b.docSelection.type=="None")C(b);else{var d=b.docSelection.createRange();if(d&&typeof d.text!="undefined")i(b,d);else{b.rangeCount=d.length;for(var h,D=c.getDocument(d.item(0)),G=0;G<b.rangeCount;++G){h=l.createRange(D);
+h.selectNode(d.item(G));b._ranges.push(h)}b.isCollapsed=b.rangeCount==1&&b._ranges[0].collapsed;z(b,b._ranges[b.rangeCount-1],false)}}}function t(b,d){var h=b.docSelection.createRange(),D=O(d),G=c.getDocument(h.item(0));G=c.getBody(G).createControlRange();for(var P=0,X=h.length;P<X;++P)G.add(h.item(P));try{G.add(D)}catch(ta){throw Error("addRange(): Element within the specified Range could not be added to control selection (does it have layout?)");}G.select();n(b)}function x(b,d,h){this.nativeSelection=
+b;this.docSelection=d;this._ranges=[];this.win=h;this.refresh()}function A(b,d){var h=c.getDocument(d[0].startContainer);h=c.getBody(h).createControlRange();for(var D=0,G;D<rangeCount;++D){G=O(d[D]);try{h.add(G)}catch(P){throw Error("setRanges(): Element within the one of the specified Ranges could not be added to control selection (does it have layout?)");}}h.select();n(b)}function q(b,d){if(b.anchorNode&&c.getDocument(b.anchorNode)!==c.getDocument(d))throw new L("WRONG_DOCUMENT_ERR");}function v(b){var d=
+[],h=new p(b.anchorNode,b.anchorOffset),D=new p(b.focusNode,b.focusOffset),G=typeof b.getName=="function"?b.getName():"Selection";if(typeof b.rangeCount!="undefined")for(var P=0,X=b.rangeCount;P<X;++P)d[P]=k.inspect(b.getRangeAt(P));return"["+G+"(Ranges: "+d.join(", ")+")(anchor: "+h.inspect()+", focus: "+D.inspect()+"]"}l.requireModules(["DomUtil","DomRange","WrappedRange"]);l.config.checkSelectionRanges=true;var c=l.dom,f=l.util,k=l.DomRange,r=l.WrappedRange,L=l.DOMException,p=c.DomPosition,u,w,
+B=l.util.isHostMethod(window,"getSelection"),V=l.util.isHostObject(document,"selection"),J=V&&(!B||l.config.preferTextRange);if(J){u=I;l.isSelectionValid=function(b){b=(b||window).document;var d=b.selection;return d.type!="None"||c.getDocument(d.createRange().parentElement())==b}}else if(B){u=H;l.isSelectionValid=function(){return true}}else K.fail("Neither document.selection or window.getSelection() detected.");l.getNativeSelection=u;B=u();var ca=l.createNativeRange(document),Y=c.getBody(document),
+W=f.areHostObjects(B,f.areHostProperties(B,["anchorOffset","focusOffset"]));l.features.selectionHasAnchorAndFocus=W;var da=f.isHostMethod(B,"extend");l.features.selectionHasExtend=da;var fa=typeof B.rangeCount=="number";l.features.selectionHasRangeCount=fa;var ea=false,ha=true;f.areHostMethods(B,["addRange","getRangeAt","removeAllRanges"])&&typeof B.rangeCount=="number"&&l.features.implementsDomRange&&function(){var b=document.createElement("iframe");b.frameBorder=0;b.style.position="absolute";b.style.left=
+"-10000px";Y.appendChild(b);var d=c.getIframeDocument(b);d.open();d.write("<html><head></head><body>12</body></html>");d.close();var h=c.getIframeWindow(b).getSelection(),D=d.documentElement.lastChild.firstChild;d=d.createRange();d.setStart(D,1);d.collapse(true);h.addRange(d);ha=h.rangeCount==1;h.removeAllRanges();var G=d.cloneRange();d.setStart(D,0);G.setEnd(D,2);h.addRange(d);h.addRange(G);ea=h.rangeCount==2;d.detach();G.detach();Y.removeChild(b)}();l.features.selectionSupportsMultipleRanges=ea;
+l.features.collapsedNonEditableSelectionsSupported=ha;var M=false,g;if(Y&&f.isHostMethod(Y,"createControlRange")){g=Y.createControlRange();if(f.areHostProperties(g,["item","add"]))M=true}l.features.implementsControlRange=M;w=W?function(b){return b.anchorNode===b.focusNode&&b.anchorOffset===b.focusOffset}:function(b){return b.rangeCount?b.getRangeAt(b.rangeCount-1).collapsed:false};var Z;if(f.isHostMethod(B,"getRangeAt"))Z=function(b,d){try{return b.getRangeAt(d)}catch(h){return null}};else if(W)Z=
+function(b){var d=c.getDocument(b.anchorNode);d=l.createRange(d);d.setStart(b.anchorNode,b.anchorOffset);d.setEnd(b.focusNode,b.focusOffset);if(d.collapsed!==this.isCollapsed){d.setStart(b.focusNode,b.focusOffset);d.setEnd(b.anchorNode,b.anchorOffset)}return d};l.getSelection=function(b){b=b||window;var d=b._rangySelection,h=u(b),D=V?I(b):null;if(d){d.nativeSelection=h;d.docSelection=D;d.refresh(b)}else{d=new x(h,D,b);b._rangySelection=d}return d};l.getIframeSelection=function(b){return l.getSelection(c.getIframeWindow(b))};
+g=x.prototype;if(!J&&W&&f.areHostMethods(B,["removeAllRanges","addRange"])){g.removeAllRanges=function(){this.nativeSelection.removeAllRanges();C(this)};var S=function(b,d){var h=k.getRangeDocument(d);h=l.createRange(h);h.collapseToPoint(d.endContainer,d.endOffset);b.nativeSelection.addRange(N(h));b.nativeSelection.extend(d.startContainer,d.startOffset);b.refresh()};g.addRange=fa?function(b,d){if(M&&V&&this.docSelection.type=="Control")t(this,b);else if(d&&da)S(this,b);else{var h;if(ea)h=this.rangeCount;
+else{this.removeAllRanges();h=0}this.nativeSelection.addRange(N(b));this.rangeCount=this.nativeSelection.rangeCount;if(this.rangeCount==h+1){if(l.config.checkSelectionRanges)if((h=Z(this.nativeSelection,this.rangeCount-1))&&!k.rangesEqual(h,b))b=new r(h);this._ranges[this.rangeCount-1]=b;z(this,b,aa(this.nativeSelection));this.isCollapsed=w(this)}else this.refresh()}}:function(b,d){if(d&&da)S(this,b);else{this.nativeSelection.addRange(N(b));this.refresh()}};g.setRanges=function(b){if(M&&b.length>
+1)A(this,b);else{this.removeAllRanges();for(var d=0,h=b.length;d<h;++d)this.addRange(b[d])}}}else if(f.isHostMethod(B,"empty")&&f.isHostMethod(ca,"select")&&M&&J){g.removeAllRanges=function(){try{this.docSelection.empty();if(this.docSelection.type!="None"){var b;if(this.anchorNode)b=c.getDocument(this.anchorNode);else if(this.docSelection.type=="Control"){var d=this.docSelection.createRange();if(d.length)b=c.getDocument(d.item(0)).body.createTextRange()}if(b){b.body.createTextRange().select();this.docSelection.empty()}}}catch(h){}C(this)};
+g.addRange=function(b){if(this.docSelection.type=="Control")t(this,b);else{r.rangeToTextRange(b).select();this._ranges[0]=b;this.rangeCount=1;this.isCollapsed=this._ranges[0].collapsed;z(this,b,false)}};g.setRanges=function(b){this.removeAllRanges();var d=b.length;if(d>1)A(this,b);else d&&this.addRange(b[0])}}else{K.fail("No means of selecting a Range or TextRange was found");return false}g.getRangeAt=function(b){if(b<0||b>=this.rangeCount)throw new L("INDEX_SIZE_ERR");else return this._ranges[b]};
+var $;if(J)$=function(b){var d;if(l.isSelectionValid(b.win))d=b.docSelection.createRange();else{d=c.getBody(b.win.document).createTextRange();d.collapse(true)}if(b.docSelection.type=="Control")n(b);else d&&typeof d.text!="undefined"?i(b,d):C(b)};else if(f.isHostMethod(B,"getRangeAt")&&typeof B.rangeCount=="number")$=function(b){if(M&&V&&b.docSelection.type=="Control")n(b);else{b._ranges.length=b.rangeCount=b.nativeSelection.rangeCount;if(b.rangeCount){for(var d=0,h=b.rangeCount;d<h;++d)b._ranges[d]=
+new l.WrappedRange(b.nativeSelection.getRangeAt(d));z(b,b._ranges[b.rangeCount-1],aa(b.nativeSelection));b.isCollapsed=w(b)}else C(b)}};else if(W&&typeof B.isCollapsed=="boolean"&&typeof ca.collapsed=="boolean"&&l.features.implementsDomRange)$=function(b){var d;d=b.nativeSelection;if(d.anchorNode){d=Z(d,0);b._ranges=[d];b.rangeCount=1;d=b.nativeSelection;b.anchorNode=d.anchorNode;b.anchorOffset=d.anchorOffset;b.focusNode=d.focusNode;b.focusOffset=d.focusOffset;b.isCollapsed=w(b)}else C(b)};else{K.fail("No means of obtaining a Range or TextRange from the user's selection was found");
+return false}g.refresh=function(b){var d=b?this._ranges.slice(0):null;$(this);if(b){b=d.length;if(b!=this._ranges.length)return false;for(;b--;)if(!k.rangesEqual(d[b],this._ranges[b]))return false;return true}};var ba=function(b,d){var h=b.getAllRanges(),D=false;b.removeAllRanges();for(var G=0,P=h.length;G<P;++G)if(D||d!==h[G])b.addRange(h[G]);else D=true;b.rangeCount||C(b)};g.removeRange=M?function(b){if(this.docSelection.type=="Control"){var d=this.docSelection.createRange();b=O(b);var h=c.getDocument(d.item(0));
+h=c.getBody(h).createControlRange();for(var D,G=false,P=0,X=d.length;P<X;++P){D=d.item(P);if(D!==b||G)h.add(d.item(P));else G=true}h.select();n(this)}else ba(this,b)}:function(b){ba(this,b)};var aa;if(!J&&W&&l.features.implementsDomRange){aa=function(b){var d=false;if(b.anchorNode)d=c.comparePoints(b.anchorNode,b.anchorOffset,b.focusNode,b.focusOffset)==1;return d};g.isBackwards=function(){return aa(this)}}else aa=g.isBackwards=function(){return false};g.toString=function(){for(var b=[],d=0,h=this.rangeCount;d<
+h;++d)b[d]=""+this._ranges[d];return b.join("")};g.collapse=function(b,d){q(this,b);var h=l.createRange(c.getDocument(b));h.collapseToPoint(b,d);this.removeAllRanges();this.addRange(h);this.isCollapsed=true};g.collapseToStart=function(){if(this.rangeCount){var b=this._ranges[0];this.collapse(b.startContainer,b.startOffset)}else throw new L("INVALID_STATE_ERR");};g.collapseToEnd=function(){if(this.rangeCount){var b=this._ranges[this.rangeCount-1];this.collapse(b.endContainer,b.endOffset)}else throw new L("INVALID_STATE_ERR");
+};g.selectAllChildren=function(b){q(this,b);var d=l.createRange(c.getDocument(b));d.selectNodeContents(b);this.removeAllRanges();this.addRange(d)};g.deleteFromDocument=function(){if(M&&V&&this.docSelection.type=="Control"){for(var b=this.docSelection.createRange(),d;b.length;){d=b.item(0);b.remove(d);d.parentNode.removeChild(d)}this.refresh()}else if(this.rangeCount){b=this.getAllRanges();this.removeAllRanges();d=0;for(var h=b.length;d<h;++d)b[d].deleteContents();this.addRange(b[h-1])}};g.getAllRanges=
+function(){return this._ranges.slice(0)};g.setSingleRange=function(b){this.setRanges([b])};g.containsNode=function(b,d){for(var h=0,D=this._ranges.length;h<D;++h)if(this._ranges[h].containsNode(b,d))return true;return false};g.toHtml=function(){var b="";if(this.rangeCount){b=k.getRangeDocument(this._ranges[0]).createElement("div");for(var d=0,h=this._ranges.length;d<h;++d)b.appendChild(this._ranges[d].cloneContents());b=b.innerHTML}return b};g.getName=function(){return"WrappedSelection"};g.inspect=
+function(){return v(this)};g.detach=function(){this.win=this.anchorNode=this.focusNode=this.win._rangySelection=null};x.inspect=v;l.Selection=x;l.selectionPrototype=g;l.addCreateMissingNativeApiListener(function(b){if(typeof b.getSelection=="undefined")b.getSelection=function(){return l.getSelection(this)};b=null})});
+/**
+ * @license AngularJS v1.3.0-build.2711+sha.facd904
+ * (c) 2010-2014 Google, Inc. http://angularjs.org
+ * License: MIT
+ */
+(function(window, angular, undefined) {'use strict';
+
+var $sanitizeMinErr = angular.$$minErr('$sanitize');
+
+/**
+ * @ngdoc module
+ * @name ngSanitize
+ * @description
+ *
+ * # ngSanitize
+ *
+ * The `ngSanitize` module provides functionality to sanitize HTML.
+ *
+ *
+ * <div doc-module-components="ngSanitize"></div>
+ *
+ * See {@link ngSanitize.$sanitize `$sanitize`} for usage.
+ */
+
+/*
+ * HTML Parser By Misko Hevery (misko@hevery.com)
+ * based on:  HTML Parser By John Resig (ejohn.org)
+ * Original code by Erik Arvidsson, Mozilla Public License
+ * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
+ *
+ * // Use like so:
+ * htmlParser(htmlString, {
+ *     start: function(tag, attrs, unary) {},
+ *     end: function(tag) {},
+ *     chars: function(text) {},
+ *     comment: function(text) {}
+ * });
+ *
+ */
+
+
+/**
+ * @ngdoc service
+ * @name $sanitize
+ * @function
+ *
+ * @description
+ *   The input is sanitized by parsing the html into tokens. All safe tokens (from a whitelist) are
+ *   then serialized back to properly escaped html string. This means that no unsafe input can make
+ *   it into the returned string, however, since our parser is more strict than a typical browser
+ *   parser, it's possible that some obscure input, which would be recognized as valid HTML by a
+ *   browser, won't make it through the sanitizer.
+ *   The whitelist is configured using the functions `aHrefSanitizationWhitelist` and
+ *   `imgSrcSanitizationWhitelist` of {@link ng.$compileProvider `$compileProvider`}.
+ *
+ * @param {string} html Html input.
+ * @returns {string} Sanitized html.
+ *
+ * @example
+   <example module="ngSanitize" deps="angular-sanitize.js">
+   <file name="index.html">
+     <script>
+       function Ctrl($scope, $sce) {
+         $scope.snippet =
+           '<p style="color:blue">an html\n' +
+           '<em onmouseover="this.textContent=\'PWN3D!\'">click here</em>\n' +
+           'snippet</p>';
+         $scope.deliberatelyTrustDangerousSnippet = function() {
+           return $sce.trustAsHtml($scope.snippet);
+         };
+       }
+     </script>
+     <div ng-controller="Ctrl">
+        Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
+       <table>
+         <tr>
+           <td>Directive</td>
+           <td>How</td>
+           <td>Source</td>
+           <td>Rendered</td>
+         </tr>
+         <tr id="bind-html-with-sanitize">
+           <td>ng-bind-html</td>
+           <td>Automatically uses $sanitize</td>
+           <td><pre>&lt;div ng-bind-html="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
+           <td><div ng-bind-html="snippet"></div></td>
+         </tr>
+         <tr id="bind-html-with-trust">
+           <td>ng-bind-html</td>
+           <td>Bypass $sanitize by explicitly trusting the dangerous value</td>
+           <td>
+           <pre>&lt;div ng-bind-html="deliberatelyTrustDangerousSnippet()"&gt;
+&lt;/div&gt;</pre>
+           </td>
+           <td><div ng-bind-html="deliberatelyTrustDangerousSnippet()"></div></td>
+         </tr>
+         <tr id="bind-default">
+           <td>ng-bind</td>
+           <td>Automatically escapes</td>
+           <td><pre>&lt;div ng-bind="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
+           <td><div ng-bind="snippet"></div></td>
+         </tr>
+       </table>
+       </div>
+   </file>
+   <file name="protractor.js" type="protractor">
+     it('should sanitize the html snippet by default', function() {
+       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
+         toBe('<p>an html\n<em>click here</em>\nsnippet</p>');
+     });
+
+     it('should inline raw snippet if bound to a trusted value', function() {
+       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).
+         toBe("<p style=\"color:blue\">an html\n" +
+              "<em onmouseover=\"this.textContent='PWN3D!'\">click here</em>\n" +
+              "snippet</p>");
+     });
+
+     it('should escape snippet without any filter', function() {
+       expect(element(by.css('#bind-default div')).getInnerHtml()).
+         toBe("&lt;p style=\"color:blue\"&gt;an html\n" +
+              "&lt;em onmouseover=\"this.textContent='PWN3D!'\"&gt;click here&lt;/em&gt;\n" +
+              "snippet&lt;/p&gt;");
+     });
+
+     it('should update', function() {
+       element(by.model('snippet')).clear();
+       element(by.model('snippet')).sendKeys('new <b onclick="alert(1)">text</b>');
+       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
+         toBe('new <b>text</b>');
+       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).toBe(
+         'new <b onclick="alert(1)">text</b>');
+       expect(element(by.css('#bind-default div')).getInnerHtml()).toBe(
+         "new &lt;b onclick=\"alert(1)\"&gt;text&lt;/b&gt;");
+     });
+   </file>
+   </example>
+ */
+function $SanitizeProvider() {
+  this.$get = ['$$sanitizeUri', function($$sanitizeUri) {
+    return function(html) {
+      var buf = [];
+      htmlParser(html, htmlSanitizeWriter(buf, function(uri, isImage) {
+        return !/^unsafe/.test($$sanitizeUri(uri, isImage));
+      }));
+      return buf.join('');
+    };
+  }];
+}
+
+function sanitizeText(chars) {
+  var buf = [];
+  var writer = htmlSanitizeWriter(buf, angular.noop);
+  writer.chars(chars);
+  return buf.join('');
+}
+
+
+// Regular Expressions for parsing tags and attributes
+var START_TAG_REGEXP =
+       /^<\s*([\w:-]+)((?:\s+[\w:-]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)\s*>/,
+  END_TAG_REGEXP = /^<\s*\/\s*([\w:-]+)[^>]*>/,
+  ATTR_REGEXP = /([\w:-]+)(?:\s*=\s*(?:(?:"((?:[^"])*)")|(?:'((?:[^'])*)')|([^>\s]+)))?/g,
+  BEGIN_TAG_REGEXP = /^</,
+  BEGING_END_TAGE_REGEXP = /^<\s*\//,
+  COMMENT_REGEXP = /<!--(.*?)-->/g,
+  DOCTYPE_REGEXP = /<!DOCTYPE([^>]*?)>/i,
+  CDATA_REGEXP = /<!\[CDATA\[(.*?)]]>/g,
+  SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
+  // Match everything outside of normal chars and " (quote character)
+  NON_ALPHANUMERIC_REGEXP = /([^\#-~| |!])/g;
+
+
+// Good source of info about elements and attributes
+// http://dev.w3.org/html5/spec/Overview.html#semantics
+// http://simon.html5.org/html-elements
+
+// Safe Void Elements - HTML5
+// http://dev.w3.org/html5/spec/Overview.html#void-elements
+var voidElements = makeMap("area,br,col,hr,img,wbr");
+
+// Elements that you can, intentionally, leave open (and which close themselves)
+// http://dev.w3.org/html5/spec/Overview.html#optional-tags
+var optionalEndTagBlockElements = makeMap("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr"),
+    optionalEndTagInlineElements = makeMap("rp,rt"),
+    optionalEndTagElements = angular.extend({},
+                                            optionalEndTagInlineElements,
+                                            optionalEndTagBlockElements);
+
+// Safe Block Elements - HTML5
+var blockElements = angular.extend({}, optionalEndTagBlockElements, makeMap("address,article," +
+        "aside,blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5," +
+        "h6,header,hgroup,hr,ins,map,menu,nav,ol,pre,script,section,table,ul"));
+
+// Inline Elements - HTML5
+var inlineElements = angular.extend({}, optionalEndTagInlineElements, makeMap("a,abbr,acronym,b," +
+        "bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s," +
+        "samp,small,span,strike,strong,sub,sup,time,tt,u,var"));
+
+
+// Special Elements (can contain anything)
+var specialElements = makeMap("script,style");
+
+var validElements = angular.extend({},
+                                   voidElements,
+                                   blockElements,
+                                   inlineElements,
+                                   optionalEndTagElements);
+
+//Attributes that have href and hence need to be sanitized
+var uriAttrs = makeMap("background,cite,href,longdesc,src,usemap");
+var validAttrs = angular.extend({}, uriAttrs, makeMap(
+    'abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,'+
+    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,'+
+    'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,'+
+    'scope,scrolling,shape,size,span,start,summary,target,title,type,'+
+    'valign,value,vspace,width'));
+
+function makeMap(str) {
+  var obj = {}, items = str.split(','), i;
+  for (i = 0; i < items.length; i++) obj[items[i]] = true;
+  return obj;
+}
+
+
+/**
+ * @example
+ * htmlParser(htmlString, {
+ *     start: function(tag, attrs, unary) {},
+ *     end: function(tag) {},
+ *     chars: function(text) {},
+ *     comment: function(text) {}
+ * });
+ *
+ * @param {string} html string
+ * @param {object} handler
+ */
+function htmlParser( html, handler ) {
+  var index, chars, match, stack = [], last = html;
+  stack.last = function() { return stack[ stack.length - 1 ]; };
+
+  while ( html ) {
+    chars = true;
+
+    // Make sure we're not in a script or style element
+    if ( !stack.last() || !specialElements[ stack.last() ] ) {
+
+      // Comment
+      if ( html.indexOf("<!--") === 0 ) {
+        // comments containing -- are not allowed unless they terminate the comment
+        index = html.indexOf("--", 4);
+
+        if ( index >= 0 && html.lastIndexOf("-->", index) === index) {
+          if (handler.comment) handler.comment( html.substring( 4, index ) );
+          html = html.substring( index + 3 );
+          chars = false;
+        }
+      // DOCTYPE
+      } else if ( DOCTYPE_REGEXP.test(html) ) {
+        match = html.match( DOCTYPE_REGEXP );
+
+        if ( match ) {
+          html = html.replace( match[0], '');
+          chars = false;
+        }
+      // end tag
+      } else if ( BEGING_END_TAGE_REGEXP.test(html) ) {
+        match = html.match( END_TAG_REGEXP );
+
+        if ( match ) {
+          html = html.substring( match[0].length );
+          match[0].replace( END_TAG_REGEXP, parseEndTag );
+          chars = false;
+        }
+
+      // start tag
+      } else if ( BEGIN_TAG_REGEXP.test(html) ) {
+        match = html.match( START_TAG_REGEXP );
+
+        if ( match ) {
+          html = html.substring( match[0].length );
+          match[0].replace( START_TAG_REGEXP, parseStartTag );
+          chars = false;
+        }
+      }
+
+      if ( chars ) {
+        index = html.indexOf("<");
+
+        var text = index < 0 ? html : html.substring( 0, index );
+        html = index < 0 ? "" : html.substring( index );
+
+        if (handler.chars) handler.chars( decodeEntities(text) );
+      }
+
+    } else {
+      html = html.replace(new RegExp("(.*)<\\s*\\/\\s*" + stack.last() + "[^>]*>", 'i'),
+        function(all, text){
+          text = text.replace(COMMENT_REGEXP, "$1").replace(CDATA_REGEXP, "$1");
+
+          if (handler.chars) handler.chars( decodeEntities(text) );
+
+          return "";
+      });
+
+      parseEndTag( "", stack.last() );
+    }
+
+    if ( html == last ) {
+      throw $sanitizeMinErr('badparse', "The sanitizer was unable to parse the following block " +
+                                        "of html: {0}", html);
+    }
+    last = html;
+  }
+
+  // Clean up any remaining tags
+  parseEndTag();
+
+  function parseStartTag( tag, tagName, rest, unary ) {
+    tagName = angular.lowercase(tagName);
+    if ( blockElements[ tagName ] ) {
+      while ( stack.last() && inlineElements[ stack.last() ] ) {
+        parseEndTag( "", stack.last() );
+      }
+    }
+
+    if ( optionalEndTagElements[ tagName ] && stack.last() == tagName ) {
+      parseEndTag( "", tagName );
+    }
+
+    unary = voidElements[ tagName ] || !!unary;
+
+    if ( !unary )
+      stack.push( tagName );
+
+    var attrs = {};
+
+    rest.replace(ATTR_REGEXP,
+      function(match, name, doubleQuotedValue, singleQuotedValue, unquotedValue) {
+        var value = doubleQuotedValue
+          || singleQuotedValue
+          || unquotedValue
+          || '';
+
+        attrs[name] = decodeEntities(value);
+    });
+    if (handler.start) handler.start( tagName, attrs, unary );
+  }
+
+  function parseEndTag( tag, tagName ) {
+    var pos = 0, i;
+    tagName = angular.lowercase(tagName);
+    if ( tagName )
+      // Find the closest opened tag of the same type
+      for ( pos = stack.length - 1; pos >= 0; pos-- )
+        if ( stack[ pos ] == tagName )
+          break;
+
+    if ( pos >= 0 ) {
+      // Close all the open elements, up the stack
+      for ( i = stack.length - 1; i >= pos; i-- )
+        if (handler.end) handler.end( stack[ i ] );
+
+      // Remove the open elements from the stack
+      stack.length = pos;
+    }
+  }
+}
+
+var hiddenPre=document.createElement("pre");
+var spaceRe = /^(\s*)([\s\S]*?)(\s*)$/;
+/**
+ * decodes all entities into regular string
+ * @param value
+ * @returns {string} A string with decoded entities.
+ */
+function decodeEntities(value) {
+  if (!value) { return ''; }
+
+  // Note: IE8 does not preserve spaces at the start/end of innerHTML
+  // so we must capture them and reattach them afterward
+  var parts = spaceRe.exec(value);
+  var spaceBefore = parts[1];
+  var spaceAfter = parts[3];
+  var content = parts[2];
+  if (content) {
+    hiddenPre.innerHTML=content.replace(/</g,"&lt;");
+    // innerText depends on styling as it doesn't display hidden elements.
+    // Therefore, it's better to use textContent not to cause unnecessary
+    // reflows. However, IE<9 don't support textContent so the innerText
+    // fallback is necessary.
+    content = 'textContent' in hiddenPre ?
+      hiddenPre.textContent : hiddenPre.innerText;
+  }
+  return spaceBefore + content + spaceAfter;
+}
+
+/**
+ * Escapes all potentially dangerous characters, so that the
+ * resulting string can be safely inserted into attribute or
+ * element text.
+ * @param value
+ * @returns {string} escaped text
+ */
+function encodeEntities(value) {
+  return value.
+    replace(/&/g, '&amp;').
+    replace(SURROGATE_PAIR_REGEXP, function (value) {
+      var hi = value.charCodeAt(0);
+      var low = value.charCodeAt(1);
+      return '&#' + (((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000) + ';';
+    }).
+    replace(NON_ALPHANUMERIC_REGEXP, function(value){
+      // unsafe chars are: \u0000-\u001f \u007f-\u009f \u00ad \u0600-\u0604 \u070f \u17b4 \u17b5 \u200c-\u200f \u2028-\u202f \u2060-\u206f \ufeff \ufff0-\uffff from jslint.com/lint.html
+      // decimal values are: 0-31, 127-159, 173, 1536-1540, 1807, 6068, 6069, 8204-8207, 8232-8239, 8288-8303, 65279, 65520-65535
+      var c = value.charCodeAt(0);
+      // if unsafe character encode
+      if(c <= 159 ||
+        c == 173 ||
+        (c >= 1536 && c <= 1540) ||
+        c == 1807 ||
+        c == 6068 ||
+        c == 6069 ||
+        (c >= 8204 && c <= 8207) ||
+        (c >= 8232 && c <= 8239) ||
+        (c >= 8288 && c <= 8303) ||
+        c == 65279 ||
+        (c >= 65520 && c <= 65535)) return '&#' + c + ';';
+      return value; // avoids multilingual issues
+    }).
+    replace(/</g, '&lt;').
+    replace(/>/g, '&gt;');
+}
+
+var trim = (function() {
+  // native trim is way faster: http://jsperf.com/angular-trim-test
+  // but IE doesn't have it... :-(
+  // TODO: we should move this into IE/ES5 polyfill
+  if (!String.prototype.trim) {
+    return function(value) {
+      return angular.isString(value) ? value.replace(/^\s\s*/, '').replace(/\s\s*$/, '') : value;
+    };
+  }
+  return function(value) {
+    return angular.isString(value) ? value.trim() : value;
+  };
+})();
+
+// Custom logic for accepting certain style options only - textAngular
+// Currently allows only the color attribute, all other attributes should be easily done through classes.
+function validStyles(styleAttr){
+	var result = '';
+	var styleArray = styleAttr.split(';');
+	angular.forEach(styleArray, function(value){
+		var v = value.split(':');
+		if(v.length == 2){
+			var key = trim(angular.lowercase(v[0]));
+			var value = trim(angular.lowercase(v[1]));
+			if(
+				key === 'color' && (
+					value.match(/^rgb\([0-9%,\. ]*\)$/i)
+					|| value.match(/^rgba\([0-9%,\. ]*\)$/i)
+					|| value.match(/^hsl\([0-9%,\. ]*\)$/i)
+					|| value.match(/^hsla\([0-9%,\. ]*\)$/i)
+					|| value.match(/^#[0-9a-f]{3,6}$/i)
+					|| value.match(/^[a-z]*$/i)
+				)
+			||
+				key === 'text-align' && (
+					value === 'left'
+					|| value === 'right'
+					|| value === 'center'
+					|| value === 'justify'
+				)
+			||
+				key === 'float' && (
+					value === 'left'
+					|| value === 'right'
+					|| value === 'none'
+				)
+			||
+				(key === 'width' || key === 'height') && (
+					value.match(/[0-9\.]*(px|em|rem|%)/)
+				)
+			) result += key + ': ' + value + ';';
+		}
+	});
+	return result;
+}
+
+// this function is used to manually allow specific attributes on specific tags with certain prerequisites
+function validCustomTag(tag, attrs, lkey, value){
+	// catch the div placeholder for the iframe replacement
+    if (tag === 'img' && attrs['ta-insert-video']){
+        if(lkey === 'ta-insert-video' || lkey === 'allowfullscreen' || lkey === 'frameborder' || (lkey === 'contenteditble' && value === 'false')) return true;
+    }
+    return false;
+}
+
+/**
+ * create an HTML/XML writer which writes to buffer
+ * @param {Array} buf use buf.jain('') to get out sanitized html string
+ * @returns {object} in the form of {
+ *     start: function(tag, attrs, unary) {},
+ *     end: function(tag) {},
+ *     chars: function(text) {},
+ *     comment: function(text) {}
+ * }
+ */
+function htmlSanitizeWriter(buf, uriValidator){
+  var ignore = false;
+  var out = angular.bind(buf, buf.push);
+  return {
+    start: function(tag, attrs, unary){
+      tag = angular.lowercase(tag);
+      if (!ignore && specialElements[tag]) {
+        ignore = tag;
+      }
+      if (!ignore && validElements[tag] === true) {
+        out('<');
+        out(tag);
+        angular.forEach(attrs, function(value, key){
+          var lkey=angular.lowercase(key);
+          var isImage=(tag === 'img' && lkey === 'src') || (lkey === 'background');
+          if ((lkey === 'style' && (value = validStyles(value)) !== '') || validCustomTag(tag, attrs, lkey, value) || validAttrs[lkey] === true &&
+            (uriAttrs[lkey] !== true || uriValidator(value, isImage))) {
+            out(' ');
+            out(key);
+            out('="');
+            out(encodeEntities(value));
+            out('"');
+          }
+        });
+        out(unary ? '/>' : '>');
+      }
+    },
+    end: function(tag){
+        tag = angular.lowercase(tag);
+        if (!ignore && validElements[tag] === true) {
+          out('</');
+          out(tag);
+          out('>');
+        }
+        if (tag == ignore) {
+          ignore = false;
+        }
+      },
+    chars: function(chars){
+        if (!ignore) {
+          out(encodeEntities(chars));
+        }
+      }
+  };
+}
+
+
+// define ngSanitize module and register $sanitize service
+angular.module('ngSanitize', []).provider('$sanitize', $SanitizeProvider);
+
+/* global sanitizeText: false */
+
+/**
+ * @ngdoc filter
+ * @name linky
+ * @function
+ *
+ * @description
+ * Finds links in text input and turns them into html links. Supports http/https/ftp/mailto and
+ * plain email address links.
+ *
+ * Requires the {@link ngSanitize `ngSanitize`} module to be installed.
+ *
+ * @param {string} text Input text.
+ * @param {string} target Window (_blank|_self|_parent|_top) or named frame to open links in.
+ * @returns {string} Html-linkified text.
+ *
+ * @usage
+   <span ng-bind-html="linky_expression | linky"></span>
+ *
+ * @example
+   <example module="ngSanitize" deps="angular-sanitize.js">
+     <file name="index.html">
+       <script>
+         function Ctrl($scope) {
+           $scope.snippet =
+             'Pretty text with some links:\n'+
+             'http://angularjs.org/,\n'+
+             'mailto:us@somewhere.org,\n'+
+             'another@somewhere.org,\n'+
+             'and one more: ftp://127.0.0.1/.';
+           $scope.snippetWithTarget = 'http://angularjs.org/';
+         }
+       </script>
+       <div ng-controller="Ctrl">
+       Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
+       <table>
+         <tr>
+           <td>Filter</td>
+           <td>Source</td>
+           <td>Rendered</td>
+         </tr>
+         <tr id="linky-filter">
+           <td>linky filter</td>
+           <td>
+             <pre>&lt;div ng-bind-html="snippet | linky"&gt;<br>&lt;/div&gt;</pre>
+           </td>
+           <td>
+             <div ng-bind-html="snippet | linky"></div>
+           </td>
+         </tr>
+         <tr id="linky-target">
+          <td>linky target</td>
+          <td>
+            <pre>&lt;div ng-bind-html="snippetWithTarget | linky:'_blank'"&gt;<br>&lt;/div&gt;</pre>
+          </td>
+          <td>
+            <div ng-bind-html="snippetWithTarget | linky:'_blank'"></div>
+          </td>
+         </tr>
+         <tr id="escaped-html">
+           <td>no filter</td>
+           <td><pre>&lt;div ng-bind="snippet"&gt;<br>&lt;/div&gt;</pre></td>
+           <td><div ng-bind="snippet"></div></td>
+         </tr>
+       </table>
+     </file>
+     <file name="protractor.js" type="protractor">
+       it('should linkify the snippet with urls', function() {
+         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
+             toBe('Pretty text with some links: http://angularjs.org/, us@somewhere.org, ' +
+                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
+         expect(element.all(by.css('#linky-filter a')).count()).toEqual(4);
+       });
+
+       it('should not linkify snippet without the linky filter', function() {
+         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText()).
+             toBe('Pretty text with some links: http://angularjs.org/, mailto:us@somewhere.org, ' +
+                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
+         expect(element.all(by.css('#escaped-html a')).count()).toEqual(0);
+       });
+
+       it('should update', function() {
+         element(by.model('snippet')).clear();
+         element(by.model('snippet')).sendKeys('new http://link.');
+         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
+             toBe('new http://link.');
+         expect(element.all(by.css('#linky-filter a')).count()).toEqual(1);
+         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText())
+             .toBe('new http://link.');
+       });
+
+       it('should work with the target property', function() {
+        expect(element(by.id('linky-target')).
+            element(by.binding("snippetWithTarget | linky:'_blank'")).getText()).
+            toBe('http://angularjs.org/');
+        expect(element(by.css('#linky-target a')).getAttribute('target')).toEqual('_blank');
+       });
+     </file>
+   </example>
+ */
+angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
+  var LINKY_URL_REGEXP =
+        /((ftp|https?):\/\/|(mailto:)?[A-Za-z0-9._%+-]+@)\S*[^\s.;,(){}<>]/,
+      MAILTO_REGEXP = /^mailto:/;
+
+  return function(text, target) {
+    if (!text) return text;
+    var match;
+    var raw = text;
+    var html = [];
+    var url;
+    var i;
+    while ((match = raw.match(LINKY_URL_REGEXP))) {
+      // We can not end in these as they are sometimes found at the end of the sentence
+      url = match[0];
+      // if we did not match ftp/http/mailto then assume mailto
+      if (match[2] == match[3]) url = 'mailto:' + url;
+      i = match.index;
+      addText(raw.substr(0, i));
+      addLink(url, match[0].replace(MAILTO_REGEXP, ''));
+      raw = raw.substring(i + match[0].length);
+    }
+    addText(raw);
+    return $sanitize(html.join(''));
+
+    function addText(text) {
+      if (!text) {
+        return;
+      }
+      html.push(sanitizeText(text));
+    }
+
+    function addLink(url, text) {
+      html.push('<a ');
+      if (angular.isDefined(target)) {
+        html.push('target="');
+        html.push(target);
+        html.push('" ');
+      }
+      html.push('href="');
+      html.push(url);
+      html.push('">');
+      addText(text);
+      html.push('</a>');
+    }
+  };
+}]);
+
+
+})(window, window.angular);
+
+/*
+textAngular
+Author : Austin Anderson
+License : 2013 MIT
+Version 1.2.2
+
+See README.md or https://github.com/fraywing/textAngular/wiki for requirements and use.
+*/
+
+(function(){ // encapsulate all variables so they don't become global vars
+	"Use Strict";
+
+	// fix a webkit bug, see: https://gist.github.com/shimondoodkin/1081133
+	// this is set true when a blur occurs as the blur of the ta-bind triggers before the click
+	var globalContentEditableBlur = false;
+	/* istanbul ignore next: Browser Un-Focus fix for webkit */
+	if(/AppleWebKit\/([\d.]+)/.exec(navigator.userAgent)) { // detect webkit
+		document.addEventListener("click", function(){
+			var curelement = window.event.target;
+			if(globalContentEditableBlur && curelement !== null){
+				var isEditable = false;
+				var tempEl = curelement;
+				while(tempEl !== null && tempEl.tagName.toLowerCase() !== 'html' && !isEditable){
+					isEditable = tempEl.contentEditable === 'true';
+					tempEl = tempEl.parentNode;
+				}
+				if(!isEditable){
+					document.getElementById('textAngular-editableFix-010203040506070809').setSelectionRange(0, 0); // set caret focus to an element that handles caret focus correctly.
+					curelement.focus(); // focus the wanted element.
+				}
+			}
+			globalContentEditableBlur = false;
+		}, false); // add global click handler
+		angular.element(document).ready(function () {
+			angular.element(document.body).append(angular.element('<input id="textAngular-editableFix-010203040506070809" style="width:1px;height:1px;border:none;margin:0;padding:0;position:absolute; top: -10000; left: -10000;" unselectable="on" tabIndex="-1">'));
+		});
+	}
+	// IE version detection - http://stackoverflow.com/questions/4169160/javascript-ie-detection-why-not-use-simple-conditional-comments
+	// We need this as IE sometimes plays funny tricks with the contenteditable.
+	// ----------------------------------------------------------
+	// If you're not in IE (or IE version is less than 5) then:
+	// ie === undefined
+	// If you're in IE (>=5) then you can determine which version:
+	// ie === 7; // IE7
+	// Thus, to detect IE:
+	// if (ie) {}
+	// And to detect the version:
+	// ie === 6 // IE6
+	// ie > 7 // IE8, IE9, IE10 ...
+	// ie < 9 // Anything less than IE9
+	// ----------------------------------------------------------
+	/* istanbul ignore next: untestable browser check */
+	var ie = (function(){
+		var undef,rv = -1; // Return value assumes failure.
+		var ua = window.navigator.userAgent;
+		var msie = ua.indexOf('MSIE ');
+		var trident = ua.indexOf('Trident/');
+
+		if (msie > 0) {
+			// IE 10 or older => return version number
+			rv = parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+		} else if (trident > 0) {
+			// IE 11 (or newer) => return version number
+			var rvNum = ua.indexOf('rv:');
+			rv = parseInt(ua.substring(rvNum + 3, ua.indexOf('.', rvNum)), 10);
+		}
+
+		return ((rv > -1) ? rv : undef);
+	}());
+
+	// Thanks to answer in http://stackoverflow.com/questions/2308134/trim-in-javascript-not-working-in-ie
+	/* istanbul ignore next: trim shim for older browsers */
+	if(typeof String.prototype.trim !== 'function') {
+		String.prototype.trim = function() {
+			return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+		};
+	}
+
+	// tests against the current jqLite/jquery implementation if this can be an element
+	function validElementString(string){
+		try{
+			return angular.element(string).length !== 0;
+		}catch(any){
+			return false;
+		}
+	}
+
+	/*
+		Custom stylesheet for the placeholders rules.
+		Credit to: http://davidwalsh.name/add-rules-stylesheets
+	*/
+	var sheet, addCSSRule, removeCSSRule, _addCSSRule, _removeCSSRule;
+	/* istanbul ignore else: IE <8 test*/
+	if(ie > 8 || ie === undefined){
+		var topsheet = (function() {
+			// Create the <style> tag
+			var style = document.createElement("style");
+			/* istanbul ignore else : WebKit hack :( */
+			if(/AppleWebKit\/([\d.]+)/.exec(navigator.userAgent)) style.appendChild(document.createTextNode(""));
+
+			// Add the <style> element to the page, add as first so the styles can be overridden by custom stylesheets
+			document.head.insertBefore(style,document.head.firstChild);
+
+			return style.sheet;
+		})();
+
+		// this sheet is used for the placeholders later on.
+		sheet = (function() {
+			// Create the <style> tag
+			var style = document.createElement("style");
+			/* istanbul ignore else : WebKit hack :( */
+			if(/AppleWebKit\/([\d.]+)/.exec(navigator.userAgent)) style.appendChild(document.createTextNode(""));
+
+			// Add the <style> element to the page, add as first so the styles can be overridden by custom stylesheets
+			document.head.appendChild(style);
+
+			return style.sheet;
+		})();
+
+		// use as: addCSSRule("header", "float: left");
+		addCSSRule = function(selector, rules) {
+			_addCSSRule(sheet, selector, rules);
+		};
+		_addCSSRule = function(sheet, selector, rules){
+			var insertIndex;
+			/* istanbul ignore else: firefox catch */
+			if(sheet.rules) insertIndex = Math.max(sheet.rules.length - 1, 0);
+			else if(sheet.cssRules) insertIndex = Math.max(sheet.cssRules.length - 1, 0);
+			/* istanbul ignore else: untestable IE option */
+			if(sheet.insertRule) {
+				sheet.insertRule(selector + "{" + rules + "}", insertIndex);
+			}
+			else {
+				sheet.addRule(selector, rules, insertIndex);
+			}
+			// return the index of the stylesheet rule
+			return insertIndex;
+		};
+
+		removeCSSRule = function(index){
+			_removeCSSRule(sheet, index);
+		};
+		_removeCSSRule = function(sheet, index){
+			/* istanbul ignore else: untestable IE option */
+			if(sheet.removeRule){
+				sheet.removeRule(index);
+			}else{
+				sheet.deleteRule(index);
+			}
+		};
+
+		// add generic styling for the editor
+		_addCSSRule(topsheet, '.ta-scroll-window.form-control', "height: auto; min-height: 300px; overflow: auto; font-family: inherit; font-size: 100%; position: relative; padding: 0;");
+		_addCSSRule(topsheet, '.ta-root.focussed .ta-scroll-window.form-control', 'border-color: #66afe9; outline: 0; -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);');
+		_addCSSRule(topsheet, '.ta-editor.ta-html', "min-height: 300px; height: auto; overflow: auto; font-family: inherit; font-size: 100%;");
+		_addCSSRule(topsheet, '.ta-scroll-window > .ta-bind', "height: auto; min-height: 300px; padding: 6px 12px;");
+		
+		// add styling for partially supported elements
+		_addCSSRule(topsheet, 'mark', 'background-color: yellow; color: black;')
+		
+		// add the styling for the awesomness of the resizer
+		_addCSSRule(topsheet, '.ta-root .ta-resizer-handle-overlay', 'z-index: 100; position: absolute; display: none;');
+		_addCSSRule(topsheet, '.ta-root .ta-resizer-handle-overlay > .ta-resizer-handle-info', 'position: absolute; bottom: 16px; right: 16px; border: 1px solid black; background-color: #FFF; padding: 0 4px; opacity: 0.7;');
+		_addCSSRule(topsheet, '.ta-root .ta-resizer-handle-overlay > .ta-resizer-handle-background', 'position: absolute; bottom: 5px; right: 5px; left: 5px; top: 5px; border: 1px solid black; background-color: rgba(0, 0, 0, 0.2);');
+		_addCSSRule(topsheet, '.ta-root .ta-resizer-handle-overlay > .ta-resizer-handle-corner', 'width: 10px; height: 10px; position: absolute;');
+		_addCSSRule(topsheet, '.ta-root .ta-resizer-handle-overlay > .ta-resizer-handle-corner-tl', 'top: 0; left: 0; border-left: 1px solid black; border-top: 1px solid black;');
+		_addCSSRule(topsheet, '.ta-root .ta-resizer-handle-overlay > .ta-resizer-handle-corner-tr', 'top: 0; right: 0; border-right: 1px solid black; border-top: 1px solid black;');
+		_addCSSRule(topsheet, '.ta-root .ta-resizer-handle-overlay > .ta-resizer-handle-corner-bl', 'bottom: 0; left: 0; border-left: 1px solid black; border-bottom: 1px solid black;');
+		_addCSSRule(topsheet, '.ta-root .ta-resizer-handle-overlay > .ta-resizer-handle-corner-br', 'bottom: 0; right: 0; border: 1px solid black; cursor: se-resize; background-color: white;');
+	}
+
+	// recursive function that returns an array of angular.elements that have the passed attribute set on them
+	function getByAttribute(element, attribute){
+		var resultingElements = [];
+		var childNodes = element.children();
+		if(childNodes.length){
+			angular.forEach(childNodes, function(child){
+				resultingElements = resultingElements.concat(getByAttribute(angular.element(child), attribute));
+			});
+		}
+		if(element.attr(attribute) !== undefined) resultingElements.push(element);
+		return resultingElements;
+	}
+
+	// this global var is used to prevent multiple fires of the drop event. Needs to be global to the textAngular file.
+	var dropFired = false;
+	var textAngular = angular.module("textAngular", ['ngSanitize', 'textAngularSetup']); //This makes ngSanitize required
+
+	// setup the global contstant functions for setting up the toolbar
+
+	// all tool definitions
+	var taTools = {};
+	/*
+		A tool definition is an object with the following key/value parameters:
+			action: [function(deferred, restoreSelection)]
+					a function that is executed on clicking on the button - this will allways be executed using ng-click and will
+					overwrite any ng-click value in the display attribute.
+					The function is passed a deferred object ($q.defer()), if this is wanted to be used `return false;` from the action and
+					manually call `deferred.resolve();` elsewhere to notify the editor that the action has finished.
+					restoreSelection is only defined if the rangy library is included and it can be called as `restoreSelection()` to restore the users
+					selection in the WYSIWYG editor.
+			display: [string]?
+					Optional, an HTML element to be displayed as the button. The `scope` of the button is the tool definition object with some additional functions
+					If set this will cause buttontext and iconclass to be ignored
+			buttontext: [string]?
+					if this is defined it will replace the contents of the element contained in the `display` element
+			iconclass: [string]?
+					if this is defined an icon (<i>) will be appended to the `display` element with this string as it's class
+			tooltiptext: [string]?
+					Optional, a plain text description of the action, used for the title attribute of the action button in the toolbar by default.
+			activestate: [function(commonElement)]?
+					this function is called on every caret movement, if it returns true then the class taOptions.classes.toolbarButtonActive
+					will be applied to the `display` element, else the class will be removed
+			disabled: [function()]?
+					if this function returns true then the tool will have the class taOptions.classes.disabled applied to it, else it will be removed
+		Other functions available on the scope are:
+			name: [string]
+					the name of the tool, this is the first parameter passed into taRegisterTool
+			isDisabled: [function()]
+					returns true if the tool is disabled, false if it isn't
+			displayActiveToolClass: [function(boolean)]
+					returns true if the tool is 'active' in the currently focussed toolbar
+			onElementSelect: [Object]
+					This object contains the following key/value pairs and is used to trigger the ta-element-select event
+					element: [String]
+						an element name, will only trigger the onElementSelect action if the tagName of the element matches this string
+					filter: [function(element)]?
+						an optional filter that returns a boolean, if true it will trigger the onElementSelect.
+					action: [function(event, element, editorScope)]
+						the action that should be executed if the onElementSelect function runs
+	*/
+	// name and toolDefinition to add into the tools available to be added on the toolbar
+	function registerTextAngularTool(name, toolDefinition){
+		if(!name || name === '' || taTools.hasOwnProperty(name)) throw('textAngular Error: A unique name is required for a Tool Definition');
+		if(
+			(toolDefinition.display && (toolDefinition.display === '' || !validElementString(toolDefinition.display))) ||
+			(!toolDefinition.display && !toolDefinition.buttontext && !toolDefinition.iconclass)
+		)
+			throw('textAngular Error: Tool Definition for "' + name + '" does not have a valid display/iconclass/buttontext value');
+		taTools[name] = toolDefinition;
+	}
+
+	textAngular.constant('taRegisterTool', registerTextAngularTool);
+	textAngular.value('taTools', taTools);
+
+	textAngular.config([function(){
+		// clear taTools variable. Just catches testing and any other time that this config may run multiple times...
+		angular.forEach(taTools, function(value, key){ delete taTools[key];	});
+	}]);
+
+	textAngular.directive("textAngular", [
+		'$compile', '$timeout', 'taOptions', 'taSelection', 'taExecCommand', 'textAngularManager', '$window', '$document', '$animate', '$log',
+		function($compile, $timeout, taOptions, taSelection, taExecCommand, textAngularManager, $window, $document, $animate, $log){
+			return {
+				require: '?ngModel',
+				scope: {},
+				restrict: "EA",
+				link: function(scope, element, attrs, ngModel){
+					// all these vars should not be accessable outside this directive
+					var _keydown, _keyup, _keypress, _mouseup, _mousedown, _focusin, _focusout,
+						_originalContents, _toolbars,
+						_serial = (attrs.serial) ? attrs.serial : Math.floor(Math.random() * 10000000000000000),
+						_name = (attrs.name) ? attrs.name : 'textAngularEditor' + _serial,
+						_taExecCommand;
+
+					var oneEvent = function(_element, event, action){
+						$timeout(function(){
+							// shim the .one till fixed
+							var _func = function(){
+								_element.off(event, _func);
+								action();
+							};
+							_element.on(event, _func);
+						}, 100);
+					};
+					_taExecCommand = taExecCommand(attrs.taDefaultWrap);
+					// get the settings from the defaults and add our specific functions that need to be on the scope
+					angular.extend(scope, angular.copy(taOptions), {
+						// wraps the selection in the provided tag / execCommand function. Should only be called in WYSIWYG mode.
+						wrapSelection: function(command, opt, isSelectableElementTool){
+							// catch errors like FF erroring when you try to force an undo with nothing done
+							_taExecCommand(command, false, opt);
+							if(isSelectableElementTool){
+								// re-apply the selectable tool events
+								scope['reApplyOnSelectorHandlerstaTextElement' + _serial]();
+							}
+							// refocus on the shown display element, this fixes a display bug when using :focus styles to outline the box.
+							// You still have focus on the text/html input it just doesn't show up
+							scope.displayElements.text[0].focus();
+						},
+						showHtml: false
+					});
+					// setup the options from the optional attributes
+					if(attrs.taFocussedClass)			scope.classes.focussed = attrs.taFocussedClass;
+					if(attrs.taTextEditorClass)			scope.classes.textEditor = attrs.taTextEditorClass;
+					if(attrs.taHtmlEditorClass)			scope.classes.htmlEditor = attrs.taHtmlEditorClass;
+					// optional setup functions
+					if(attrs.taTextEditorSetup)			scope.setup.textEditorSetup = scope.$parent.$eval(attrs.taTextEditorSetup);
+					if(attrs.taHtmlEditorSetup)			scope.setup.htmlEditorSetup = scope.$parent.$eval(attrs.taHtmlEditorSetup);
+					// optional fileDropHandler function
+					if(attrs.taFileDrop)				scope.fileDropHandler = scope.$parent.$eval(attrs.taFileDrop);
+					else								scope.fileDropHandler = scope.defaultFileDropHandler;
+
+					_originalContents = element[0].innerHTML;
+					// clear the original content
+					element[0].innerHTML = '';
+
+					// Setup the HTML elements as variable references for use later
+					scope.displayElements = {
+						// we still need the hidden input even with a textarea as the textarea may have invalid/old input in it,
+						// wheras the input will ALLWAYS have the correct value.
+						forminput: angular.element("<input type='hidden' tabindex='-1' style='display: none;'>"),
+						html: angular.element("<textarea></textarea>"),
+						text: angular.element("<div></div>"),
+						// other toolbased elements
+						scrollWindow: angular.element("<div class='ta-scroll-window'></div>"),
+						popover: angular.element('<div class="popover fade bottom" style="max-width: none; width: 305px;"></div>'),
+						popoverArrow: angular.element('<div class="arrow"></div>'),
+						popoverContainer: angular.element('<div class="popover-content"></div>'),
+						resize: {
+							overlay: angular.element('<div class="ta-resizer-handle-overlay"></div>'),
+							background: angular.element('<div class="ta-resizer-handle-background"></div>'),
+							anchors: [
+								angular.element('<div class="ta-resizer-handle-corner ta-resizer-handle-corner-tl"></div>'),
+								angular.element('<div class="ta-resizer-handle-corner ta-resizer-handle-corner-tr"></div>'),
+								angular.element('<div class="ta-resizer-handle-corner ta-resizer-handle-corner-bl"></div>'),
+								angular.element('<div class="ta-resizer-handle-corner ta-resizer-handle-corner-br"></div>')
+							],
+							info: angular.element('<div class="ta-resizer-handle-info"></div>')
+						}
+					};
+
+					// Setup the popover
+					scope.displayElements.popover.append(scope.displayElements.popoverArrow);
+					scope.displayElements.popover.append(scope.displayElements.popoverContainer);
+					scope.displayElements.scrollWindow.append(scope.displayElements.popover);
+
+					scope.displayElements.popover.on('mousedown', function(e, eventData){
+						/* istanbul ignore else: this is for catching the jqLite testing*/
+						if(eventData) angular.extend(e, eventData);
+						// this prevents focusout from firing on the editor when clicking anything in the popover
+						e.preventDefault();
+						return false;
+					});
+
+					// define the popover show and hide functions
+					scope.showPopover = function(_el){
+						scope.displayElements.popover.css('display', 'block');
+						scope.reflowPopover(_el);
+						$animate.addClass(scope.displayElements.popover, 'in');
+						oneEvent(element, 'click keyup', function(){scope.hidePopover();});
+					};
+					scope.reflowPopover = function(_el){
+						if(scope.displayElements.text[0].offsetHeight - 51 > _el[0].offsetTop){
+							scope.displayElements.popover.css('top', _el[0].offsetTop + _el[0].offsetHeight + 'px');
+							scope.displayElements.popover.removeClass('top').addClass('bottom');
+						}else{
+							scope.displayElements.popover.css('top', _el[0].offsetTop - 54 + 'px');
+							scope.displayElements.popover.removeClass('bottom').addClass('top');
+						}
+						var _maxLeft = scope.displayElements.text[0].offsetWidth - scope.displayElements.popover[0].offsetWidth;
+						var _targetLeft = _el[0].offsetLeft + (_el[0].offsetWidth / 2.0) - (scope.displayElements.popover[0].offsetWidth / 2.0);
+						scope.displayElements.popover.css('left', Math.max(0, Math.min(_maxLeft, _targetLeft)) + 'px');
+						scope.displayElements.popoverArrow.css('margin-left', (Math.min(_targetLeft, (Math.max(0, _targetLeft - _maxLeft))) - 11) + 'px');
+					};
+					scope.hidePopover = function(){
+						$animate.removeClass(scope.displayElements.popover, 'in', /* istanbul ignore next: dosen't test with mocked animate */ function(){
+							scope.displayElements.popover.css('display', '');
+							scope.displayElements.popoverContainer.attr('style', '');
+							scope.displayElements.popoverContainer.attr('class', 'popover-content');
+						});
+					};
+
+					// setup the resize overlay
+					scope.displayElements.resize.overlay.append(scope.displayElements.resize.background);
+					angular.forEach(scope.displayElements.resize.anchors, function(anchor){ scope.displayElements.resize.overlay.append(anchor);});
+					scope.displayElements.resize.overlay.append(scope.displayElements.resize.info);
+					scope.displayElements.scrollWindow.append(scope.displayElements.resize.overlay);
+
+					// define the show and hide events
+					scope.reflowResizeOverlay = function(_el){
+						_el = angular.element(_el)[0];
+						scope.displayElements.resize.overlay.css({
+							'display': 'block',
+							'left': _el.offsetLeft - 5 + 'px',
+							'top': _el.offsetTop - 5 + 'px',
+							'width': _el.offsetWidth + 10 + 'px',
+							'height': _el.offsetHeight + 10 + 'px'
+						});
+						scope.displayElements.resize.info.text(_el.offsetWidth + ' x ' + _el.offsetHeight);
+					};
+					/* istanbul ignore next: pretty sure phantomjs won't test this */
+					scope.showResizeOverlay = function(_el){
+						var resizeMouseDown = function(event){
+							var startPosition = {
+								width: parseInt(_el.attr('width')),
+								height: parseInt(_el.attr('height')),
+								x: event.clientX,
+								y: event.clientY
+							};
+							if(startPosition.width === undefined) startPosition.width = _el[0].offsetWidth;
+							if(startPosition.height === undefined) startPosition.height = _el[0].offsetHeight;
+							scope.hidePopover();
+							var ratio = startPosition.height / startPosition.width;
+							var mousemove = function(event){
+								// calculate new size
+								var pos = {
+									x: Math.max(0, startPosition.width + (event.clientX - startPosition.x)),
+									y: Math.max(0, startPosition.height + (event.clientY - startPosition.y))
+								};
+								var applyImageSafeCSS = function(_el, css){
+									_el = angular.element(_el);
+									if(_el[0].tagName.toLowerCase() === 'img'){
+										if(css.height){
+											_el.attr('height', css.height);
+											delete css.height;
+										}
+										if(css.width){
+											_el.attr('width', css.width);
+											delete css.width;
+										}
+									}
+									_el.css(css);
+								};
+								if(event.shiftKey){
+									// keep ratio
+									var newRatio = pos.y / pos.x;
+									applyImageSafeCSS(_el, {
+										width: ratio > newRatio ? pos.x : pos.y / ratio,
+										height: ratio > newRatio ? pos.x * ratio : pos.y
+									});
+								}else{
+									applyImageSafeCSS(_el, {
+										width: pos.x,
+										height: pos.y
+									});
+								}
+								// reflow the popover tooltip
+								scope.reflowResizeOverlay(_el);
+							};
+							$document.find('body').on('mousemove', mousemove);
+							oneEvent(scope.displayElements.resize.overlay, 'mouseup', function(){
+								$document.find('body').off('mousemove', mousemove);
+								scope.showPopover(_el);
+							});
+							event.stopPropagation();
+							event.preventDefault();
+						};
+
+						scope.displayElements.resize.anchors[3].on('mousedown', resizeMouseDown);
+
+						scope.reflowResizeOverlay(_el);
+						oneEvent(element, 'click', function(){scope.hideResizeOverlay();});
+					};
+					/* istanbul ignore next: pretty sure phantomjs won't test this */
+					scope.hideResizeOverlay = function(){
+						scope.displayElements.resize.overlay.css('display', '');
+					};
+
+					// allow for insertion of custom directives on the textarea and div
+					scope.setup.htmlEditorSetup(scope.displayElements.html);
+					scope.setup.textEditorSetup(scope.displayElements.text);
+					scope.displayElements.html.attr({
+						'id': 'taHtmlElement' + _serial,
+						'ng-show': 'showHtml',
+						'ta-bind': 'ta-bind',
+						'ng-model': 'html'
+					});
+					scope.displayElements.text.attr({
+						'id': 'taTextElement' + _serial,
+						'contentEditable': 'true',
+						'ta-bind': 'ta-bind',
+						'ng-model': 'html'
+					});
+					scope.displayElements.scrollWindow.attr({'ng-hide': 'showHtml'});
+					if(attrs.taDefaultWrap) scope.displayElements.text.attr('ta-default-wrap', attrs.taDefaultWrap);
+					
+					if(attrs.taUnsafeSanitizer){
+						scope.displayElements.text.attr('ta-unsafe-sanitizer', attrs.taUnsafeSanitizer);
+						scope.displayElements.html.attr('ta-unsafe-sanitizer', attrs.taUnsafeSanitizer);
+					}
+					
+					// add the main elements to the origional element
+					scope.displayElements.scrollWindow.append(scope.displayElements.text);
+					element.append(scope.displayElements.scrollWindow);
+					element.append(scope.displayElements.html);
+
+					scope.displayElements.forminput.attr('name', _name);
+					element.append(scope.displayElements.forminput);
+
+					if(attrs.tabindex){
+						element.removeAttr('tabindex');
+						scope.displayElements.text.attr('tabindex', attrs.tabindex);
+						scope.displayElements.html.attr('tabindex', attrs.tabindex);
+					}
+
+					if (attrs.placeholder) {
+						scope.displayElements.text.attr('placeholder', attrs.placeholder);
+						scope.displayElements.html.attr('placeholder', attrs.placeholder);
+					}
+
+					if(attrs.taDisabled){
+						scope.displayElements.text.attr('ta-readonly', 'disabled');
+						scope.displayElements.html.attr('ta-readonly', 'disabled');
+						scope.disabled = scope.$parent.$eval(attrs.taDisabled);
+						scope.$parent.$watch(attrs.taDisabled, function(newVal){
+							scope.disabled = newVal;
+							if(scope.disabled){
+								element.addClass(scope.classes.disabled);
+							}else{
+								element.removeClass(scope.classes.disabled);
+							}
+						});
+					}
+
+					// compile the scope with the text and html elements only - if we do this with the main element it causes a compile loop
+					$compile(scope.displayElements.scrollWindow)(scope);
+					$compile(scope.displayElements.html)(scope);
+
+					scope.updateTaBindtaTextElement = scope['updateTaBindtaTextElement' + _serial];
+					scope.updateTaBindtaHtmlElement = scope['updateTaBindtaHtmlElement' + _serial];
+
+					// add the classes manually last
+					element.addClass("ta-root");
+					scope.displayElements.scrollWindow.addClass("ta-text ta-editor " + scope.classes.textEditor);
+					scope.displayElements.html.addClass("ta-html ta-editor " + scope.classes.htmlEditor);
+
+					// used in the toolbar actions
+					scope._actionRunning = false;
+					var _savedSelection = false;
+					scope.startAction = function(){
+						scope._actionRunning = true;
+						// if rangy library is loaded return a function to reload the current selection
+						if($window.rangy && $window.rangy.saveSelection){
+							_savedSelection = $window.rangy.saveSelection();
+							return function(){
+								if(_savedSelection) $window.rangy.restoreSelection(_savedSelection);
+							};
+						}
+					};
+					scope.endAction = function(){
+						scope._actionRunning = false;
+						if(_savedSelection) $window.rangy.removeMarkers(_savedSelection);
+						_savedSelection = false;
+						scope.updateSelectedStyles();
+						// only update if in text or WYSIWYG mode
+						if(!scope.showHtml) scope['updateTaBindtaTextElement' + _serial]();
+					};
+
+					// note that focusout > focusin is called everytime we click a button - except bad support: http://www.quirksmode.org/dom/events/blurfocus.html
+					// cascades to displayElements.text and displayElements.html automatically.
+					_focusin = function(){
+						element.addClass(scope.classes.focussed);
+						_toolbars.focus();
+					};
+					scope.displayElements.html.on('focus', _focusin);
+					scope.displayElements.text.on('focus', _focusin);
+					_focusout = function(e){
+						// if we are NOT runnig an action and have NOT focussed again on the text etc then fire the blur events
+						if(!scope._actionRunning && $document[0].activeElement !== scope.displayElements.html[0] && $document[0].activeElement !== scope.displayElements.text[0]){
+							element.removeClass(scope.classes.focussed);
+							_toolbars.unfocus();
+							// to prevent multiple apply error defer to next seems to work.
+							$timeout(function(){ element.triggerHandler('blur'); }, 0);
+						}
+						e.preventDefault();
+						return false;
+					};
+					scope.displayElements.html.on('blur', _focusout);
+					scope.displayElements.text.on('blur', _focusout);
+
+					// Setup the default toolbar tools, this way allows the user to add new tools like plugins.
+					// This is on the editor for future proofing if we find a better way to do this.
+					scope.queryFormatBlockState = function(command){
+						// $document[0].queryCommandValue('formatBlock') errors in Firefox if we call this when focussed on the textarea
+						return !scope.showHtml && command.toLowerCase() === $document[0].queryCommandValue('formatBlock').toLowerCase();
+					};
+					scope.queryCommandState = function(command){
+						// $document[0].queryCommandValue('formatBlock') errors in Firefox if we call this when focussed on the textarea
+						return (!scope.showHtml) ? $document[0].queryCommandState(command) : '';
+					};
+					scope.switchView = function(){
+						scope.showHtml = !scope.showHtml;
+						//Show the HTML view
+						if(scope.showHtml){
+							//defer until the element is visible
+							$timeout(function(){
+								// [0] dereferences the DOM object from the angular.element
+								return scope.displayElements.html[0].focus();
+							}, 100);
+						}else{
+							//Show the WYSIWYG view
+							//defer until the element is visible
+							$timeout(function(){
+								// [0] dereferences the DOM object from the angular.element
+								return scope.displayElements.text[0].focus();
+							}, 100);
+						}
+					};
+
+					// changes to the model variable from outside the html/text inputs
+					// if no ngModel, then the only input is from inside text-angular
+					if(attrs.ngModel){
+						var _firstRun = true;
+						ngModel.$render = function(){
+							if(_firstRun){
+								// we need this firstRun to set the originalContents otherwise it gets overrided by the setting of ngModel to undefined from NaN
+								_firstRun = false;
+								// if view value is null or undefined initially and there was original content, set to the original content
+								var _initialValue = scope.$parent.$eval(attrs.ngModel);
+								if((_initialValue === undefined || _initialValue === null) && (_originalContents && _originalContents !== '')){
+									// on passing through to taBind it will be sanitised
+									ngModel.$setViewValue(_originalContents);
+								}
+							}
+							scope.displayElements.forminput.val(ngModel.$viewValue);
+							// if the editors aren't focused they need to be updated, otherwise they are doing the updating
+							/* istanbul ignore else: don't care */
+							if(!scope._elementSelectTriggered && $document[0].activeElement !== scope.displayElements.html[0] && $document[0].activeElement !== scope.displayElements.text[0]){
+								// catch model being null or undefined
+								scope.html = ngModel.$viewValue || '';
+							}
+						};
+						// trigger the validation calls
+						var _validity = function(value){
+							if(attrs.required) ngModel.$setValidity('required', !(!value || value.trim() === ''));
+							return value;
+						};
+						ngModel.$parsers.push(_validity);
+						ngModel.$formatters.push(_validity);
+					}else{
+						// if no ngModel then update from the contents of the origional html.
+						scope.displayElements.forminput.val(_originalContents);
+						scope.html = _originalContents;
+					}
+
+					// changes from taBind back up to here
+					scope.$watch('html', function(newValue, oldValue){
+						if(newValue !== oldValue){
+							if(attrs.ngModel && ngModel.$viewValue !== newValue) ngModel.$setViewValue(newValue);
+							scope.displayElements.forminput.val(newValue);
+						}
+					});
+
+					if(attrs.taTargetToolbars) _toolbars = textAngularManager.registerEditor(_name, scope, attrs.taTargetToolbars.split(','));
+					else{
+						var _toolbar = angular.element('<div text-angular-toolbar name="textAngularToolbar' + _serial + '">');
+						// passthrough init of toolbar options
+						if(attrs.taToolbar)						_toolbar.attr('ta-toolbar', attrs.taToolbar);
+						if(attrs.taToolbarClass)				_toolbar.attr('ta-toolbar-class', attrs.taToolbarClass);
+						if(attrs.taToolbarGroupClass)			_toolbar.attr('ta-toolbar-group-class', attrs.taToolbarGroupClass);
+						if(attrs.taToolbarButtonClass)			_toolbar.attr('ta-toolbar-button-class', attrs.taToolbarButtonClass);
+						if(attrs.taToolbarActiveButtonClass)	_toolbar.attr('ta-toolbar-active-button-class', attrs.taToolbarActiveButtonClass);
+						if(attrs.taFocussedClass)				_toolbar.attr('ta-focussed-class', attrs.taFocussedClass);
+
+						element.prepend(_toolbar);
+						$compile(_toolbar)(scope.$parent);
+						_toolbars = textAngularManager.registerEditor(_name, scope, ['textAngularToolbar' + _serial]);
+					}
+
+					scope.$on('$destroy', function(){
+						textAngularManager.unregisterEditor(_name);
+					});
+
+					// catch element select event and pass to toolbar tools
+					scope.$on('ta-element-select', function(event, element){
+						_toolbars.triggerElementSelect(event, element);
+					});
+
+					scope.$on('ta-drop-event', function(event, element, dropEvent, dataTransfer){
+						scope.displayElements.text[0].focus();
+						if(dataTransfer && dataTransfer.files && dataTransfer.files.length > 0){
+							angular.forEach(dataTransfer.files, function(file){
+								// taking advantage of boolean execution, if the fileDropHandler returns true, nothing else after it is executed
+								// If it is false then execute the defaultFileDropHandler if the fileDropHandler is NOT the default one
+								try{
+									return scope.fileDropHandler(file, scope.wrapSelection) ||
+										(scope.fileDropHandler !== scope.defaultFileDropHandler &&
+										scope.defaultFileDropHandler(file, scope.wrapSelection));
+								}catch(error){
+									$log.error(error);
+								}
+							});
+							dropEvent.preventDefault();
+							dropEvent.stopPropagation();
+						}
+					});
+
+					// the following is for applying the active states to the tools that support it
+					scope._bUpdateSelectedStyles = false;
+					// loop through all the tools polling their activeState function if it exists
+					scope.updateSelectedStyles = function(){
+						var _selection;
+						// test if the common element ISN'T the root ta-text node
+						if((_selection = taSelection.getSelectionElement()) !== undefined && _selection.parentNode !== scope.displayElements.text[0]){
+							_toolbars.updateSelectedStyles(angular.element(_selection));
+						}else _toolbars.updateSelectedStyles();
+						// used to update the active state when a key is held down, ie the left arrow
+						if(scope._bUpdateSelectedStyles) $timeout(scope.updateSelectedStyles, 200);
+					};
+					// start updating on keydown
+					_keydown = function(){
+						/* istanbul ignore else: don't run if already running */
+						if(!scope._bUpdateSelectedStyles){
+							scope._bUpdateSelectedStyles = true;
+							scope.$apply(function(){
+								scope.updateSelectedStyles();
+							});
+						}
+					};
+					scope.displayElements.html.on('keydown', _keydown);
+					scope.displayElements.text.on('keydown', _keydown);
+					// stop updating on key up and update the display/model
+					_keyup = function(){
+						scope._bUpdateSelectedStyles = false;
+					};
+					scope.displayElements.html.on('keyup', _keyup);
+					scope.displayElements.text.on('keyup', _keyup);
+					// stop updating on key up and update the display/model
+					_keypress = function(event, eventData){
+						/* istanbul ignore else: this is for catching the jqLite testing*/
+						if(eventData) angular.extend(event, eventData);
+						scope.$apply(function(){
+							if(_toolbars.sendKeyCommand(event)){
+								/* istanbul ignore else: don't run if already running */
+								if(!scope._bUpdateSelectedStyles){
+									scope.updateSelectedStyles();
+								}
+								event.preventDefault();
+								return false;
+							}
+						});
+					};
+					scope.displayElements.html.on('keypress', _keypress);
+					scope.displayElements.text.on('keypress', _keypress);
+					// update the toolbar active states when we click somewhere in the text/html boxed
+					_mouseup = function(){
+						// ensure only one execution of updateSelectedStyles()
+						scope._bUpdateSelectedStyles = false;
+						scope.$apply(function(){
+							scope.updateSelectedStyles();
+						});
+					};
+					scope.displayElements.html.on('mouseup', _mouseup);
+					scope.displayElements.text.on('mouseup', _mouseup);
+				}
+			};
+		}
+	]).factory('taBrowserTag', [function(){
+		return function(tag){
+			/* istanbul ignore next: ie specific test */
+			if(!tag) return (ie <= 8)? 'P' : 'p';
+			else if(tag === '') return (ie === undefined)? 'div' : (ie <= 8)? 'P' : 'p';
+			else return (ie <= 8)? tag.toUpperCase() : tag;
+		};
+	}]).factory('taExecCommand', ['taSelection', 'taBrowserTag', '$document', function(taSelection, taBrowserTag, $document){
+		var BLOCKELEMENTS = /^(address|article|aside|audio|blockquote|canvas|dd|div|dl|fieldset|figcaption|figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|noscript|ol|output|p|pre|section|table|tfoot|ul|video)$/ig;
+		var LISTELEMENTS = /^(ul|li|ol)$/ig;
+		var listToDefault = function(listElement, defaultWrap){
+			var $target, i;
+			// if all selected then we should remove the list
+			// grab all li elements and convert to taDefaultWrap tags
+			var children = listElement.find('li');
+			for(i = children.length - 1; i >= 0; i--){
+				$target = angular.element('<' + defaultWrap + '>' + children[i].innerHTML + '</' + defaultWrap + '>');
+				listElement.after($target);
+			}
+			listElement.remove();
+			taSelection.setSelectionToElementEnd($target[0]);
+		};
+		var listToList = function(listElement, newListTag){
+			var $target = angular.element('<' + newListTag + '>' + listElement[0].innerHTML + '</' + newListTag + '>');
+			listElement.after($target);
+			listElement.remove();
+			taSelection.setSelectionToElementEnd($target.find('li')[0]);
+		};
+		var childElementsToList = function(elements, listElement, newListTag){
+			var html = '';
+			for(var i = 0; i < elements.length; i++){
+				html += '<' + taBrowserTag('li') + '>' + elements[i].innerHTML + '</' + taBrowserTag('li') + '>';
+			}
+			var $target = angular.element('<' + newListTag + '>' + html + '</' + newListTag + '>');
+			listElement.after($target);
+			listElement.remove();
+			taSelection.setSelectionToElementEnd($target.find('li')[0]);
+		};
+		return function(taDefaultWrap){
+			taDefaultWrap = taBrowserTag(taDefaultWrap);
+			return function(command, showUI, options){
+				var i, $target, html, _nodes, next;
+				var defaultWrapper = angular.element('<' + taDefaultWrap + '>');
+				var selectedElement = taSelection.getSelectionElement();
+				var $selected = angular.element(selectedElement);
+				if(selectedElement !== undefined){
+					var tagName = selectedElement.tagName.toLowerCase();
+					if(command.toLowerCase() === 'insertorderedlist' || command.toLowerCase() === 'insertunorderedlist'){
+						var selfTag = taBrowserTag((command.toLowerCase() === 'insertorderedlist')? 'ol' : 'ul');
+						if(tagName === selfTag){
+							// if all selected then we should remove the list
+							// grab all li elements and convert to taDefaultWrap tags
+							return listToDefault($selected, taDefaultWrap);
+						}else if(tagName === 'li' && $selected.parent()[0].tagName.toLowerCase() === selfTag && $selected.parent().children().length === 1){
+							// catch for the previous statement if only one li exists
+							return listToDefault($selected.parent(), taDefaultWrap);
+						}else if(tagName === 'li' && $selected.parent()[0].tagName.toLowerCase() !== selfTag && $selected.parent().children().length === 1){
+							// catch for the previous statement if only one li exists
+							return listToList($selected.parent(), selfTag);
+						}else if(tagName.match(BLOCKELEMENTS) && !$selected.hasClass('ta-bind')){
+							// if it's one of those block elements we have to change the contents
+							// if it's a ol/ul we are changing from one to the other
+							if(tagName === 'ol' || tagName === 'ul'){
+								return listToList($selected, selfTag);
+							}else{
+								var childBlockElements = false;
+								angular.forEach($selected.children(), function(elem){
+									if(elem.tagName.match(BLOCKELEMENTS)) {
+										childBlockElements = true;
+									}
+								});
+								if(childBlockElements){
+									return childElementsToList($selected.children(), $selected, selfTag);
+								}else{
+									return childElementsToList([angular.element('<div>' + selectedElement.innerHTML + '</div>')[0]], $selected, selfTag);
+								}
+							}
+						}else if(tagName.match(BLOCKELEMENTS)){
+							// if we get here then all the contents of the ta-bind are selected
+							_nodes = taSelection.getOnlySelectedElements();
+							if(_nodes.length === 1 && (_nodes[0].tagName.toLowerCase() === 'ol' || _nodes[0].tagName.toLowerCase() === 'ul')){
+								if(_nodes[0].tagName.toLowerCase() === selfTag){
+									// remove
+									return listToDefault(angular.element(_nodes[0]), taDefaultWrap);
+								}else{
+									return listToList(angular.element(_nodes[0]), selfTag);
+								}
+							}else{
+								html = '';
+								var $nodes = [];
+								for(i = 0; i < _nodes.length; i++){
+									/* istanbul ignore else: catch for real-world can't make it occur in testing */
+									if(_nodes[i].nodeType !== 3){
+										var $n = angular.element(_nodes[i]);
+										html += '<' + taBrowserTag('li') + '>' + $n[0].innerHTML + '</' + taBrowserTag('li') + '>';
+										$nodes.unshift($n);
+									}
+								}
+								$target = angular.element('<' + selfTag + '>' + html + '</' + selfTag + '>');
+								$nodes.pop().replaceWith($target);
+								angular.forEach($nodes, function($node){ $node.remove(); });
+							}
+							taSelection.setSelectionToElementEnd($target[0]);
+							return;
+						}
+					}else if(command.toLowerCase() === 'formatblock'){
+						var optionsTagName = options.toLowerCase().replace(/[<>]/ig, '');
+						if(tagName === 'li') $target = $selected.parent();
+						else $target = $selected;
+						// find the first blockElement
+						while(!$target[0].tagName.match(BLOCKELEMENTS)){
+							$target = $target.parent();
+							tagName = $target[0].tagName.toLowerCase();
+						}
+						if(tagName === optionsTagName){
+							// $target is wrap element
+							_nodes = $target.children();
+							var hasBlock = false;
+							for(i = 0; i < _nodes.length; i++){
+								hasBlock = hasBlock || _nodes[i].tagName.match(BLOCKELEMENTS);
+							}
+							if(hasBlock){
+								$target.after(_nodes);
+								next = $target.next();
+								$target.remove();
+								$target = next;
+							}else{
+								defaultWrapper.append($target[0].childNodes);
+								$target.after(defaultWrapper);
+								$target.remove();
+								$target = defaultWrapper;
+							}
+						}else if($target.parent()[0].tagName.toLowerCase() === optionsTagName && !$target.parent().hasClass('ta-bind')){
+							//unwrap logic for parent
+							var blockElement = $target.parent();
+							var contents = blockElement.contents();
+							for(i = 0; i < contents.length; i ++){
+								/* istanbul ignore next: can't test - some wierd thing with how phantomjs works */
+								if(blockElement.parent().hasClass('ta-bind') && contents[i].nodeType === 3){
+									defaultWrapper = angular.element('<' + taDefaultWrap + '>');
+									defaultWrapper[0].innerHTML = contents[i].outerHTML;
+									contents[i] = defaultWrapper[0];
+								}
+								blockElement.parent()[0].insertBefore(contents[i], blockElement[0]);
+							}
+							blockElement.remove();
+						}else if(tagName.match(LISTELEMENTS)){
+							// wrapping a list element
+							$target.wrap(options);
+						}else{
+							// default wrap behaviour
+							_nodes = taSelection.getOnlySelectedElements();
+							if(_nodes.length === 0) _nodes = [$target[0]];
+							// find the parent block element if any of the nodes are inline or text
+							var inlineNodePresent = false;
+							angular.forEach(_nodes, function(node){
+								if(node.nodeType === 3 || !node.tagName.match(BLOCKELEMENTS)){
+									inlineNodePresent = true;
+								}
+							});
+							if(inlineNodePresent){
+								while(_nodes[0].nodeType === 3 || !_nodes[0].tagName.match(BLOCKELEMENTS)){
+									_nodes = [_nodes[0].parentNode];
+								}
+							}
+							if(angular.element(_nodes[0]).hasClass('ta-bind')){
+								$target = angular.element(options);
+								$target[0].innerHTML = _nodes[0].innerHTML;
+								_nodes[0].innerHTML = $target[0].outerHTML;
+							}else if(optionsTagName === 'blockquote'){
+								// blockquotes wrap other block elements
+								html = '';
+								for(i = 0; i < _nodes.length; i++){
+									html += _nodes[i].outerHTML;
+								}
+								$target = angular.element(options);
+								$target[0].innerHTML = html;
+								_nodes[0].parentNode.insertBefore($target[0],_nodes[0]);
+								angular.forEach(_nodes, function(node){
+									node.parentNode.removeChild(node);
+								});
+							}
+							else {
+								// regular block elements replace other block elements
+								for(i = 0; i < _nodes.length; i++){
+									$target = angular.element(options);
+									$target[0].innerHTML = _nodes[i].innerHTML;
+									_nodes[i].parentNode.insertBefore($target[0],_nodes[i]);
+									_nodes[i].parentNode.removeChild(_nodes[i]);
+								}
+							}
+						}
+						taSelection.setSelectionToElementEnd($target[0]);
+						return;
+					}else if(command.toLowerCase() === 'formatinline'){
+						var optionsTagName = options.toLowerCase().replace(/[<>]/ig, '');
+						
+						/*
+							return {
+								start: {
+									element: range.startContainer,
+									offset: range.startOffset
+								},
+								end: {
+									element: range.endContainer,
+									offset: range.endOffset
+								},
+								container: container
+								
+							};
+							
+							cases:
+								All need their reverse enabled as well
+								Create / Remove Completely
+								*
+									`<p>Blah test blah</p>`
+									`<p>Blah <mark>test</mark> blah</p>`
+								*
+									`<p>test</p>`
+									`<p><mark>test</mark></p>`
+								* 
+									`<p>Blah <b>test bold</b> blah</p>`
+									`<p>Blah <mark><b>test</b></mark><b> bold</b> blah</p>`
+								*
+									`<p>Blah test blah</p>
+									<p>Blah test blah</p>`
+									`<p>Blah test <mark>blah</mark></p>
+									<p><mark>Blah test</mark> blah</p>`
+								Partial Remove / Add to Current
+								*
+									`<p>Blah <mark>test</mark> blah</p>
+									`<p>Blah te<mark>st</mark> blah</p>`
+								* 
+									`<p>Blah <mark><b>test</b></mark><b> bold</b> blah</p>`
+									`<p>Blah <mark><b>test bo</b></mark><b>ld</b> blah</p>`
+								*
+									`<p>Blah test <mark>blah</mark></p>
+									<p><mark>Blah test</mark> blah</p>
+									<p>Blah test blah</p>`
+									`<p>Blah test <mark>blah</mark></p>
+									<p><mark>Blah test blah</mark></p>
+									<p><mark>Blah test</mark> blah</p>`
+						*/
+						
+						selection = taSelection.getSelected();
+					}
+				}
+				try{
+					$document[0].execCommand(command, showUI, options);
+				}catch(e){}
+			};
+		};
+	}]).directive('taBind', ['taSanitize', '$timeout', '$window', '$document', 'taFixChrome', 'taBrowserTag', 'taSelection', 'taSelectableElements', 'taApplyCustomRenderers', 'taOptions',
+					function(taSanitize, $timeout, $window, $document, taFixChrome, taBrowserTag, taSelection, taSelectableElements, taApplyCustomRenderers, taOptions){
+		// Uses for this are textarea or input with ng-model and ta-bind='text'
+		// OR any non-form element with contenteditable="contenteditable" ta-bind="html|text" ng-model
+		return {
+			require: 'ngModel',
+			scope: {},
+			link: function(scope, element, attrs, ngModel){
+				// the option to use taBind on an input or textarea is required as it will sanitize all input into it correctly.
+				var _isContentEditable = element.attr('contenteditable') !== undefined && element.attr('contenteditable');
+				var _isInputFriendly = _isContentEditable || element[0].tagName.toLowerCase() === 'textarea' || element[0].tagName.toLowerCase() === 'input';
+				var _isReadonly = false;
+				var _focussed = false;
+				var _disableSanitizer = attrs.taUnsafeSanitizer || taOptions.disableSanitizer;
+				
+				// defaults to the paragraph element, but we need the line-break or it doesn't allow you to type into the empty element
+				// non IE is '<p><br/></p>', ie is '<p></p>' as for once IE gets it correct...
+				var _defaultVal, _defaultTest, _trimTest;
+				// set the default to be a paragraph value
+				if(attrs.taDefaultWrap === undefined) attrs.taDefaultWrap = 'p';
+				/* istanbul ignore next: ie specific test */
+				if(attrs.taDefaultWrap === ''){
+					_defaultVal = '';
+					_defaultTest = (ie === undefined)? '<div><br></div>' : (ie >= 11)? '<p><br></p>' : (ie <= 8)? '<P>&nbsp;</P>' : '<p>&nbsp;</p>';
+					_trimTest = (ie === undefined)? /^<div>(\s|&nbsp;)*<\/div>$/ig : /^<p>(\s|&nbsp;)*<\/p>$/ig;
+				}else{
+					_defaultVal = (ie === undefined || ie >= 11)?
+						'<' + attrs.taDefaultWrap + '><br></' + attrs.taDefaultWrap + '>' :
+						(ie <= 8)?
+							'<' + attrs.taDefaultWrap.toUpperCase() + '></' + attrs.taDefaultWrap.toUpperCase() + '>' :
+							'<' + attrs.taDefaultWrap + '></' + attrs.taDefaultWrap + '>';
+					_defaultTest = (ie === undefined || ie >= 11)?
+						'<' + attrs.taDefaultWrap + '><br></' + attrs.taDefaultWrap + '>' :
+						(ie <= 8)?
+							'<' + attrs.taDefaultWrap.toUpperCase() + '>&nbsp;</' + attrs.taDefaultWrap.toUpperCase() + '>' :
+							'<' + attrs.taDefaultWrap + '>&nbsp;</' + attrs.taDefaultWrap + '>';
+					_trimTest = new RegExp('^<' + attrs.taDefaultWrap + '>(\\s|&nbsp;)*<\\/' + attrs.taDefaultWrap + '>$', 'ig');
+				}
+				
+				element.addClass('ta-bind');
+
+				// in here we are undoing the converts used elsewhere to prevent the < > and & being displayed when they shouldn't in the code.
+				var _compileHtml = function(){
+					if(_isContentEditable) return element[0].innerHTML;
+					if(_isInputFriendly) return element.val();
+					throw ('textAngular Error: attempting to update non-editable taBind');
+				};
+				
+				var _setViewValue = function(val){
+					if(!val) val = _compileHtml();
+					if(val === _defaultTest || val.match(_trimTest)){
+						// this avoids us from tripping the ng-pristine flag if we click in and out with out typing
+						if(ngModel.$viewValue !== '') ngModel.$setViewValue('');
+					}else{
+						if(ngModel.$viewValue !== val) ngModel.$setViewValue(val);
+					}
+				};
+				
+				//used for updating when inserting wrapped elements
+				scope.$parent['updateTaBind' + (attrs.id || '')] = function(){
+					if(!_isReadonly) _setViewValue();
+				};
+				
+				//this code is used to update the models when data is entered/deleted
+				if(_isInputFriendly){
+					if(!_isContentEditable){
+						element.on('paste cut', function(){
+							// timeout to next is needed as otherwise the paste/cut event has not finished actually changing the display
+							if(!_isReadonly) $timeout(function(){
+								ngModel.$setViewValue(_compileHtml());
+							}, 0);
+						});
+						// if a textarea or input just add in change and blur handlers, everything else is done by angulars input directive
+						element.on('change blur', function(){
+							if(!_isReadonly) ngModel.$setViewValue(_compileHtml());
+						});
+					}else{
+						element.on('cut', function(e){
+							// timeout to next is needed as otherwise the paste/cut event has not finished actually changing the display
+							if(!_isReadonly)
+								$timeout(function(){
+									_setViewValue();
+								}, 0);
+							else e.preventDefault();
+						});
+						element.on('paste', function(e, eventData){
+							/* istanbul ignore else: this is for catching the jqLite testing*/
+							if(eventData) angular.extend(e, eventData);
+							var text;
+							// for non-ie
+							if(e.clipboardData || (e.originalEvent && e.originalEvent.clipboardData))
+								text = (e.originalEvent || e).clipboardData.getData('text/plain');
+							// for ie
+							else if($window.clipboardData)
+								text = $window.clipboardData.getData('Text');
+							// if theres non text data and we aren't in read-only do default
+							if(!text && !_isReadonly) return true;
+							// prevent the default paste command
+							e.preventDefault();
+							if(!_isReadonly){
+								var _working = angular.element('<div></div>');
+								_working[0].innerHTML = text;
+								// this strips out all HTML tags
+								text = _working.text();
+								if ($document[0].selection){
+									var range = $document[0].selection.createRange();
+									range.pasteHTML(text);
+								}
+								else{
+									$document[0].execCommand('insertText', false, text);
+								}
+								_setViewValue();
+							}
+						});
+
+						// all the code specific to contenteditable divs
+						element.on('keyup', function(event, eventData){
+							/* istanbul ignore else: this is for catching the jqLite testing*/
+							if(eventData) angular.extend(event, eventData);
+							if(!_isReadonly){
+								// if enter - insert new taDefaultWrap, if shift+enter insert <br/>
+								if(_defaultVal !== '' && event.keyCode === 13){
+									if(!event.shiftKey){
+										// new paragraph, br should be caught correctly
+										var selection = taSelection.getSelectionElement();
+										if(selection.tagName.toLowerCase() !== attrs.taDefaultWrap && selection.tagName.toLowerCase() !== 'li' && (selection.innerHTML.trim() === '' || selection.innerHTML.trim() === '<br>')){
+											var _new = angular.element(_defaultVal);
+											angular.element(selection).replaceWith(_new);
+											taSelection.setSelectionToElementStart(_new[0]);
+										}
+									}
+								}
+								var val = _compileHtml();
+								if(_defaultVal !== '' && val.trim() === ''){
+									element[0].innerHTML = _defaultVal;
+									taSelection.setSelectionToElementStart(element.children()[0]);
+								}
+								_setViewValue(val);
+							}
+						});
+
+						element.on('blur', function(){
+							_focussed = false;
+							/* istanbul ignore else: if readonly don't update model */
+							if(!_isReadonly){
+								_setViewValue();
+							}
+							ngModel.$render();
+						});
+
+						// Placeholders not supported on ie 8 and below
+						if(attrs.placeholder && (ie > 8 || ie === undefined)){
+							var ruleIndex;
+							if(attrs.id) ruleIndex = addCSSRule('#' + attrs.id + '.placeholder-text:before', 'content: "' + attrs.placeholder + '"');
+							else throw('textAngular Error: An unique ID is required for placeholders to work');
+
+							scope.$on('$destroy', function(){
+								removeCSSRule(ruleIndex);
+							});
+						}
+
+						element.on('focus', function(){
+							_focussed = true;
+							ngModel.$render();
+						});
+						
+						// prevent propagation on mousedown in editor, see #206
+						element.on('mousedown', function(event, eventData){
+							/* istanbul ignore else: this is for catching the jqLite testing*/
+							if(eventData) angular.extend(event, eventData);
+							event.stopPropagation(); 
+						});
+					}
+				}
+				
+				// catch DOM XSS via taSanitize
+				// Sanitizing both ways is identical
+				var _sanitize = function(unsafe){
+					return (ngModel.$oldViewValue = taSanitize(taFixChrome(unsafe), ngModel.$oldViewValue, _disableSanitizer));
+				};
+				
+				// trigger the validation calls
+				var _validity = function(value){
+					if(attrs.required) ngModel.$setValidity('required', !(!value || value.trim() === _defaultTest || value.trim().match(_trimTest) || value.trim() === ''));
+					return value;
+				};
+				// parsers trigger from the above keyup function or any other time that the viewValue is updated and parses it for storage in the ngModel
+				ngModel.$parsers.push(_sanitize);
+				ngModel.$parsers.push(_validity);
+				// because textAngular is bi-directional (which is awesome) we need to also sanitize values going in from the server
+				ngModel.$formatters.push(_sanitize);
+				ngModel.$formatters.push(_validity);
+
+				var selectorClickHandler = function(event){
+					// emit the element-select event, pass the element
+					scope.$emit('ta-element-select', this);
+					event.preventDefault();
+					return false;
+				};
+				var fileDropHandler = function(event, eventData){
+					/* istanbul ignore else: this is for catching the jqLite testing*/
+					if(eventData) angular.extend(event, eventData);
+					// emit the drop event, pass the element, preventing should be done elsewhere
+					if(!dropFired && !_isReadonly){
+						dropFired = true;
+						var dataTransfer;
+						if(event.originalEvent) dataTransfer = event.originalEvent.dataTransfer;
+						else dataTransfer = event.dataTransfer;
+						scope.$emit('ta-drop-event', this, event, dataTransfer);
+						$timeout(function(){dropFired = false;}, 100);
+					}
+				};
+
+				//used for updating when inserting wrapped elements
+				scope.$parent['reApplyOnSelectorHandlers' + (attrs.id || '')] = function(){
+					/* istanbul ignore else */
+					if(!_isReadonly) angular.forEach(taSelectableElements, function(selector){
+							// check we don't apply the handler twice
+							element.find(selector)
+								.off('click', selectorClickHandler)
+								.on('click', selectorClickHandler);
+						});
+				};
+				
+				var _setInnerHTML = function(newval){
+					element[0].innerHTML = newval;
+				};
+				
+				// changes to the model variable from outside the html/text inputs
+				ngModel.$render = function(){
+					// catch model being null or undefined
+					var val = ngModel.$viewValue || '';
+					// if the editor isn't focused it needs to be updated, otherwise it's receiving user input
+					if($document[0].activeElement !== element[0]){
+						// Not focussed
+						if(_isContentEditable){
+							// WYSIWYG Mode
+							if(attrs.placeholder){
+								if(val === ''){
+									// blank
+									if(_focussed) element.removeClass('placeholder-text');
+									else element.addClass('placeholder-text');
+									_setInnerHTML(_defaultVal);
+								}else{
+									// not-blank
+									element.removeClass('placeholder-text');
+									_setInnerHTML(val);
+								}
+							}else{
+								_setInnerHTML((val === '') ? _defaultVal : val);
+							}
+							// if in WYSIWYG and readOnly we kill the use of links by clicking
+							if(!_isReadonly){
+								angular.forEach(taSelectableElements, function(selector){
+									element.find(selector).on('click', selectorClickHandler);
+								});
+								element.on('drop', fileDropHandler);
+							}else{
+								element.off('drop', fileDropHandler);
+							}
+						}else if(element[0].tagName.toLowerCase() !== 'textarea' && element[0].tagName.toLowerCase() !== 'input'){
+							// make sure the end user can SEE the html code as a display. This is a read-only display element
+							_setInnerHTML(taApplyCustomRenderers(val));
+						}else{
+							// only for input and textarea inputs
+							element.val(val);
+						}
+					}else{
+						/* istanbul ignore else: in other cases we don't care */
+						if(_isContentEditable){
+							// element is focussed, test for placeholder
+							element.removeClass('placeholder-text');
+						}
+					}
+				};
+				
+				if(attrs.taReadonly){
+					//set initial value
+					_isReadonly = scope.$parent.$eval(attrs.taReadonly);
+					if(_isReadonly){
+						element.addClass('ta-readonly');
+						// we changed to readOnly mode (taReadonly='true')
+						if(element[0].tagName.toLowerCase() === 'textarea' || element[0].tagName.toLowerCase() === 'input'){
+							element.attr('disabled', 'disabled');
+						}
+						if(element.attr('contenteditable') !== undefined && element.attr('contenteditable')){
+							element.removeAttr('contenteditable');
+						}
+					}else{
+						element.removeClass('ta-readonly');
+						// we changed to NOT readOnly mode (taReadonly='false')
+						if(element[0].tagName.toLowerCase() === 'textarea' || element[0].tagName.toLowerCase() === 'input'){
+							element.removeAttr('disabled');
+						}else if(_isContentEditable){
+							element.attr('contenteditable', 'true');
+						}
+					}
+					// taReadonly only has an effect if the taBind element is an input or textarea or has contenteditable='true' on it.
+					// Otherwise it is readonly by default
+					scope.$parent.$watch(attrs.taReadonly, function(newVal, oldVal){
+						if(oldVal === newVal) return;
+						if(newVal){
+							element.addClass('ta-readonly');
+							// we changed to readOnly mode (taReadonly='true')
+							if(element[0].tagName.toLowerCase() === 'textarea' || element[0].tagName.toLowerCase() === 'input'){
+								element.attr('disabled', 'disabled');
+							}
+							if(element.attr('contenteditable') !== undefined && element.attr('contenteditable')){
+								element.removeAttr('contenteditable');
+							}
+							// turn ON selector click handlers
+							angular.forEach(taSelectableElements, function(selector){
+								element.find(selector).on('click', selectorClickHandler);
+							});
+							element.off('drop', fileDropHandler);
+						}else{
+							element.removeClass('ta-readonly');
+							// we changed to NOT readOnly mode (taReadonly='false')
+							if(element[0].tagName.toLowerCase() === 'textarea' || element[0].tagName.toLowerCase() === 'input'){
+								element.removeAttr('disabled');
+							}else if(_isContentEditable){
+								element.attr('contenteditable', 'true');
+							}
+							// remove the selector click handlers
+							angular.forEach(taSelectableElements, function(selector){
+								element.find(selector).off('click', selectorClickHandler);
+							});
+							element.on('drop', fileDropHandler);
+						}
+						_isReadonly = newVal;
+					});
+				}
+
+				// Initialise the selectableElements
+				// if in WYSIWYG and readOnly we kill the use of links by clicking
+				if(_isContentEditable && !_isReadonly){
+					angular.forEach(taSelectableElements, function(selector){
+						element.find(selector).on('click', selectorClickHandler);
+					});
+					element.on('drop', fileDropHandler);
+					element.on('blur', function(){
+						/* istanbul ignore next: webkit fix */
+						if(/AppleWebKit\/([\d.]+)/.exec(navigator.userAgent)) { // detect webkit
+							globalContentEditableBlur = true;
+						}
+					});
+				}
+			}
+		};
+	}]).factory('taApplyCustomRenderers', ['taCustomRenderers', function(taCustomRenderers){
+		return function(val){
+			var element = angular.element('<div></div>');
+			element[0].innerHTML = val;
+
+			angular.forEach(taCustomRenderers, function(renderer){
+				var elements = [];
+				// get elements based on what is defined. If both defined do secondary filter in the forEach after using selector string
+				if(renderer.selector && renderer.selector !== '')
+					elements = element.find(renderer.selector);
+				/* istanbul ignore else: shouldn't fire, if it does we're ignoring everything */
+				else if(renderer.customAttribute && renderer.customAttribute !== '')
+					elements = getByAttribute(element, renderer.customAttribute);
+				// process elements if any found
+				angular.forEach(elements, function(_element){
+					_element = angular.element(_element);
+					if(renderer.selector && renderer.selector !== '' && renderer.customAttribute && renderer.customAttribute !== ''){
+						if(_element.attr(renderer.customAttribute) !== undefined) renderer.renderLogic(_element);
+					} else renderer.renderLogic(_element);
+				});
+			});
+
+			return element[0].innerHTML;
+		};
+	}]).directive('taMaxText', function(){
+		return {
+			restrict: 'A',
+			require: 'ngModel',
+			link: function(scope, elem, attrs, ctrl){
+				var max = parseInt(scope.$eval(attrs.taMaxText));
+				if (isNaN(max)){
+					throw('Max text must be an integer');
+				}
+				attrs.$observe('taMaxText', function(value){
+					max = parseInt(value);
+					if (isNaN(max)){
+						throw('Max text must be an integer');
+					}
+					if (ctrl.$dirty){
+						ctrl.$setViewValue(ctrl.$viewValue);
+					}
+				});
+				function validator (viewValue){
+					var source = angular.element('<div/>');
+					source.html(viewValue);
+					var length = source.text().length;
+					if (length <= max){
+						ctrl.$setValidity('taMaxText', true);
+						return viewValue;
+					}
+					else{
+						ctrl.$setValidity('taMaxText', false);
+						return undefined;
+					}
+				}
+				ctrl.$parsers.unshift(validator);
+			}
+		};
+	}).directive('taMinText', function(){
+		return {
+			restrict: 'A',
+			require: 'ngModel',
+			link: function(scope, elem, attrs, ctrl){
+				var min = parseInt(scope.$eval(attrs.taMinText));
+				if (isNaN(min)){
+					throw('Min text must be an integer');
+				}
+				attrs.$observe('taMinText', function(value){
+					min = parseInt(value);
+					if (isNaN(min)){
+						throw('Min text must be an integer');
+					}
+					if (ctrl.$dirty){
+						ctrl.$setViewValue(ctrl.$viewValue);
+					}
+				});
+				function validator (viewValue){
+					var source = angular.element('<div/>');
+					source.html(viewValue);
+					var length = source.text().length;
+					if (!length || length >= min){
+						ctrl.$setValidity('taMinText', true);
+						return viewValue;
+					}
+					else{
+						ctrl.$setValidity('taMinText', false);
+						return undefined;
+					}
+				}
+				ctrl.$parsers.unshift(validator);
+			}
+		};
+	}).factory('taFixChrome', function(){
+		// get whaterever rubbish is inserted in chrome
+		// should be passed an html string, returns an html string
+		var taFixChrome = function(html){
+			// default wrapper is a span so find all of them
+			var $html = angular.element('<div>' + html + '</div>');
+			var spans = angular.element($html).find('span');
+			for(var s = 0; s < spans.length; s++){
+				var span = angular.element(spans[s]);
+				// chrome specific string that gets inserted into the style attribute, other parts may vary. Second part is specific ONLY to hitting backspace in Headers
+				if(span.attr('style') && span.attr('style').match(/line-height: 1.428571429;|color: inherit; line-height: 1.1;/i)){
+					span.attr('style', span.attr('style').replace(/( |)font-family: inherit;|( |)line-height: 1.428571429;|( |)line-height:1.1;|( |)color: inherit;/ig, ''));
+					if(!span.attr('style') || span.attr('style') === ''){
+						if(span.next().length > 0 && span.next()[0].tagName === 'BR') span.next().remove();
+						span.replaceWith(span[0].innerHTML);
+					}
+				}
+			}
+			// regex to replace ONLY offending styles - these can be inserted into various other tags on delete
+			var result = $html[0].innerHTML.replace(/style="[^"]*?(line-height: 1.428571429;|color: inherit; line-height: 1.1;)[^"]*"/ig, '');
+			// only replace when something has changed, else we get focus problems on inserting lists
+			if(result !== $html[0].innerHTML) $html[0].innerHTML = result;
+			return $html[0].innerHTML;
+		};
+		return taFixChrome;
+	}).factory('taSanitize', ['$sanitize', function taSanitizeFactory($sanitize){
+		return function taSanitize(unsafe, oldsafe, ignore){
+			// unsafe and oldsafe should be valid HTML strings
+			// any exceptions (lets say, color for example) should be made here but with great care
+			// setup unsafe element for modification
+			var unsafeElement = angular.element('<div>' + unsafe + '</div>');
+			// replace all align='...' tags with text-align attributes
+			angular.forEach(getByAttribute(unsafeElement, 'align'), function(element){
+				element.css('text-align', element.attr('align'));
+				element.removeAttr('align');
+			});
+
+			// get the html string back
+			var safe;
+			unsafe = unsafeElement[0].innerHTML;
+			try {
+				safe = $sanitize(unsafe);
+				// do this afterwards, then the $sanitizer should still throw for bad markup
+				if(ignore) safe = unsafe;
+			} catch (e){
+				safe = oldsafe || '';
+			}
+			return safe;
+		};
+	}]).directive('textAngularToolbar', [
+		'$compile', 'textAngularManager', 'taOptions', 'taTools', 'taToolExecuteAction', '$window',
+		function($compile, textAngularManager, taOptions, taTools, taToolExecuteAction, $window){
+			return {
+				scope: {
+					name: '@' // a name IS required
+				},
+				restrict: "EA",
+				link: function(scope, element, attrs){
+					if(!scope.name || scope.name === '') throw('textAngular Error: A toolbar requires a name');
+					angular.extend(scope, angular.copy(taOptions));
+					if(attrs.taToolbar)						scope.toolbar = scope.$parent.$eval(attrs.taToolbar);
+					if(attrs.taToolbarClass)				scope.classes.toolbar = attrs.taToolbarClass;
+					if(attrs.taToolbarGroupClass)			scope.classes.toolbarGroup = attrs.taToolbarGroupClass;
+					if(attrs.taToolbarButtonClass)			scope.classes.toolbarButton = attrs.taToolbarButtonClass;
+					if(attrs.taToolbarActiveButtonClass)	scope.classes.toolbarButtonActive = attrs.taToolbarActiveButtonClass;
+					if(attrs.taFocussedClass)				scope.classes.focussed = attrs.taFocussedClass;
+
+					scope.disabled = true;
+					scope.focussed = false;
+					scope._$element = element;
+					element[0].innerHTML = '';
+					element.addClass("ta-toolbar " + scope.classes.toolbar);
+
+					scope.$watch('focussed', function(){
+						if(scope.focussed) element.addClass(scope.classes.focussed);
+						else element.removeClass(scope.classes.focussed);
+					});
+
+					var setupToolElement = function(toolDefinition, toolScope){
+						var toolElement;
+						if(toolDefinition && toolDefinition.display){
+							toolElement = angular.element(toolDefinition.display);
+						}
+						else toolElement = angular.element("<button type='button'>");
+
+						toolElement.addClass(scope.classes.toolbarButton);
+						toolElement.attr('name', toolScope.name);
+						// important to not take focus from the main text/html entry
+						toolElement.attr('unselectable', 'on');
+						toolElement.attr('ng-disabled', 'isDisabled()');
+						toolElement.attr('tabindex', '-1');
+						toolElement.attr('ng-click', 'executeAction()');
+						toolElement.attr('ng-class', 'displayActiveToolClass(active)');
+
+						if (toolDefinition && toolDefinition.tooltiptext) {
+							toolElement.attr('title', toolDefinition.tooltiptext);
+						}
+
+						toolElement.on('mousedown', function(e, eventData){
+							/* istanbul ignore else: this is for catching the jqLite testing*/
+							if(eventData) angular.extend(e, eventData);
+							// this prevents focusout from firing on the editor when clicking toolbar buttons
+							e.preventDefault();
+							return false;
+						});
+						if(toolDefinition && !toolDefinition.display && !toolScope._display){
+							// first clear out the current contents if any
+							toolElement[0].innerHTML = '';
+							// add the buttonText
+							if(toolDefinition.buttontext) toolElement[0].innerHTML = toolDefinition.buttontext;
+							// add the icon to the front of the button if there is content
+							if(toolDefinition.iconclass){
+								var icon = angular.element('<i>'), content = toolElement[0].innerHTML;
+								icon.addClass(toolDefinition.iconclass);
+								toolElement[0].innerHTML = '';
+								toolElement.append(icon);
+								if(content && content !== '') toolElement.append('&nbsp;' + content);
+							}
+						}
+
+						toolScope._lastToolDefinition = angular.copy(toolDefinition);
+
+						return $compile(toolElement)(toolScope);
+					};
+
+					// Keep a reference for updating the active states later
+					scope.tools = {};
+					// create the tools in the toolbar
+					// default functions and values to prevent errors in testing and on init
+					scope._parent = {
+						disabled: true,
+						showHtml: false,
+						queryFormatBlockState: function(){ return false; },
+						queryCommandState: function(){ return false; }
+					};
+					var defaultChildScope = {
+						$window: $window,
+						$editor: function(){
+							// dynamically gets the editor as it is set
+							return scope._parent;
+						},
+						isDisabled: function(){
+							// to set your own disabled logic set a function or boolean on the tool called 'disabled'
+							return ( // this bracket is important as without it it just returns the first bracket and ignores the rest
+								// when the button's disabled function/value evaluates to true
+								this.$eval('disabled') || this.$eval('disabled()') ||
+								// all buttons except the HTML Switch button should be disabled in the showHtml (RAW html) mode
+								(this.name !== 'html' && this.$editor().showHtml) ||
+								// if the toolbar is disabled
+								this.$parent.disabled ||
+								// if the current editor is disabled
+								this.$editor().disabled
+							);
+						},
+						displayActiveToolClass: function(active){
+							return (active)? scope.classes.toolbarButtonActive : '';
+						},
+						executeAction: taToolExecuteAction
+					};
+
+					angular.forEach(scope.toolbar, function(group){
+						// setup the toolbar group
+						var groupElement = angular.element("<div>");
+						groupElement.addClass(scope.classes.toolbarGroup);
+						angular.forEach(group, function(tool){
+							// init and add the tools to the group
+							// a tool name (key name from taTools struct)
+							//creates a child scope of the main angularText scope and then extends the childScope with the functions of this particular tool
+							// reference to the scope and element kept
+							scope.tools[tool] = angular.extend(scope.$new(true), taTools[tool], defaultChildScope, {name: tool});
+							scope.tools[tool].$element = setupToolElement(taTools[tool], scope.tools[tool]);
+							// append the tool compiled with the childScope to the group element
+							groupElement.append(scope.tools[tool].$element);
+						});
+						// append the group to the toolbar
+						element.append(groupElement);
+					});
+
+					// update a tool
+					// if a value is set to null, remove from the display
+					// when forceNew is set to true it will ignore all previous settings, used to reset to taTools definition
+					// to reset to defaults pass in taTools[key] as _newTool and forceNew as true, ie `updateToolDisplay(key, taTools[key], true);`
+					scope.updateToolDisplay = function(key, _newTool, forceNew){
+						var toolInstance = scope.tools[key];
+						if(toolInstance){
+							// get the last toolDefinition, then override with the new definition
+							if(toolInstance._lastToolDefinition && !forceNew) _newTool = angular.extend({}, toolInstance._lastToolDefinition, _newTool);
+							if(_newTool.buttontext === null && _newTool.iconclass === null && _newTool.display === null)
+								throw('textAngular Error: Tool Definition for updating "' + key + '" does not have a valid display/iconclass/buttontext value');
+
+							// if tool is defined on this toolbar, update/redo the tool
+							if(_newTool.buttontext === null){
+								delete _newTool.buttontext;
+							}
+							if(_newTool.iconclass === null){
+								delete _newTool.iconclass;
+							}
+							if(_newTool.display === null){
+								delete _newTool.display;
+							}
+
+							var toolElement = setupToolElement(_newTool, toolInstance);
+							toolInstance.$element.replaceWith(toolElement);
+							toolInstance.$element = toolElement;
+						}
+					};
+
+					// we assume here that all values passed are valid and correct
+					scope.addTool = function(key, _newTool, groupIndex, index){
+						scope.tools[key] = angular.extend(scope.$new(true), taTools[key], defaultChildScope, {name: key});
+						scope.tools[key].$element = setupToolElement(taTools[key], scope.tools[key]);
+						var group;
+						if(groupIndex === undefined) groupIndex = scope.toolbar.length - 1;
+						group = angular.element(element.children()[groupIndex]);
+
+						if(index === undefined){
+							group.append(scope.tools[key].$element);
+							scope.toolbar[groupIndex][scope.toolbar[groupIndex].length - 1] = key;
+						}else{
+							group.children().eq(index).after(scope.tools[key].$element);
+							scope.toolbar[groupIndex][index] = key;
+						}
+					};
+
+					textAngularManager.registerToolbar(scope);
+
+					scope.$on('$destroy', function(){
+						textAngularManager.unregisterToolbar(scope.name);
+					});
+				}
+			};
+		}
+	]).service('taToolExecuteAction', ['$q', function($q){
+		// this must be called on a toolScope or instance
+		return function(editor){
+			if(editor !== undefined) this.$editor = function(){ return editor; };
+			var deferred = $q.defer(),
+				promise = deferred.promise,
+				_editor = this.$editor();
+			promise['finally'](function(){
+				_editor.endAction.call(_editor);
+			});
+			// pass into the action the deferred function and also the function to reload the current selection if rangy available
+			var result;
+			try{
+				result = this.action(deferred, _editor.startAction());
+			}catch(any){}
+			if(result || result === undefined){
+				// if true or undefined is returned then the action has finished. Otherwise the deferred action will be resolved manually.
+				deferred.resolve();
+			}
+		};
+	}]).service('textAngularManager', ['taToolExecuteAction', 'taTools', 'taRegisterTool', function(taToolExecuteAction, taTools, taRegisterTool){
+		// this service is used to manage all textAngular editors and toolbars.
+		// All publicly published functions that modify/need to access the toolbar or editor scopes should be in here
+		// these contain references to all the editors and toolbars that have been initialised in this app
+		var toolbars = {}, editors = {};
+		// when we focus into a toolbar, we need to set the TOOLBAR's $parent to be the toolbars it's linked to.
+		// We also need to set the tools to be updated to be the toolbars...
+		return {
+			// register an editor and the toolbars that it is affected by
+			registerEditor: function(name, scope, targetToolbars){
+				// targetToolbars are optional, we don't require a toolbar to function
+				if(!name || name === '') throw('textAngular Error: An editor requires a name');
+				if(!scope) throw('textAngular Error: An editor requires a scope');
+				if(editors[name]) throw('textAngular Error: An Editor with name "' + name + '" already exists');
+				// _toolbars is an ARRAY of toolbar scopes
+				var _toolbars = [];
+				angular.forEach(targetToolbars, function(_name){
+					if(toolbars[_name]) _toolbars.push(toolbars[_name]);
+					// if it doesn't exist it may not have been compiled yet and it will be added later
+				});
+				editors[name] = {
+					scope: scope,
+					toolbars: targetToolbars,
+					_registerToolbar: function(toolbarScope){
+						// add to the list late
+						if(this.toolbars.indexOf(toolbarScope.name) >= 0) _toolbars.push(toolbarScope);
+					},
+					// this is a suite of functions the editor should use to update all it's linked toolbars
+					editorFunctions: {
+						disable: function(){
+							// disable all linked toolbars
+							angular.forEach(_toolbars, function(toolbarScope){ toolbarScope.disabled = true; });
+						},
+						enable: function(){
+							// enable all linked toolbars
+							angular.forEach(_toolbars, function(toolbarScope){ toolbarScope.disabled = false; });
+						},
+						focus: function(){
+							// this should be called when the editor is focussed
+							angular.forEach(_toolbars, function(toolbarScope){
+								toolbarScope._parent = scope;
+								toolbarScope.disabled = false;
+								toolbarScope.focussed = true;
+							});
+						},
+						unfocus: function(){
+							// this should be called when the editor becomes unfocussed
+							angular.forEach(_toolbars, function(toolbarScope){
+								toolbarScope.disabled = true;
+								toolbarScope.focussed = false;
+							});
+						},
+						updateSelectedStyles: function(selectedElement){
+							// update the active state of all buttons on liked toolbars
+							angular.forEach(_toolbars, function(toolbarScope){
+								angular.forEach(toolbarScope.tools, function(toolScope){
+									if(toolScope.activeState){
+										toolScope.active = toolScope.activeState(selectedElement);
+									}
+								});
+							});
+						},
+						sendKeyCommand: function(event){
+							// we return true if we applied an action, false otherwise
+							var result = false;
+							if(event.ctrlKey || event.metaKey) angular.forEach(taTools, function(tool, name){
+								if(tool.commandKeyCode && tool.commandKeyCode === event.which){
+									for(var _t = 0; _t < _toolbars.length; _t++){
+										if(_toolbars[_t].tools[name] !== undefined){
+											taToolExecuteAction.call(_toolbars[_t].tools[name], scope);
+											result = true;
+											break;
+										}
+									}
+								}
+							});
+							return result;
+						},
+						triggerElementSelect: function(event, element){
+							// search through the taTools to see if a match for the tag is made.
+							// if there is, see if the tool is on a registered toolbar and not disabled.
+							// NOTE: This can trigger on MULTIPLE tools simultaneously.
+							var elementHasAttrs = function(_element, attrs){
+								var result = true;
+								for(var i = 0; i < attrs.length; i++) result = result && _element.attr(attrs[i]);
+								return result;
+							};
+							var workerTools = [];
+							var unfilteredTools = {};
+							var result = false;
+							element = angular.element(element);
+							// get all valid tools by element name, keep track if one matches the
+							var onlyWithAttrsFilter = false;
+							angular.forEach(taTools, function(tool, name){
+								if(
+									tool.onElementSelect &&
+									tool.onElementSelect.element &&
+									tool.onElementSelect.element.toLowerCase() === element[0].tagName.toLowerCase() &&
+									(!tool.onElementSelect.filter || tool.onElementSelect.filter(element))
+								){
+									// this should only end up true if the element matches the only attributes
+									onlyWithAttrsFilter = onlyWithAttrsFilter ||
+										(angular.isArray(tool.onElementSelect.onlyWithAttrs) && elementHasAttrs(element, tool.onElementSelect.onlyWithAttrs));
+									if(!tool.onElementSelect.onlyWithAttrs || elementHasAttrs(element, tool.onElementSelect.onlyWithAttrs)) unfilteredTools[name] = tool;
+								}
+							});
+							// if we matched attributes to filter on, then filter, else continue
+							if(onlyWithAttrsFilter){
+								angular.forEach(unfilteredTools, function(tool, name){
+									if(tool.onElementSelect.onlyWithAttrs && elementHasAttrs(element, tool.onElementSelect.onlyWithAttrs)) workerTools.push({'name': name, 'tool': tool});
+								});
+								// sort most specific (most attrs to find) first
+								workerTools.sort(function(a,b){
+									return b.tool.onElementSelect.onlyWithAttrs.length - a.tool.onElementSelect.onlyWithAttrs.length;
+								});
+							}else{
+								angular.forEach(unfilteredTools, function(tool, name){
+									workerTools.push({'name': name, 'tool': tool});
+								});
+							}
+							// Run the actions on the first visible filtered tool only
+							if(workerTools.length > 0){
+								for(var _i = 0; _i < workerTools.length; _i++){
+									var tool = workerTools[_i].tool;
+									var name = workerTools[_i].name;
+									for(var _t = 0; _t < _toolbars.length; _t++){
+										if(_toolbars[_t].tools[name] !== undefined){
+											tool.onElementSelect.action.call(_toolbars[_t].tools[name], event, element, scope);
+											result = true;
+											break;
+										}
+									}
+									if(result) break; 
+								}
+							}
+							return result;
+						}
+					}
+				};
+				return editors[name].editorFunctions;
+			},
+			// retrieve editor by name, largely used by testing suites only
+			retrieveEditor: function(name){
+				return editors[name];
+			},
+			unregisterEditor: function(name){
+				delete editors[name];
+			},
+			// registers a toolbar such that it can be linked to editors
+			registerToolbar: function(scope){
+				if(!scope) throw('textAngular Error: A toolbar requires a scope');
+				if(!scope.name || scope.name === '') throw('textAngular Error: A toolbar requires a name');
+				if(toolbars[scope.name]) throw('textAngular Error: A toolbar with name "' + scope.name + '" already exists');
+				toolbars[scope.name] = scope;
+				angular.forEach(editors, function(_editor){
+					_editor._registerToolbar(scope);
+				});
+			},
+			// retrieve toolbar by name, largely used by testing suites only
+			retrieveToolbar: function(name){
+				return toolbars[name];
+			},
+			// retrieve toolbars by editor name, largely used by testing suites only
+			retrieveToolbarsViaEditor: function(name){
+				var result = [], _this = this;
+				angular.forEach(this.retrieveEditor(name).toolbars, function(name){
+					result.push(_this.retrieveToolbar(name));
+				});
+				return result;
+			},
+			unregisterToolbar: function(name){
+				delete toolbars[name];
+			},
+			// functions for updating the toolbar buttons display
+			updateToolsDisplay: function(newTaTools){
+				// pass a partial struct of the taTools, this allows us to update the tools on the fly, will not change the defaults.
+				var _this = this;
+				angular.forEach(newTaTools, function(_newTool, key){
+					_this.updateToolDisplay(key, _newTool);
+				});
+			},
+			// this function resets all toolbars to their default tool definitions
+			resetToolsDisplay: function(){
+				var _this = this;
+				angular.forEach(taTools, function(_newTool, key){
+					_this.resetToolDisplay(key);
+				});
+			},
+			// update a tool on all toolbars
+			updateToolDisplay: function(toolKey, _newTool){
+				var _this = this;
+				angular.forEach(toolbars, function(toolbarScope, toolbarKey){
+					_this.updateToolbarToolDisplay(toolbarKey, toolKey, _newTool);
+				});
+			},
+			// resets a tool to the default/starting state on all toolbars
+			resetToolDisplay: function(toolKey){
+				var _this = this;
+				angular.forEach(toolbars, function(toolbarScope, toolbarKey){
+					_this.resetToolbarToolDisplay(toolbarKey, toolKey);
+				});
+			},
+			// update a tool on a specific toolbar
+			updateToolbarToolDisplay: function(toolbarKey, toolKey, _newTool){
+				if(toolbars[toolbarKey]) toolbars[toolbarKey].updateToolDisplay(toolKey, _newTool);
+				else throw('textAngular Error: No Toolbar with name "' + toolbarKey + '" exists');
+			},
+			// reset a tool on a specific toolbar to it's default starting value
+			resetToolbarToolDisplay: function(toolbarKey, toolKey){
+				if(toolbars[toolbarKey]) toolbars[toolbarKey].updateToolDisplay(toolKey, taTools[toolKey], true);
+				else throw('textAngular Error: No Toolbar with name "' + toolbarKey + '" exists');
+			},
+			// removes a tool from all toolbars and it's definition
+			removeTool: function(toolKey){
+				delete taTools[toolKey];
+				angular.forEach(toolbars, function(toolbarScope){
+					delete toolbarScope.tools[toolKey];
+					for(var i = 0; i < toolbarScope.toolbar.length; i++){
+						var toolbarIndex;
+						for(var j = 0; j < toolbarScope.toolbar[i].length; j++){
+							if(toolbarScope.toolbar[i][j] === toolKey){
+								toolbarIndex = {
+									group: i,
+									index: j
+								};
+								break;
+							}
+							if(toolbarIndex !== undefined) break;
+						}
+						if(toolbarIndex !== undefined){
+							toolbarScope.toolbar[toolbarIndex.group].slice(toolbarIndex.index, 1);
+							toolbarScope._$element.children().eq(toolbarIndex.group).children().eq(toolbarIndex.index).remove();
+						}
+					}
+				});
+			},
+			// toolkey, toolDefinition are required. If group is not specified will pick the last group, if index isnt defined will append to group
+			addTool: function(toolKey, toolDefinition, group, index){
+				taRegisterTool(toolKey, toolDefinition);
+				angular.forEach(toolbars, function(toolbarScope){
+					toolbarScope.addTool(toolKey, toolDefinition, group, index);
+				});
+			},
+			// adds a Tool but only to one toolbar not all
+			addToolToToolbar: function(toolKey, toolDefinition, toolbarKey, group, index){
+				taRegisterTool(toolKey, toolDefinition);
+				toolbars[toolbarKey].addTool(toolKey, toolDefinition, group, index);
+			},
+			// this is used when externally the html of an editor has been changed and textAngular needs to be notified to update the model.
+			// this will call a $digest if not already happening
+			refreshEditor: function(name){
+				if(editors[name]){
+					editors[name].scope.updateTaBindtaTextElement();
+					/* istanbul ignore else: phase catch */
+					if(!editors[name].scope.$$phase) editors[name].scope.$digest();
+				}else throw('textAngular Error: No Editor with name "' + name + '" exists');
+			}
+		};
+	}]).service('taSelection', ['$window', '$document',
+	/* istanbul ignore next: all browser specifics and PhantomJS dosen't seem to support half of it */
+	function($window, $document){
+		// need to dereference the document else the calls don't work correctly
+		var _document = $document[0];
+		var nextNode = function(node) {
+			if (node.hasChildNodes()) {
+				return node.firstChild;
+			} else {
+				while (node && !node.nextSibling) {
+					node = node.parentNode;
+				}
+				if (!node) {
+					return null;
+				}
+				return node.nextSibling;
+			}
+		};
+		var getRangeSelectedNodes = function(range) {
+			var node = range.startContainer;
+			var endNode = range.endContainer;
+
+			// Special case for a range that is contained within a single node
+			if (node === endNode) {
+				return [node];
+			}
+			// Iterate nodes until we hit the end container
+			var rangeNodes = [];
+			while (node && node !== endNode) {
+				node = nextNode(node);
+				if(node.parentNode === range.commonAncestorContainer) rangeNodes.push(node);
+			}
+			// Add partially selected nodes at the start of the range
+			node = range.startContainer;
+			while (node && node !== range.commonAncestorContainer) {
+				if(node.parentNode === range.commonAncestorContainer) rangeNodes.unshift(node);
+				node = node.parentNode;
+			}
+			return rangeNodes;
+		};
+		return {
+			getSelection: function(){
+				var range, sel, container;
+				if (_document.selection && _document.selection.createRange) {
+					// IE case
+					range = _document.selection.createRange();
+					container = range.parentElement();
+				} else if ($window.getSelection) {
+					sel = $window.getSelection();
+					if (sel.getRangeAt) {
+						if (sel.rangeCount > 0) {
+							range = sel.getRangeAt(0);
+						}
+					} else {
+						// Old WebKit selection object has no getRangeAt, so
+						// create a range from other selection properties
+						range = _document.createRange();
+						range.setStart(sel.anchorNode, sel.anchorOffset);
+						range.setEnd(sel.focusNode, sel.focusOffset);
+						
+						// Handle the case when the selection was selected backwards (from the end to the start in the document)
+						if (range.collapsed !== sel.isCollapsed) {
+							range.setStart(sel.focusNode, sel.focusOffset);
+							range.setEnd(sel.anchorNode, sel.anchorOffset);
+						}
+					}
+
+					if (range) {
+						container = range.commonAncestorContainer;
+
+						// Check if the container is a text node and return its parent if so
+						container = container.nodeType === 3 ? container.parentNode : container;
+					}
+				}
+				return {
+					start: {
+						element: range.startContainer,
+						offset: range.startOffset
+					},
+					end: {
+						element: range.endContainer,
+						offset: range.endOffset
+					},
+					container: container
+					
+				};
+			},
+			getOnlySelectedElements: function(){
+				if (window.getSelection) {
+					var sel = $window.getSelection();
+					if (!sel.isCollapsed) {
+						return getRangeSelectedNodes(sel.getRangeAt(0));
+					}
+				}
+				return [];
+			},
+			// Some basic selection functions
+			getSelectionElement: function () {
+				this.getSelection().container;
+			},
+			setSelectionToElementStart: function (el){
+				if (_document.createRange && $window.getSelection) {
+					var range = _document.createRange();
+					range.selectNodeContents(el);
+					range.setStart(el, 0);
+					range.setEnd(el, 0);
+
+					var sel = $window.getSelection();
+					sel.removeAllRanges();
+					sel.addRange(range);
+				} else if (_document.selection && _document.body.createTextRange) {
+					var textRange = _document.body.createTextRange();
+					textRange.moveToElementText(el);
+					textRange.collapse(true);
+					textRange.moveEnd("character", 0);
+					textRange.moveStart("character", 0);
+					textRange.select();
+				}
+			},
+			setSelectionToElementEnd: function (el){
+				if (_document.createRange && $window.getSelection) {
+					var range = _document.createRange();
+					range.selectNodeContents(el);
+					range.collapse(false);
+
+					var sel = $window.getSelection();
+					sel.removeAllRanges();
+					sel.addRange(range);
+				} else if (_document.selection && _document.body.createTextRange) {
+					var textRange = _document.body.createTextRange();
+					textRange.moveToElementText(el);
+					textRange.collapse(false);
+					textRange.select();
+				}
+			}
+		};
+	}]);
+})();
+
+/*
+textAngular
+Author : Austin Anderson
+License : 2013 MIT
+Version 1.2.2
+
+See README.md or https://github.com/fraywing/textAngular/wiki for requirements and use.
+*/
+angular.module('textAngularSetup', [])
+	
+// Here we set up the global display defaults, to set your own use a angular $provider#decorator.
+.value('taOptions',  {
+	toolbar: [
+		['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre'],
+		['bold', 'italics', 'underline', 'ul', 'ol'],
+		['justifyLeft','justifyCenter','justifyRight'],
+		['html', 'insertImage', 'insertLink', 'insertVideo']
+	],
+	classes: {
+		focussed: "focussed",
+		toolbar: "btn-toolbar",
+		toolbarGroup: "btn-group",
+		toolbarButton: "btn btn-default btn-sm",
+		toolbarButtonActive: "active",
+		disabled: "disabled",
+		textEditor: 'form-control',
+		htmlEditor: 'form-control'
+	},
+	setup: {
+		// wysiwyg mode
+		textEditorSetup: function($element){ /* Do some processing here */ },
+		// raw html
+		htmlEditorSetup: function($element){ /* Do some processing here */ }
+	},
+	defaultFileDropHandler:
+		/* istanbul ignore next: untestable image processing */
+		function(file, insertAction){
+			var reader = new FileReader();
+			if(file.type.substring(0, 5) === 'image'){
+				reader.onload = function() {
+					if(reader.result !== '') insertAction('insertImage', reader.result, true);
+				};
+
+				reader.readAsDataURL(file);
+				return true;
+			}
+			return false;
+		}
+})
+
+// This is the element selector string that is used to catch click events within a taBind, prevents the default and $emits a 'ta-element-select' event
+// these are individually used in an angular.element().find() call. What can go here depends on whether you have full jQuery loaded or just jQLite with angularjs.
+// div is only used as div.ta-insert-video caught in filter.
+.value('taSelectableElements', ['a','img'])
+
+// This is an array of objects with the following options:
+//				selector: <string> a jqLite or jQuery selector string
+//				customAttribute: <string> an attribute to search for
+//				renderLogic: <function(element)>
+// Both or one of selector and customAttribute must be defined.
+.value('taCustomRenderers', [
+	{
+		// Parse back out: '<div class="ta-insert-video" ta-insert-video src="' + urlLink + '" allowfullscreen="true" width="300" frameborder="0" height="250"></div>'
+		// To correct video element. For now only support youtube
+		selector: 'img',
+		customAttribute: 'ta-insert-video',
+		renderLogic: function(element){
+			var iframe = angular.element('<iframe></iframe>');
+			var attributes = element.prop("attributes");
+			// loop through element attributes and apply them on iframe
+			angular.forEach(attributes, function(attr) {
+				iframe.attr(attr.name, attr.value);
+			});
+			iframe.attr('src', iframe.attr('ta-insert-video'));
+			element.replaceWith(iframe);
+		}
+	}
+])
+
+.constant('taTranslations', {
+	// moved to sub-elements
+	//toggleHTML: "Toggle HTML",
+	//insertImage: "Please enter a image URL to insert",
+	//insertLink: "Please enter a URL to insert",
+	//insertVideo: "Please enter a youtube URL to embed",
+	html: {
+		buttontext: 'HTML',
+		tooltip: 'Toggle html / Rich Text'
+	},
+	// tooltip for heading - might be worth splitting
+	heading: {
+		tooltip: 'Heading '
+	},
+	p: {
+		tooltip: 'Paragraph'
+	},
+	pre: {
+		tooltip: 'Preformatted text'
+	},
+	ul: {
+		tooltip: 'Unordered List'
+	},
+	ol: {
+		tooltip: 'Ordered List'
+	},
+	quote: {
+		tooltip: 'Quote/unqoute selection or paragraph'
+	},
+	undo: {
+		tooltip: 'Undo'
+	},
+	redo: {
+		tooltip: 'Redo'
+	},
+	mark: {
+		tooltip: 'Highlight'
+	},
+	bold: {
+		tooltip: 'Bold'
+	},
+	italic: {
+		tooltip: 'Italic'
+	},
+	underline: {
+		tooltip: 'Underline'
+	},
+	justifyLeft: {
+		tooltip: 'Align text left'
+	},
+	justifyRight: {
+		tooltip: 'Align text right'
+	},
+	justifyCenter: {
+		tooltip: 'Center'
+	},
+	indent: {
+		tooltip: 'Increase indent'
+	},
+	outdent: {
+		tooltip: 'Decrease indent'
+	},
+	clear: {
+		tooltip: 'Clear formatting'
+	},
+	insertImage: {
+		dialogPrompt: 'Please enter an image URL to insert',
+		tooltip: 'Insert image',
+		hotkey: 'the - possibly language dependent hotkey ... for some future implementation'
+	},
+	insertVideo: {
+		tooltip: 'Insert video',
+		dialogPrompt: 'Please enter a youtube URL to embed'
+	},
+	insertLink: {
+		tooltip: 'Insert / edit link',
+		dialogPrompt: "Please enter a URL to insert"
+	}
+})
+.run(['taRegisterTool', '$window', 'taTranslations', 'taSelection', function(taRegisterTool, $window, taTranslations, taSelection){
+	taRegisterTool("html", {
+		buttontext: taTranslations.html.buttontext,
+		tooltiptext: taTranslations.html.tooltip,
+		action: function(){
+			this.$editor().switchView();
+		},
+		activeState: function(){
+			return this.$editor().showHtml;
+		}
+	});
+	// add the Header tools
+	// convenience functions so that the loop works correctly
+	var _retActiveStateFunction = function(q){
+		return function(){ return this.$editor().queryFormatBlockState(q); };
+	};
+	var headerAction = function(){
+		return this.$editor().wrapSelection("formatBlock", "<" + this.name.toUpperCase() +">");
+	};
+	angular.forEach(['h1','h2','h3','h4','h5','h6'], function(h){
+		taRegisterTool(h.toLowerCase(), {
+			buttontext: h.toUpperCase(),
+			tooltiptext: taTranslations.heading.tooltip + h.charAt(1),
+			action: headerAction,
+			activeState: _retActiveStateFunction(h.toLowerCase())
+		});
+	});
+	taRegisterTool('p', {
+		buttontext: 'P',
+		tooltiptext: taTranslations.p.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("formatBlock", "<P>");
+		},
+		activeState: function(){ return this.$editor().queryFormatBlockState('p'); }
+	});
+	// key: pre -> taTranslations[key].tooltip, taTranslations[key].buttontext
+	taRegisterTool('pre', {
+		buttontext: 'pre',
+		tooltiptext: taTranslations.pre.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("formatBlock", "<PRE>");
+		},
+		activeState: function(){ return this.$editor().queryFormatBlockState('pre'); }
+	});
+	taRegisterTool('ul', {
+		iconclass: 'fa fa-list-ul',
+		tooltiptext: taTranslations.ul.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("insertUnorderedList", null);
+		},
+		activeState: function(){ return this.$editor().queryCommandState('insertUnorderedList'); }
+	});
+	taRegisterTool('ol', {
+		iconclass: 'fa fa-list-ol',
+		tooltiptext: taTranslations.ol.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("insertOrderedList", null);
+		},
+		activeState: function(){ return this.$editor().queryCommandState('insertOrderedList'); }
+	});
+	taRegisterTool('quote', {
+		iconclass: 'fa fa-quote-right',
+		tooltiptext: taTranslations.quote.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("formatBlock", "<BLOCKQUOTE>");
+		},
+		activeState: function(){ return this.$editor().queryFormatBlockState('blockquote'); }
+	});
+	taRegisterTool('undo', {
+		iconclass: 'fa fa-undo',
+		tooltiptext: taTranslations.undo.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("undo", null);
+		}
+	});
+	taRegisterTool('redo', {
+		iconclass: 'fa fa-repeat',
+		tooltiptext: taTranslations.redo.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("redo", null);
+		}
+	});
+	taRegisterTool('bold', {
+		iconclass: 'fa fa-bold',
+		tooltiptext: taTranslations.bold.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("bold", null);
+		},
+		activeState: function(){
+			return this.$editor().queryCommandState('bold');
+		},
+		commandKeyCode: 98
+	});
+    taRegisterTool('mark', {
+        iconclass: 'fa fa-flash',
+        tooltiptext: taTranslations.mark.tooltip,
+        action: function(){
+			return this.$editor().wrapSelection("formatInline", "<MARK>");
+		},
+		activeState: function(){ return this.$editor().queryFormatBlockState('mark'); }
+    });
+	taRegisterTool('justifyLeft', {
+		iconclass: 'fa fa-align-left',
+		tooltiptext: taTranslations.justifyLeft.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("justifyLeft", null);
+		},
+		activeState: function(commonElement){
+			var result = false;
+			if(commonElement) result = commonElement.css('text-align') === 'left' || commonElement.attr('align') === 'left' ||
+				(commonElement.css('text-align') !== 'right' && commonElement.css('text-align') !== 'center' && !this.$editor().queryCommandState('justifyRight') && !this.$editor().queryCommandState('justifyCenter'));
+			result = result || this.$editor().queryCommandState('justifyLeft');
+			return result;
+		}
+	});
+	taRegisterTool('justifyRight', {
+		iconclass: 'fa fa-align-right',
+		tooltiptext: taTranslations.justifyRight.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("justifyRight", null);
+		},
+		activeState: function(commonElement){
+			var result = false;
+			if(commonElement) result = commonElement.css('text-align') === 'right';
+			result = result || this.$editor().queryCommandState('justifyRight');
+			return result;
+		}
+	});
+	taRegisterTool('justifyCenter', {
+		iconclass: 'fa fa-align-center',
+		tooltiptext: taTranslations.justifyCenter.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("justifyCenter", null);
+		},
+		activeState: function(commonElement){
+			var result = false;
+			if(commonElement) result = commonElement.css('text-align') === 'center';
+			result = result || this.$editor().queryCommandState('justifyCenter');
+			return result;
+		}
+	});
+	taRegisterTool('indent', {
+		iconclass: 'fa fa-indent',
+		tooltiptext: taTranslations.indent.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("indent", null);
+		},
+		activeState: function(){
+			return this.$editor().queryFormatBlockState('blockquote'); 
+		}
+	});
+	taRegisterTool('outdent', {
+		iconclass: 'fa fa-outdent',
+		tooltiptext: taTranslations.outdent.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("outdent", null);
+		},
+		activeState: function(){
+			return false;
+		}
+	});
+	taRegisterTool('italics', {
+		iconclass: 'fa fa-italic',
+		tooltiptext: taTranslations.italic.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("italic", null);
+		},
+		activeState: function(){
+			return this.$editor().queryCommandState('italic');
+		},
+		commandKeyCode: 105
+	});
+	taRegisterTool('underline', {
+		iconclass: 'fa fa-underline',
+		tooltiptext: taTranslations.underline.tooltip,
+		action: function(){
+			return this.$editor().wrapSelection("underline", null);
+		},
+		activeState: function(){
+			return this.$editor().queryCommandState('underline');
+		},
+		commandKeyCode: 117
+	});
+	taRegisterTool('clear', {
+		iconclass: 'fa fa-ban',
+		tooltiptext: taTranslations.clear.tooltip,
+		action: function(deferred, restoreSelection){
+			this.$editor().wrapSelection("removeFormat", null);
+			var possibleNodes = angular.element(taSelection.getSelectionElement());
+			// remove lists
+			var removeListElements = function(list){
+				list = angular.element(list);
+				var prevElement = list;
+				angular.forEach(list.children(), function(liElem){
+					var newElem = angular.element('<p></p>');
+					newElem.html(angular.element(liElem).html());
+					prevElement.after(newElem);
+					prevElement = newElem;
+				});
+				list.remove();
+			};
+			angular.forEach(possibleNodes.find("ul"), removeListElements);
+			angular.forEach(possibleNodes.find("ol"), removeListElements);
+			// clear out all class attributes. These do not seem to be cleared via removeFormat
+			var $editor = this.$editor();
+			var recursiveRemoveClass = function(node){
+				node = angular.element(node);
+				if(node[0] !== $editor.displayElements.text[0]) node.removeAttr('class');
+				angular.forEach(node.children(), recursiveRemoveClass);
+			};
+			angular.forEach(possibleNodes, recursiveRemoveClass);
+			// check if in list. If not in list then use formatBlock option
+			if(possibleNodes[0].tagName.toLowerCase() !== 'li' &&
+				possibleNodes[0].tagName.toLowerCase() !== 'ol' &&
+				possibleNodes[0].tagName.toLowerCase() !== 'ul') this.$editor().wrapSelection("formatBlock", "<p>");
+			restoreSelection();
+		}
+	});
+	
+	var imgOnSelectAction = function(event, $element, editorScope){
+		// setup the editor toolbar
+		// Credit to the work at http://hackerwins.github.io/summernote/ for this editbar logic/display
+		var finishEdit = function(){
+			editorScope.updateTaBindtaTextElement();
+			editorScope.hidePopover();
+		};
+		event.preventDefault();
+		editorScope.displayElements.popover.css('width', '375px');
+		var container = editorScope.displayElements.popoverContainer;
+		container.empty();
+		var buttonGroup = angular.element('<div class="btn-group" style="padding-right: 6px;">');
+		var fullButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1">100% </button>');
+		fullButton.on('click', function(event){
+			event.preventDefault();
+			$element.css({
+				'width': '100%',
+				'height': ''
+			});
+			finishEdit();
+		});
+		var halfButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1">50% </button>');
+		halfButton.on('click', function(event){
+			event.preventDefault();
+			$element.css({
+				'width': '50%',
+				'height': ''
+			});
+			finishEdit();
+		});
+		var quartButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1">25% </button>');
+		quartButton.on('click', function(event){
+			event.preventDefault();
+			$element.css({
+				'width': '25%',
+				'height': ''
+			});
+			finishEdit();
+		});
+		var resetButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1">Reset</button>');
+		resetButton.on('click', function(event){
+			event.preventDefault();
+			$element.css({
+				width: '',
+				height: ''
+			});
+			finishEdit();
+		});
+		buttonGroup.append(fullButton);
+		buttonGroup.append(halfButton);
+		buttonGroup.append(quartButton);
+		buttonGroup.append(resetButton);
+		container.append(buttonGroup);
+		
+		buttonGroup = angular.element('<div class="btn-group" style="padding-right: 6px;">');
+		var floatLeft = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-align-left"></i></button>');
+		floatLeft.on('click', function(event){
+			event.preventDefault();
+			$element.css('float', 'left');
+			finishEdit();
+		});
+		var floatRight = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-align-right"></i></button>');
+		floatRight.on('click', function(event){
+			event.preventDefault();
+			$element.css('float', 'right');
+			finishEdit();
+		});
+		var floatNone = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-align-justify"></i></button>');
+		floatNone.on('click', function(event){
+			event.preventDefault();
+			$element.css('float', '');
+			finishEdit();
+		});
+		buttonGroup.append(floatLeft);
+		buttonGroup.append(floatNone);
+		buttonGroup.append(floatRight);
+		container.append(buttonGroup);
+		
+		buttonGroup = angular.element('<div class="btn-group">');
+		var remove = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-trash-o"></i></button>');
+		remove.on('click', function(event){
+			event.preventDefault();
+			$element.remove();
+			finishEdit();
+		});
+		buttonGroup.append(remove);
+		container.append(buttonGroup);
+		
+		editorScope.showPopover($element);
+		editorScope.showResizeOverlay($element);
+	};
+	
+	taRegisterTool('insertImage', {
+		iconclass: 'fa fa-picture-o',
+		tooltiptext: taTranslations.insertImage.tooltip,
+		action: function(){
+			var imageLink;
+			imageLink = $window.prompt(taTranslations.insertImage.dialogPrompt, 'http://');
+			if(imageLink && imageLink !== '' && imageLink !== 'http://'){
+				return this.$editor().wrapSelection('insertImage', imageLink, true);
+			}
+		},
+		onElementSelect: {
+			element: 'img',
+			action: imgOnSelectAction
+		}
+	});
+	taRegisterTool('insertVideo', {
+		iconclass: 'fa fa-youtube-play',
+		tooltiptext: taTranslations.insertVideo.tooltip,
+		action: function(){
+			var urlPrompt;
+			urlPrompt = $window.prompt(taTranslations.insertVideo.dialogPrompt, 'http://');
+			if (urlPrompt && urlPrompt !== '' && urlPrompt !== 'http://') {
+				// get the video ID
+				var ids = urlPrompt.match(/(\?|&)v=[^&]*/);
+				/* istanbul ignore else: if it's invalid don't worry - though probably should show some kind of error message */
+				if(ids.length > 0){
+					// create the embed link
+					var urlLink = "http://www.youtube.com/embed/" + ids[0].substring(3);
+					// create the HTML
+					var embed = '<img class="ta-insert-video" ta-insert-video="' + urlLink + '" contenteditable="false" src="" allowfullscreen="true" width="300" frameborder="0" height="250"/>';
+					// insert
+					return this.$editor().wrapSelection('insertHTML', embed, true);
+				}
+			}
+		},
+		onElementSelect: {
+			element: 'img',
+			onlyWithAttrs: ['ta-insert-video'],
+			action: imgOnSelectAction
+		}
+	});	
+	taRegisterTool('insertLink', {
+		tooltiptext: taTranslations.insertLink.tooltip,
+		iconclass: 'fa fa-link',
+		action: function(){
+			var urlLink;
+			urlLink = $window.prompt(taTranslations.insertLink.dialogPrompt, 'http://');
+			if(urlLink && urlLink !== '' && urlLink !== 'http://'){
+				return this.$editor().wrapSelection('createLink', urlLink, true);
+			}
+		},
+		activeState: function(commonElement){
+			if(commonElement) return commonElement[0].tagName === 'A';
+			return false;
+		},
+		onElementSelect: {
+			element: 'a',
+			action: function(event, $element, editorScope){
+				// setup the editor toolbar
+				// Credit to the work at http://hackerwins.github.io/summernote/ for this editbar logic
+				event.preventDefault();
+				editorScope.displayElements.popover.css('width', '435px');
+				var container = editorScope.displayElements.popoverContainer;
+				container.empty();
+				container.css('line-height', '28px');
+				var link = angular.element('<a href="' + $element.attr('href') + '" target="_blank">' + $element.attr('href') + '</a>');
+				link.css({
+					'display': 'inline-block',
+					'max-width': '200px',
+					'overflow': 'hidden',
+					'text-overflow': 'ellipsis',
+					'white-space': 'nowrap',
+					'vertical-align': 'middle'
+				});
+				container.append(link);
+				var buttonGroup = angular.element('<div class="btn-group pull-right">');
+				var reLinkButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on"><i class="fa fa-edit icon-edit"></i></button>');
+				reLinkButton.on('click', function(event){
+					event.preventDefault();
+					var urlLink = $window.prompt(taTranslations.insertLink.dialogPrompt, $element.attr('href'));
+					if(urlLink && urlLink !== '' && urlLink !== 'http://'){
+						$element.attr('href', urlLink);
+						editorScope.updateTaBindtaTextElement();
+					}
+					editorScope.hidePopover();
+				});
+				buttonGroup.append(reLinkButton);
+				var unLinkButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on"><i class="fa fa-unlink icon-unlink"></i></button>');
+				// directly before this click event is fired a digest is fired off whereby the reference to $element is orphaned off
+				unLinkButton.on('click', function(event){
+					event.preventDefault();
+					$element.replaceWith($element.contents());
+					editorScope.updateTaBindtaTextElement();
+					editorScope.hidePopover();
+				});
+				buttonGroup.append(unLinkButton);
+				var targetToggle = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on">Open in New Window</button>');
+				if($element.attr('target') === '_blank'){
+					targetToggle.addClass('active');
+				}
+				targetToggle.on('click', function(event){
+					event.preventDefault();
+					$element.attr('target', ($element.attr('target') === '_blank') ? '' : '_blank');
+					targetToggle.toggleClass('active');
+					editorScope.updateTaBindtaTextElement();
+				});
+				buttonGroup.append(targetToggle);
+				container.append(buttonGroup);
+				editorScope.showPopover($element);
+			}
+		}
+	});
+}]);
+
 /**
  * Main module
  */
@@ -49805,7 +53283,7 @@ angular.module('ngStrap.typeahead').run(['$templateCache', function($templateCac
 })(window, document);
 'use strict';
 
-var mo = angular.module("mo",["ui.router","ngAnimate", "ngStrap","angularCharts"]);
+var mo = angular.module("mo",["ui.router","ngAnimate","textAngular", "ngStrap","angularCharts"]);
 mo.constant('constants', {
 	tpl_url: 'http://xinziji.com/assets/',
 })
@@ -50020,14 +53498,23 @@ mo.constant('constants', {
 		set_user_roles: function(obj, cb){ post("/api/user/set_roles", obj, cb);},
 
 		get_cats: function(cb){ get("/api/cats", cb);},
+		get_cats_by_type: function(type, cb){ get("/api/cats/type/" + type, cb);},
 		set_cat: function(obj, cb){post("/api/cat", obj, cb);},
 		del_cat_by_id: function(id, cb){get("/api/cat/del/"+id, cb);},
 
 		get_video_by_id: function(id, cb){ get("/api/video/"+id, cb); },
+		get_videos: function(cb) { get("/api/videos", cb); },
 		get_videos_by_catid: function(id, cb) { get("/api/videos/catid/" + id, cb); },
 		get_videos_by_keyword: function(keyword, cb) { get("/api/videos/keyword/" + keyword, cb); },
 		del_video_by_id: function(id, cb) { get("/api/video/del/"+id, cb);},
 		set_video: function(obj, cb){ post("/api/video", obj, cb);},
+
+		get_article_by_id: function(id, cb){ get("/api/article/"+id, cb); },
+		get_articles: function(cb) { get("/api/articles", cb); },
+		get_articles_by_catid: function(id, cb) { get("/api/articles/catid/" + id, cb); },
+		get_articles_by_keyword: function(keyword, cb) { get("/api/articles/keyword/" + keyword, cb); },
+		del_article_by_id: function(id, cb) { get("/api/article/del/"+id, cb);},
+		set_article: function(obj, cb){ post("/api/article", obj, cb);},
 
 		set_visit: function(obj, cb){ post("/api/visit", obj, cb); },
 		get_visit_videos: function(cb){ get("/api/visit/videos", cb); },
@@ -50159,1043 +53646,7 @@ mo.filter("filterCats", ["$window",function($window) {
 'use strict';
 mo.constant('dropdownConfig', {openClass: 'open'})
 
-mo.factory('$transition', ['$q', '$timeout', '$rootScope', function($q, $timeout, $rootScope) {
-	var $transition = function(element, trigger, options) {
-		options = options || {};
-		var deferred = $q.defer();
-		var endEventName = $transition[options.animation ? 'animationEndEventName' : 'transitionEndEventName'];
-		var transitionEndHandler = function(event) {
-			$rootScope.$apply(function() {
-				element.unbind(endEventName, transitionEndHandler);
-				deferred.resolve(element);
-			});
-		};
-		if (endEventName) { element.bind(endEventName, transitionEndHandler);}
 
-		$timeout(function() {
-			if ( angular.isString(trigger) ) {
-				element.addClass(trigger);
-			} else if ( angular.isFunction(trigger) ) {
-				trigger(element);
-			} else if ( angular.isObject(trigger) ) {
-				element.css(trigger);
-			}
-			if ( !endEventName ) {deferred.resolve(element);}
-		});
-
-		deferred.promise.cancel = function() {
-			if ( endEventName ) {
-				element.unbind(endEventName, transitionEndHandler);
-			}
-			deferred.reject('Transition cancelled');
-		};
-		return deferred.promise;
-	};
-
-	var transElement = document.createElement('trans');
-	var transitionEndEventNames = {
-		'WebkitTransition': 'webkitTransitionEnd',
-		'MozTransition': 'transitionend',
-		'OTransition': 'oTransitionEnd',
-		'transition': 'transitionend'
-	};
-	var animationEndEventNames = {
-		'WebkitTransition': 'webkitAnimationEnd',
-		'MozTransition': 'animationend',
-		'OTransition': 'oAnimationEnd',
-		'transition': 'animationend'
-	};
-	function findEndEventName(endEventNames) {
-		for (var name in endEventNames){
-			if (transElement.style[name] !== undefined) {return endEventNames[name];}
-		}
-	}
-	$transition.transitionEndEventName = findEndEventName(transitionEndEventNames);
-	$transition.animationEndEventName = findEndEventName(animationEndEventNames);
-	return $transition;
-}])
-.service('dropdownService', ['$document', function($document) {
-  var openScope = null;
-
-  this.open = function( dropdownScope ) {
-    if ( !openScope ) {
-      $document.bind('click', closeDropdown);
-      $document.bind('keydown', escapeKeyBind);
-    }
-
-    if ( openScope && openScope !== dropdownScope ) {
-        openScope.isOpen = false;
-    }
-
-    openScope = dropdownScope;
-  };
-
-  this.close = function( dropdownScope ) {
-    if ( openScope === dropdownScope ) {
-      openScope = null;
-      $document.unbind('click', closeDropdown);
-      $document.unbind('keydown', escapeKeyBind);
-    }
-  };
-
-  var closeDropdown = function( evt ) {
-    // This method may still be called during the same mouse event that
-    // unbound this event handler. So check openScope before proceeding.
-    if (!openScope) { return; }
-
-    var toggleElement = openScope.getToggleElement();
-    if ( evt && toggleElement && toggleElement[0].contains(evt.target) ) {
-        return;
-    }
-
-    openScope.$apply(function() {
-      openScope.isOpen = false;
-    });
-  };
-
-  var escapeKeyBind = function( evt ) {
-    if ( evt.which === 27 ) {
-      openScope.focusToggleElement();
-      closeDropdown();
-    }
-  };
-}])
-.controller('DropdownController', ['$scope', '$attrs', '$parse', 'dropdownConfig', 'dropdownService', '$animate', function($scope, $attrs, $parse, dropdownConfig, dropdownService, $animate) {
-	var 	self = this,
-		scope = $scope.$new(), // create a child scope so we are not polluting original one
-		openClass = dropdownConfig.openClass,
-		getIsOpen,
-		setIsOpen = angular.noop,
-		toggleInvoker = $attrs.onToggle ? $parse($attrs.onToggle) : angular.noop;
-
-	this.init = function( element ) {
-		self.$element = element;
-		if ( $attrs.isOpen ) {
-			getIsOpen = $parse($attrs.isOpen);
-			setIsOpen = getIsOpen.assign;
-			$scope.$watch(getIsOpen, function(value) {scope.isOpen = !!value;});
-		}
-	};
-	this.toggle = function( open ) {
-		return scope.isOpen = arguments.length ? !!open : !scope.isOpen;
-	};
-	this.isOpen = function() {
-		return scope.isOpen;
-	};
-	scope.getToggleElement = function() {
-		return self.toggleElement;
-	};
-	scope.focusToggleElement = function() {
-		if ( self.toggleElement ) {
-			self.toggleElement[0].focus();
-		}
-	};
-	scope.$watch('isOpen', function( isOpen, wasOpen ) {
-		$animate[isOpen ? 'addClass' : 'removeClass'](self.$element, openClass);
-		if ( isOpen ) {
-			scope.focusToggleElement();
-			dropdownService.open( scope );
-		} else {
-			dropdownService.close( scope );
-		}
-		setIsOpen($scope, isOpen);
-		if (angular.isDefined(isOpen) && isOpen !== wasOpen) {toggleInvoker($scope, { open: !!isOpen });}
-	});
-	$scope.$on('$locationChangeSuccess', function() {
-		scope.isOpen = false;
-	});
-	$scope.$on('$destroy', function() {
-		scope.$destroy();
-	});
-}])
-.directive('dropdown', function() {
-	return {
-		controller: 'DropdownController',
-		link: function(scope, element, attrs, dropdownCtrl) {
-			dropdownCtrl.init( element );
-		}
-	};
-})
-.directive('dropdownToggle', function() {
-	return {
-		require: '?^dropdown',
-		link: function(scope, element, attrs, dropdownCtrl) {
-			if ( !dropdownCtrl ) {return;}
-			dropdownCtrl.toggleElement = element;
-			var toggleDropdown = function(event) {
-				event.preventDefault();
-				if ( !element.hasClass('disabled') && !attrs.disabled ) {
-					scope.$apply(function() {dropdownCtrl.toggle();});
-				}
-			};
-			element.bind('click', toggleDropdown);
-			element.attr({ 'aria-haspopup': true, 'aria-expanded': false });
-			scope.$watch(dropdownCtrl.isOpen, function( isOpen ) {
-				element.attr('aria-expanded', !!isOpen);
-			});
-			scope.$on('$destroy', function() {
-				element.unbind('click', toggleDropdown);
-			});
-		}
-	};
-})
-.directive( 'ngTabs', function() {
-	return {
-		scope: true,
-		restrict: 'EAC',
-		controller: function( $scope ) {
-			$scope.tabs = {
-				index: 0,
-				count: 0
-			};
-			this.headIndex = 0;
-			this.bodyIndex = 0;
-			this.getTabHeadIndex = function() {
-				return $scope.tabs.count = ++this.headIndex;
-			};
-			this.getTabBodyIndex = function() {
-				return ++this.bodyIndex;
-			};
-		}
-	};
-})
-.directive( 'ngTabHead', function() {
-	return {
-		scope: false,
-		restrict: 'EAC',
-		require: '^ngTabs',
-		link: function( scope, element, attributes, controller ) {
-			var index = controller.getTabHeadIndex();
-			var value = attributes.ngTabHead;
-			var active = /[-*\/%^=!<>&|]/.test( value ) ? scope.$eval( value ) : !!value;
-			scope.tabs.index = scope.tabs.index || ( active ? index : null );
-			element.bind( 'click', function() {
-				scope.tabs.index = index;
-				scope.$$phase || scope.$apply();
-			});
-			scope.$watch( 'tabs.index', function() {
-				element.toggleClass( 'active', scope.tabs.index === index );
-			});
-		}
-	};
-})
-.directive( 'ngTabBody', function() {
-	return {
-		scope: false,
-		restrict: 'EAC',
-		require: '^ngTabs',
-		link: function( scope, element, attributes, controller ) {
-			var index = controller.getTabBodyIndex();
-			scope.$watch( 'tabs.index', function() {
-				element.toggleClass( attributes.ngTabBody + ' active', scope.tabs.index === index );
-			});
-		}
-	};
-})
-.directive('formlyForm', function formlyForm($timeout) {
-	'use strict';
-	return {
-		restrict: 'E',
-		template: '<form class="formly" role="form"><formly-field ng-repeat="field in fields" options="field" form-result="result" form-id="options.uniqueFormId" ng-if="!field.hide" index="$index"></formly-field><div ng-transclude></div></form>',
-		replace: true,
-		transclude: true,
-		scope: {
-			fields: '=',
-			options: '=?',
-			result: '=',
-			formOnParentScope: '=name'
-		},
-		compile: function () {
-			return {
-				post: function (scope, ele, attr) {scope.formOnParentScope = scope[attr.name];}
-			};
-		},
-		controller: function($scope, $element, $parse) {
-			angular.forEach($scope.fields, function(field) {
-				if (angular.isDefined(field.watch) &&
-					angular.isDefined(field.watch.expression) &&
-					angular.isDefined(field.watch.listener)) {
-					var watchExpression = field.watch.expression;
-					if (angular.isFunction(watchExpression)) {
-						watchExpression = function() {
-							var args = Array.prototype.slice.call(arguments, 0);
-							args.unshift(field);
-							return field.watch.expression.apply(this, args);
-						};
-					}
-					$scope.$watch(watchExpression, function() {
-						var args = Array.prototype.slice.call(arguments, 0);
-						args.unshift(field);
-						return field.watch.listener.apply(this, args);
-					});
-				}
-			});
-			$scope.$watch('result', function onResultUpdate() {
-				angular.forEach($scope.fields, function(field) {
-					if (field.hideExpression) {
-						field.hide = $parse(field.hideExpression)($scope.result);
-					}
-					if (field.requiredExpression) {
-						field.required = $parse(field.requiredExpression)($scope.result);
-					}
-				});
-			}, true);
-			$scope.$on('formly-dynamic-name-update', function(e) {
-				e.stopPropagation();
-				if (!$scope.formOnParentScope) {
-					return;
-				}
-				$timeout(function() {
-					angular.forEach($scope.fields, function(field) {
-						var formField = $scope.formOnParentScope[field.key];
-						if (formField) {
-							field.formField = formField;
-						}
-					});
-				});
-			});
-		}
-	};
-})
-.directive('formlyField', function formlyField($http, $compile, $templateCache) {
-	'use strict';
-	return {
-		restrict: 'AE',
-		transclude: true,
-		scope: {
-			optionsData: '&options',
-			formId: '=formId',
-			index: '=index',
-			result: '=formResult'
-		},
-		link: function fieldLink($scope, $element) {
-			var templateOptions = 0;
-			templateOptions += $scope.options.template ? 1 : 0;
-			templateOptions += $scope.options.type ? 1 : 0;
-			if (templateOptions === 0) {
-				console.warn('Formly Error: template type \'' + $scope.options.type + '\' not supported. On element:', $element);
-				return;
-			} else if (templateOptions > 1) {
-				console.warn('Formly Error: You must only provide a type, template, or templateUrl for a field. On element:', $element);
-			}
-			//return $http.get(options.templateUrl,{cache: $templateCache}).then(function (result) {return result.data;});
-			var url = "fields/formly-field-" + $scope.options.type + ".html";
-			console.log(url);
-			var templateData = angular.element($templateCache.get("fields/formly-field-" + $scope.options.type + ".html"));
-			console.log("mydebug");
-			console.log(templateData);
-			$http.get("fields/formly-field-" + $scope.options.type + ".html", {cache: $templateCache}).then(function(response) {
-				setElementTemplate(response.data);
-			}, function(error) {
-				console.warn('Formly Error: Problem loading template for ' + $scope.options.type, error);
-			});
-			function setElementTemplate(templateData) {
-				$element.html(templateData);
-				$compile($element.contents())($scope);
-			}
-		},
-		controller: function fieldController($scope) {
-			$scope.options = $scope.optionsData();
-			var type = $scope.options.type;
-			if (!type && $scope.options.template) {
-				type = 'template';
-			} else if (!type && $scope.options.templateUrl) {
-				type = 'templateUrl';
-			}
-			$scope.id = $scope.formId + type + $scope.index;
-		}
-	};
-})
-.directive('formInput', ['$compile', '$rootScope', '$filter', 'utils', function ($compile, $rootScope, $filter, utils) {
-	return {
-		restrict: 'EA',
-		link: function (scope, element, attrs) {
-//                generate markup for bootstrap forms
-//
-//                Bootstrap 3
-//                Horizontal (default)
-//                <div class="form-group">
-//                    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
-//                    <div class="col-sm-10">
-//                        <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
-//                    </div>
-//                 </div>
-//
-//                Vertical
-//                <div class="form-group">
-//                    <label for="exampleInputEmail1">Email address</label>
-//                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-//                </div>
-//
-//                Inline
-//                <div class="form-group">
-//                    <label class="sr-only" for="exampleInputEmail2">Email address</label>
-//                    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
-//                </div>
-			var sizeMapping = [1, 2, 4, 6, 8, 10, 12], 
-				sizeDescriptions = ['mini', 'small', 'medium', 'large', 'xlarge', 'xxlarge', 'block-level'],
-				defaultSizeOffset = 5, 
-				subkeys = [],
-				tabsSetup = false;
-			var isHorizontalStyle = function (formStyle) { return (!formStyle || formStyle === 'undefined' || ['vertical', 'inline'].indexOf(formStyle) === -1);};
-			var generateNgShow = function (showWhen, model) {
-				function evaluateSide(side) {
-					var result = side;
-					if (typeof side === 'string') {
-						if (side.slice(0, 1) === '$') {
-							result = (model || 'record') + '.';
-							var parts = side.slice(1).split('.');
-							if (parts.length > 1) {
-								var lastBit = parts.pop();result += parts.join('.') + '[$index].' + lastBit;
-							} else {
-								result += side.slice(1);
-							}
-						} else {
-							result = '\'' + side + '\'';
-						}
-					}
-					return result;
-				}
-				var conditionText = ['eq', 'ne', 'gt', 'gte', 'lt', 'lte'],
-				conditionSymbols = ['===', '!==', '>', '>=', '<', '<='],
-				conditionPos = conditionText.indexOf(showWhen.comp);
-				if (conditionPos === -1) {throw new Error('Invalid comparison in showWhen');}
-				return evaluateSide(showWhen.lhs) + conditionSymbols[conditionPos] + evaluateSide(showWhen.rhs);
-			};
-			var generateDefault = function (common, options, fieldInfo) {return '<input ' + common + 'type="' + fieldInfo.type + '" />';};
-			var generateInput = function (fieldInfo, modelString, isRequired, idString, options) {
-				var nameString;
-				if (!modelString) {
-					var modelBase = (options.model || 'record') + '.';
-					modelString = modelBase;
-					if (options.subschema && fieldInfo.name.indexOf('.') !== -1) {
-						var compoundName = fieldInfo.name;
-						var root = options.subschemaRoot;
-						var lastPart = compoundName.slice(root.length+1);
-						if (options.index) {
-							modelString += root + '[' + options.index + '].' + lastPart;
-							idString = 'f_' + modelString.slice(modelBase.length).replace(/(\.|\[|\]\.)/g, '-');
-						} else {
-							modelString += root;
-							if (options.subkey) {
-								modelString += '[' + '$_arrayOffset_' + root.replace(/\./g, '_') + '_' + options.subkeyno + '].' + lastPart;
-								idString = modelString.slice(modelBase.length);
-							} else {
-								modelString += '[$index].' + lastPart;
-								idString = null;
-								nameString = compoundName.replace(/\./g, '-');
-							}
-						}
-					} else {
-						modelString += fieldInfo.name;
-					}
-				}
-				var value, 
-					requiredStr = (isRequired || fieldInfo.required) ? ' required' : '',
-					readonlyStr = fieldInfo.readonly ? ' readonly' : '',
-					placeHolder = fieldInfo.placeHolder,compactClass = '',
-					sizeClassBS3 = '',
-					formControl = '';
-				compactClass = (['horizontal', 'vertical', 'inline'].indexOf(options.formstyle) === -1) ? ' input-sm' : '';
-				sizeClassBS3 = 'col-sm-' + sizeMapping[fieldInfo.size ? sizeDescriptions.indexOf(fieldInfo.size) : defaultSizeOffset];
-				formControl = ' form-control';
-				if (options.formstyle === 'inline') {placeHolder = placeHolder || fieldInfo.label;}
-				var common = 'ng-model="' + modelString + '"' + (idString ? ' id="' + idString + '" name="' + idString + '" ' : ' name="' + nameString + '" ');
-				common += (placeHolder ? ('placeholder="' + placeHolder + '" ') : '');
-				if (fieldInfo.popup) {common += 'title="' + fieldInfo.popup + '" ';}
-				common += addAll('Field', null, options);
-				switch (fieldInfo.type) {
-					case 'select' :
-						common += (fieldInfo.readonly ? 'disabled ' : '');
-						if (fieldInfo.select2) {
-							common += 'class="fng-select2' + formControl + compactClass + sizeClassBS3 + '"';
-							if (fieldInfo.select2.fngAjax) {
-								value = '<div class="input-group">';
-								value += '<input ui-select2="' + fieldInfo.select2.fngAjax + '" ' + common + '>';
-								value += '<span class="input-group-addon' + compactClass + '" data-select2-open="' + idString + '" ';
-								value += '    ng-click="openSelect2($event)"><i class="glyphicon glyphicon-search"></i></span>';
-								value += '</div>';
-							} else if (fieldInfo.select2) {
-								value = '<input ui-select2="' + fieldInfo.select2.s2query + '" ' + (fieldInfo.readonly ? 'disabled ' : '') + common + '>';
-							}
-						} else {
-							value = '<select ' + common + 'class="' + formControl.trim() + compactClass + sizeClassBS3 + '">';
-							if (!isRequired) {value += '<option></option>';}
-							if (angular.isArray(fieldInfo.options)) {
-								angular.forEach(fieldInfo.options, function (optValue) {
-									if (_.isObject(optValue)) {
-										value += '<option value="' + (optValue.val || optValue.id) + '">' + (optValue.label || optValue.text) + '</option>';
-									} else {
-										value += '<option>' + optValue + '</option>';
-									}
-								});
-							} else {
-								value += '<option ng-repeat="option in ' + fieldInfo.options + '">{{option}}</option>';
-							}
-							value += '</select>';
-						}
-						break;
-					case 'radio' :
-						value = '';
-						var separateLines = (options.formstyle !== 'inline' && !fieldInfo.inlineRadio);
-						if (angular.isArray(fieldInfo.options)) {
-							if (options.subschema) {common = common.replace('name="', 'name="{{$index}}-');}
-							angular.forEach(fieldInfo.options, function (optValue) {
-								value += '<input ' + common + 'type="radio"';
-								value += ' value="' + optValue + '">' + optValue;
-								if (separateLines) {value += '<br />';}
-							});
-						} else {
-							var tagType = separateLines ? 'div' : 'span';
-							if (options.subschema) {common = common.replace('$index', '$parent.$index').replace('name="', 'name="{{$parent.$index}}-');}
-							value += '<' + tagType + ' ng-repeat="option in ' + fieldInfo.options + '"><input ' + common + ' type="radio" value="{{option}}"> {{option}} </' + tagType + '> ';
-						}
-						break;
-					case 'checkbox' :
-						value = '<div class="checkbox"><input ' + common + 'type="checkbox"></div>';
-						break;
-					default:
-						var setClass = formControl.trim() + compactClass + sizeClassBS3 + (fieldInfo.class ? ' ' + fieldInfo.class : '');
-						if (setClass.length !== 0) {common += 'class="' + setClass + '"';}
-						if (fieldInfo.add) {common += ' ' + fieldInfo.add + ' ';}
-						common += 'ng-model="' + modelString + '"' + (idString ? ' id="' + idString + '" name="' + idString + '"' : '') + requiredStr + readonlyStr + ' ';
-						if (fieldInfo.type === 'textarea') {
-							if (fieldInfo.rows) {
-								if (fieldInfo.rows === 'auto') {common += 'msd-elastic="\n" class="ng-animate" ';} else {common += 'rows = "' + fieldInfo.rows + '" ';}
-							}
-							if (fieldInfo.editor === 'ckEditor') {
-								common += 'ckeditor = "" ';
-								sizeClassBS3 = 'col-xs-12';
-							}
-							value = '<textarea ' + common + ' />';
-						} else {
-							value = generateDefault(common, options, fieldInfo);
-						}
-				}
-				if (isHorizontalStyle(options.formstyle) && fieldInfo.type !== 'checkbox') {value = '<div class="' + sizeClassBS3 + '">' + value + '</div>';}
-				if (fieldInfo.helpInline && fieldInfo.type !== 'checkbox') {value += '<span class="help-inline">' + fieldInfo.helpInline + '</span>';}
-				if (fieldInfo.help) {value += '<span class="help-block ' + sizeClassBS3 + '">' + fieldInfo.help + '</span>';}
-				return value;
-			};
-			var convertFormStyleToClass = function (aFormStyle) {
-				var result;
-				switch (aFormStyle) {
-					case 'horizontal' : result = 'form-horizontal'; break;
-					case 'vertical' :result = '';break;
-					case 'inline' :result = 'form-inline';break;
-					case 'horizontalCompact' :result = 'form-horizontal compact';break;
-					default:result = 'form-horizontal compact';break;
-				}
-				return result;
-			};
-			var containerInstructions = function (info) {
-				var result = {before: '', after: ''};
-				if (typeof info.containerType === 'function') {
-					result = info.containerType(info);
-				} else {
-					switch (info.containerType) {
-						case 'tab' :result.before = '<tab heading="' + info.title + '">';result.after = '</tab>';break;
-						case 'tabset' :result.before = '<tabset>';result.after = '</tabset>';break;
-						case 'well' :result.before = '<div class="well">';if (info.title) {result.before += '<h4>' + info.title + '</h4>';}result.after = '</div>';break;
-						case 'well-large' :result.before = '<div class="well well-lg well-large">';result.after = '</div>';break;
-						case 'well-small' :result.before = '<div class="well well-sm well-small">';result.after = '</div>';break;
-						case 'fieldset' :result.before = '<fieldset>';if (info.title) {result.before += '<legend>' + info.title + '</legend>';}result.after = '</fieldset>';break;
-						case undefined:break;
-						case null:break;
-						case '':break;
-						default:
-							result.before = '<div class="' + info.containerType + '">';
-							if (info.title) {
-								var titleLook = info.titleTagOrClass || 'h4';
-								if (titleLook.match(/h[1-6]/)) {
-									result.before += '<' + titleLook + '>' + info.title + '</' + titleLook + '>';
-								} else {
-									result.before += '<p class="' + titleLook + '">' + info.title + '</p>';
-								}
-							}
-							result.after = '</div>';
-							break;
-					}
-				}
-				return result;
-			};
-			var generateLabel = function (fieldInfo, addButtonMarkup, options) {
-				var labelHTML = '<label', classes = 'control-label';
-				if (isHorizontalStyle(options.formstyle)) {
-					labelHTML += ' for="' + fieldInfo.id + '"';
-					classes += ' col-sm-2';
-				} else if (options.formstyle === 'inline') {
-					labelHTML += ' for="' + fieldInfo.id + '"';
-					classes += ' sr-only';
-				}
-				labelHTML += addAll('Label', null, options) + ' class="' + classes + '">' + fieldInfo.label + (addButtonMarkup || '') + '</label>';
-				return labelHTML;
-			};
-			var handleField = function (info, options) {
-				info.type = info.type || 'text';
-				info.id = info.id || 'f_' + info.name.replace(/\./g, '_');
-				info.label = (info.label !== undefined) ? (info.label === null ? '' : info.label) : "";
-				var template = '', closeTag = '</div>', classes = 'form-group';
-				if (options.formstyle === 'vertical' && info.size !== 'block-level') {
-					template += '<div class="row">';
-					classes += ' col-sm-' + sizeMapping[info.size ? sizeDescriptions.indexOf(info.size) : defaultSizeOffset];
-				}
-				template += '<div' + addAll('Group', classes, options);
-				var includeIndex = false;
-				if (options.index) {
-					try {
-						parseInt(options.index);
-						includeIndex = true;
-					} catch (err) {
-					}
-				}
-				if (info.showWhen) {
-					if (typeof info.showWhen === 'string') {template += 'ng-show="' + info.showWhen + '"';} else {template += 'ng-show="' + generateNgShow(info.showWhen, options.model) + '"';}
-				}
-				if (includeIndex) {template += ' id="cg_' + info.id.replace('_', '-' + attrs.index + '-') + '">';} else {template += ' id="cg_' + info.id.replace(/\./g, '-') + '">';}
-				if (info.schema) {
-					var niceName = info.name.replace(/\./g, '_');
-					var schemaDefName = '$_schema_' + niceName;
-					scope[schemaDefName] = info.schema;
-					if (info.subkey) {
-						info.subkey.path = info.name;
-						scope[schemaDefName + '_subkey'] = info.subkey;
-						var subKeyArray = angular.isArray(info.subkey) ? info.subkey : [info.subkey];
-						for (var arraySel = 0; arraySel < subKeyArray.length; arraySel++) {
-							var topAndTail = containerInstructions(subKeyArray[arraySel]);
-							template += topAndTail.before;
-							template += processInstructions(info.schema, null, {
-								subschema: true,
-								formStyle: options.formstyle,
-								subschemaRoot: info.name,
-								subkey: schemaDefName + '_subkey',
-								subkeyno: arraySel
-							});
-							template += topAndTail.after;
-						}
-						subkeys.push(info);
-					} else {
-						template += '<div class="schema-head">' + info.label +'</div>' +
-						'<div ng-form class="' + 
-						convertFormStyleToClass(info.formStyle) + '" name="form_' + niceName + '_{{$index}}" class="sub-doc well" id="' + info.id + 'List_{{$index}}" ' +
-							' ng-repeat="subDoc in ' + (options.model || 'record') + '.' + info.name + ' track by $index">' +
-							'   <div class="row' + ' sub-doc">' +
-							'      <div class="pull-left">' + processInstructions(info.schema, false, {subschema: true,subschemaRoot: info.name,formstyle: info.formStyle,model: options.model}) +'</div>';
-						if (!info.noRemove || info.customSubDoc) {
-							template += '   <div class="pull-left sub-doc-btns">';
-							if (info.customSubDoc) {template += info.customSubDoc;}
-							if (!info.noRemove) {template += '      <button name="remove_' + info.id + '_btn" class="remove-btn btn btn-default btn-xs form-btn" ng-click="remove(\'' + info.name + '\',$index,$event)"><i class="glyphicon glyphicon-minus"></i> Remove</button>';}
-							template += '  </div> ';
-						}
-						template += '   </div>' +
-						'</div>';
-						if (!info.noAdd || info.customFooter) {
-							template += '<div class = "schema-foot">';
-							if (info.customFooter) {template += info.customFooter;}
-							if (!info.noAdd) {template += '    <button id="add_' + info.id + '_btn" class="add-btn btn btn-default btn-xs form-btn" ng-click="add(\'' + info.name + '\',$event)"><i class="glyphicon glyphicon-plus"></i> Add</button>';}
-							template += '</div>';
-						}
-					}
-				} else {
-					var controlClass = [];
-					if (isHorizontalStyle(options.formstyle)) {controlClass.push('col-sm-10');}
-					if (info.array) {
-						controlClass.push('fng-array');
-						if (options.formstyle === 'inline') {throw 'Cannot use arrays in an inline form';}
-						var glyphClass = 'glyphicon glyphicon',ngClassString = 'ng-class="skipCols($index)" ';
-						template += generateLabel(info, ' <i id="add_' + info.id + '" ng-click="add(\'' + info.name + '\',$event)" class="' + glyphClass + '-plus-sign"></i>', options) + '<div ' + ngClassString + 'class="' + controlClass.join(' ') + '" id="' + info.id + 'List" ng-repeat="arrayItem in ' +
-							(options.model || 'record') + '.' + info.name + '">' + generateInput(info, 'arrayItem.x', true, info.id + '_{{$index}}', options) +
-							'<i ng-click="remove(\'' + info.name + '\',$index,$event)" id="remove_' + info.id + '_{{$index}}" class="' + glyphClass + '-minus-sign"></i></div>';
-					} else {
-						template += generateLabel(info, null, options);
-						if (controlClass.length > 0) {template += '<div class="' + controlClass.join(' ') + '">';}
-						template += generateInput(info, null, options.required, info.id, options);
-						if (controlClass.length > 0) {template += '</div>';}
-					}
-				}
-				template += closeTag;
-				return template;
-			};
-			var processInstructions = function (instructionsArray, topLevel, options) {
-				var result = '';
-				if (instructionsArray) {
-					for (var anInstruction = 0; anInstruction < instructionsArray.length; anInstruction++) {
-						var info = instructionsArray[anInstruction];
-						if (anInstruction === 0 && topLevel && !options.schema.match(/$_schema_/)) {
-							info.add = info.add ? ' ' + info.add + ' ' : '';
-							if (info.add.indexOf('ui-date') === -1 && !options.noautofocus && !info.containerType) {info.add = info.add + 'autofocus ';}
-						}
-						var callHandleField = true;
-						if (info.directive) {
-							var directiveName = info.directive;
-							var newElement = '<' + directiveName + ' model="' + (options.model || 'record') + '"';
-							var thisElement = element[0];
-							for (var i = 0; i < thisElement.attributes.length; i++) {
-								var thisAttr = thisElement.attributes[i];
-								switch (thisAttr.nodeName) {
-									case 'class' :var classes = thisAttr.nodeValue.replace('ng-scope', '');if (classes.length > 0) {newElement += ' class="' + classes + '"';}break;
-									case 'schema' :var bespokeSchemaDefName = ('bespoke_' + info.name).replace(/\./g, '_');scope[bespokeSchemaDefName] = angular.copy(info);delete scope[bespokeSchemaDefName].directive;newElement += ' schema="' + bespokeSchemaDefName + '"';break;
-									default :newElement += ' ' + thisAttr.nodeName + '="' + thisAttr.nodeValue + '"';
-								}
-							}
-							if (info.add) {newElement += ' ' + info.add;}
-							newElement += '></' + directiveName + '>';
-							result += newElement;
-							callHandleField = false;
-						} else if (info.containerType) {
-							var parts = containerInstructions(info);
-							switch (info.containerType) {
-								case 'tab' :if (!tabsSetup) {tabsSetup = 'forced';result += '<tabset>';}result += parts.before + processInstructions(info.content, null, options) + parts.after;break;
-								case 'tabset' :tabsSetup = true;result += parts.before + processInstructions(info.content, null, options) + parts.after;break;
-								default:result += parts.before + processInstructions(info.content, null, options) + parts.after;break;
-							}
-							callHandleField = false;
-						} else if (options.subkey) {
-							var objectToSearch = angular.isArray(scope[options.subkey]) ? scope[options.subkey][0].keyList : scope[options.subkey].keyList;
-							if (_.find(objectToSearch, function (value, key) {return scope[options.subkey].path + '.' + key === info.name;})) {
-								callHandleField = false;
-							}
-						}
-						if (callHandleField) {result += handleField(info, options);}
-					}
-				} else {
-					console.log('Empty array passed to processInstructions');
-					result = '';
-				}
-				return result;
-			};
-			var unwatch = scope.$watch(attrs.schema, function (newValue) {
-				if (newValue) {
-					newValue = angular.isArray(newValue) ? newValue : [newValue];   // otherwise some old tests stop working for no real reason
-					if (newValue.length > 0) {
-						unwatch();
-						var elementHtml = '';
-						var theRecord = scope[attrs.model || 'record'];      // By default data comes from scope.record
-						theRecord = theRecord || {};
-						if ((attrs.subschema || attrs.model) && !attrs.forceform) {
-							elementHtml = '';
-						} else {
-							scope.topLevelFormName = attrs.name || 'myForm';     // Form name defaults to myForm
-							var customAttrs = '';
-							for (var thisAttr in attrs) {
-								if (attrs.hasOwnProperty(thisAttr)) {
-									if (thisAttr[0] !== '$' && ['name', 'formstyle', 'schema', 'subschema', 'model'].indexOf(thisAttr) === -1) {customAttrs += ' ' + attrs.$attr[thisAttr] + '="' + attrs[thisAttr] + '"';}
-								}
-							}
-							elementHtml = '<form name="' + scope.topLevelFormName + '" class="' + convertFormStyleToClass(attrs.formstyle) + ' novalidate"' + customAttrs + '>';
-						}
-						if (theRecord === scope.topLevelFormName) {throw new Error('Model and Name must be distinct - they are both ' + theRecord);}
-						elementHtml += processInstructions(newValue, true, attrs);
-						if (tabsSetup === 'forced') {elementHtml += '</tabset>';}
-						elementHtml += attrs.subschema ? '' : '</form>';
-						element.replaceWith($compile(elementHtml)(scope));
-						if (subkeys.length > 0) {
-							var unwatch2 = scope.$watch('phase', function (newValue) {
-								if (newValue === 'ready') {
-									unwatch2();
-									for (var subkeyCtr = 0; subkeyCtr < subkeys.length; subkeyCtr++) {
-										var info = subkeys[subkeyCtr],arrayOffset,matching;
-										var arrayToProcess = angular.isArray(info.subkey) ? info.subkey : [info.subkey];
-										var parts = info.name.split('.');
-										var dataVal = theRecord;
-										while (parts.length > 1) {dataVal = dataVal[parts.shift()] || {};}
-										dataVal = dataVal[parts[0]] = dataVal[parts[0]] || [];
-										for (var thisOffset = 0; thisOffset < arrayToProcess.length; thisOffset++) {
-											if (arrayToProcess[thisOffset].selectFunc) {
-												arrayOffset = scope[arrayToProcess[thisOffset].selectFunc](theRecord, info);
-											} else if (arrayToProcess[thisOffset].keyList) {
-												var thisSubkeyList = arrayToProcess[thisOffset].keyList;
-												for (arrayOffset = 0; arrayOffset < dataVal.length; arrayOffset++) {
-													matching = true;
-													for (var keyField in thisSubkeyList) {
-														if (thisSubkeyList.hasOwnProperty(keyField)) {
-															if (dataVal[arrayOffset][keyField] !== thisSubkeyList[keyField] && (!dataVal[arrayOffset][keyField].text || dataVal[arrayOffset][keyField].text !== thisSubkeyList[keyField])) {matching = false;break;}
-														}
-													}
-													if (matching) {break;}
-												}
-												if (!matching) {arrayOffset = theRecord[info.name].push(thisSubkeyList) - 1;}
-											} else {
-												throw new Error('Invalid subkey setup for ' + info.name);
-											}
-											scope['$_arrayOffset_' + info.name.replace(/\./g, '_') + '_' + thisOffset] = arrayOffset;
-										}
-									}
-								}
-							});
-						}
-						$rootScope.$broadcast('formInputDone');
-						if (scope.updateDataDependentDisplay && theRecord && Object.keys(theRecord).length > 0) {scope.updateDataDependentDisplay(theRecord, null, true);}
-					}
-				}
-			}, true);
-			function addAll(type, additionalClasses, options) {
-				var action = 'getAddAll' + type + 'Options';
-				return utils[action](scope, options, additionalClasses) || [];
-			}
-		}
-	};
-}])
-.directive('dynamicForm', ['$q', '$parse', '$http', '$templateCache', '$compile', '$document', '$timeout', function ($q, $parse, $http, $templateCache, $compile, $document, $timeout) {
-	var supported = {
-		'text': {element: 'input', type: 'text', editable: true, textBased: true},
-		'date': {element: 'input', type: 'date', editable: true, textBased: true},
-		'datetime': {element: 'input', type: 'datetime', editable: true, textBased: true},
-		'datetime-local': {element: 'input', type: 'datetime-local', editable: true, textBased: true},
-		'email': {element: 'input', type: 'email', editable: true, textBased: true},
-		'month': {element: 'input', type: 'month', editable: true, textBased: true},
-		'number': {element: 'input', type: 'number', editable: true, textBased: true},
-		'password': {element: 'input', type: 'password', editable: true, textBased: true},
-		'search': {element: 'input', type: 'search', editable: true, textBased: true},
-		'tel': {element: 'input', type: 'tel', editable: true, textBased: true},
-		'textarea': {element: 'textarea', editable: true, textBased: true},
-		'time': {element: 'input', type: 'time', editable: true, textBased: true},
-		'url': {element: 'input', type: 'url', editable: true, textBased: true},
-		'week': {element: 'input', type: 'week', editable: true, textBased: true},
-		'checkbox': {element: 'input', type: 'checkbox', editable: true, textBased: false},
-		'color': {element: 'input', type: 'color', editable: true, textBased: false},
-		'file': {element: 'input', type: 'file', editable: true, textBased: false},
-		'range': {element: 'input', type: 'range', editable: true, textBased: false},
-		'select': {element: 'select', editable: true, textBased: false},
-		'checklist': {element: 'div', editable: false, textBased: false},
-		'fieldset': {element: 'fieldset', editable: false, textBased: false},
-		'radio': {element: 'div', editable: false, textBased: false},
-		'button': {element: 'button', type: 'button', editable: false, textBased: false},
-		'hidden': {element: 'input', type: 'hidden', editable: false, textBased: false},
-		'image': {element: 'input', type: 'image', editable: false, textBased: false},
-		'legend': {element: 'legend', editable: false, textBased: false},
-		'reset': {element: 'button', type: 'reset', editable: false, textBased: false},
-		'submit': {element: 'button', type: 'submit', editable: false, textBased: false}
-	};
-	return {
-		restrict: 'E', // supports using directive as element only
-		link: function ($scope, element, attrs) {
-			var newElement = null,
-			newChild = null,
-			optGroups = {},
-			cbAtt = '',
-			foundOne = false,
-			iterElem = element,
-			model = null;
-			if (angular.isDefined(attrs.ngModel) && (angular.isDefined(attrs.template) || angular.isDefined(attrs.templateUrl)) && !element.hasClass('dynamic-form')) {
-				model = $parse(attrs.ngModel)($scope);
-				(attrs.template ? $q.when($parse(attrs.template)($scope)) :$http.get(attrs.templateUrl, {cache: $templateCache}).then(function (result) {return result.data;})).then(function (template) {
-					var buildFields = function (field, id) {
-						if (!angular.isDefined(supported[field.type]) || supported[field.type] === false) {
-							newElement = angular.element('<span></span>');
-							if (angular.isDefined(field.label)) {angular.element(newElement).html(field.label);}
-							angular.forEach(field, function (val, attr) {
-								if (["label", "type"].indexOf(attr) > -1) {return;}
-								newElement.attr(attr, val);
-							});
-							this.append(newElement);
-							newElement = null;
-						} else {
-							if (!angular.isDefined(field.model)) {field.model = id;}
-							newElement = angular.element($document[0].createElement(supported[field.type].element));
-							if (angular.isDefined(supported[field.type].type)) {newElement.attr('type', supported[field.type].type);}
-							if (angular.isDefined(supported[field.type].editable) && supported[field.type].editable) {
-								newElement.attr('name', field.model);
-								newElement.attr('ng-model', attrs.ngModel + "['" + field.model + "']");
-								if (angular.isDefined(field.readonly)) {newElement.attr('ng-readonly', field.readonly);}
-								if (angular.isDefined(field.required)) {newElement.attr('ng-required', field.required);}
-								if (angular.isDefined(field.val)) {
-									model[field.model] = angular.copy(field.val);
-									newElement.attr('value', field.val);
-								}
-							}
-							if (angular.isDefined(supported[field.type].textBased) && supported[field.type].textBased) {
-								if (angular.isDefined(field.minLength)) {newElement.attr('ng-minlength', field.minLength);}
-								if (angular.isDefined(field.maxLength)) {newElement.attr('ng-maxlength', field.maxLength);}
-								if (angular.isDefined(field.validate)) {newElement.attr('ng-pattern', field.validate);}
-								if (angular.isDefined(field.placeholder)) {newElement.attr('placeholder', field.placeholder);}
-							}
-							if (field.type === 'number' || field.type === 'range') {
-								if (angular.isDefined(field.minValue)) {newElement.attr('min', field.minValue);}
-								if (angular.isDefined(field.maxValue)) {newElement.attr('max', field.maxValue);}
-								if (angular.isDefined(field.step)) {newElement.attr('step', field.step);}
-							}else if (['text', 'textarea'].indexOf(field.type) > -1) {
-								if (angular.isDefined(field.splitBy)) {newElement.attr('ng-list', field.splitBy);}
-							}
-							else if (field.type === 'checkbox') {
-								if (angular.isDefined(field.isOn)) {newElement.attr('ng-true-value', field.isOn);}
-								if (angular.isDefined(field.isOff)) {newElement.attr('ng-false-value', field.isOff);}
-								if (angular.isDefined(field.slaveTo)) {newElement.attr('ng-checked', field.slaveTo);}
-							}else if (field.type === 'checklist') {
-								if (angular.isDefined(field.val)) {model[field.model] = angular.copy(field.val);}
-								if (angular.isDefined(field.options)) {
-									if ( ! (angular.isDefined(model[field.model]) && angular.isObject(model[field.model]))) {model[field.model] = {};}
-									angular.forEach(field.options, function (option, childId) {
-										newChild = angular.element('<input type="checkbox" />');
-										newChild.attr('name', field.model + '.' + childId);
-										newChild.attr('ng-model', attrs.ngModel + "['" + field.model + "']" + "['" + childId + "']");
-										if (angular.isDefined(option['class'])) {newChild.attr('ng-class', option['class']);}
-										if (angular.isDefined(field.disabled)) {newChild.attr('ng-disabled', field.disabled);}
-										if (angular.isDefined(field.readonly)) {newChild.attr('ng-readonly', field.readonly);}
-										if (angular.isDefined(field.required)) {newChild.attr('ng-required', field.required);}
-										if (angular.isDefined(field.callback)) {newChild.attr('ng-change', field.callback);}
-										if (angular.isDefined(option.isOn)) {newChild.attr('ng-true-value', option.isOn);}
-										if (angular.isDefined(option.isOff)) {newChild.attr('ng-false-value', option.isOff);}
-										if (angular.isDefined(option.slaveTo)) {newChild.attr('ng-checked', option.slaveTo);}
-										if (angular.isDefined(option.val)) {
-											model[field.model][childId] = angular.copy(option.val);
-											newChlid.attr('value', field.val);
-										}
-										if (angular.isDefined(option.label)) {
-											newChild = newChild.wrap('<label></label>').parent();
-											newChild.append(document.createTextNode(' ' + option.label));
-										}
-										newElement.append(newChild);
-									});
-								}
-							}else if (field.type === 'radio') {
-								if (angular.isDefined(field.val)) {model[field.model] = angular.copy(field.val);}
-								if (angular.isDefined(field.values)) {
-									angular.forEach(field.values, function (label, val) {
-										newChild = angular.element('<input type="radio" />');
-										newChild.attr('name', field.model);
-										newChild.attr('ng-model', attrs.ngModel + "['" + field.model + "']");
-										if (angular.isDefined(field['class'])) {newChild.attr('ng-class', field['class']);}
-										if (angular.isDefined(field.disabled)) {newChild.attr('ng-disabled', field.disabled);}
-										if (angular.isDefined(field.callback)) {newChild.attr('ng-change', field.callback);}
-										if (angular.isDefined(field.readonly)) {newChild.attr('ng-readonly', field.readonly);}
-										if (angular.isDefined(field.required)) {newChild.attr('ng-required', field.required);}
-										newChild.attr('value', val);
-										if (angular.isDefined(field.val) && field.val === val) {newChild.attr('checked', 'checked');}
-										if (label) {
-											newChild = newChild.wrap('<label></label>').parent();
-											newChild.append(document.createTextNode(' ' + label));
-										}
-										newElement.append(newChild);
-									});
-								}
-							}else if (field.type === 'select') {
-								if (angular.isDefined(field.multiple) && field.multiple !== false) {newElement.attr('multiple', 'multiple');}
-								if (angular.isDefined(field.empty) && field.empty !== false) {newElement.append(angular.element($document[0].createElement('option')).attr('value', '').html(field.empty));}
-								if (angular.isDefined(field.autoOptions)) {
-									newElement.attr('ng-options', field.autoOptions);
-								}else if (angular.isDefined(field.options)) {
-									angular.forEach(field.options, function (option, childId) {
-										newChild = angular.element($document[0].createElement('option'));
-										newChild.attr('value', childId);
-										if (angular.isDefined(option.disabled)) {newChild.attr('ng-disabled', option.disabled);}
-										if (angular.isDefined(option.slaveTo)) {newChild.attr('ng-selected', option.slaveTo);}
-										if (angular.isDefined(option.label)) {newChild.html(option.label);}
-										if (angular.isDefined(option.group)) {
-											if (!angular.isDefined(optGroups[option.group])) {
-												optGroups[option.group] = angular.element($document[0].createElement('optgroup'));
-												optGroups[option.group].attr('label', option.group);
-											}
-											optGroups[option.group].append(newChild);
-										}else {
-											newElement.append(newChild);
-										}
-									});
-									if (!angular.equals(optGroups, {})) {
-										angular.forEach(optGroups, function (optGroup) {
-											newElement.append(optGroup);
-										});
-										optGroups = {};
-									}
-								}
-							}else if (field.type === 'image') {
-								if (angular.isDefined(field.label)) {newElement.attr('alt', field.label);}
-								if (angular.isDefined(field.source)) {newElement.attr('src', field.source);}
-							}else if (field.type === 'hidden') {
-								newElement.attr('name', field.model);
-								newElement.attr('ng-model', attrs.ngModel + "['" + field.model + "']");
-								if (angular.isDefined(field.val)) {
-									model[field.model] = angular.copy(field.val);
-									newElement.attr('value', field.val);
-								}
-							}else if (field.type === 'file') {
-								if (angular.isDefined(field.multiple)) {
-									newElement.attr('multiple', field.multiple);
-								}
-							}
-							else if (field.type === 'fieldset') {
-								if (angular.isDefined(field.fields)) {
-									var workingElement = newElement;
-									angular.forEach(field.fields, buildFields, newElement);
-									newElement = workingElement;
-								}
-							}
-
-							if (field.type !== "radio") {
-								if (angular.isDefined(field['class'])) {newElement.attr('ng-class', field['class']);}
-								if (field.type !== "checklist") {
-									if (angular.isDefined(field.disabled)) {newElement.attr('ng-disabled', field.disabled);}
-									if (angular.isDefined(field.callback)) {
-										if (["button", "fieldset", "image", "legend", "reset", "submit"].indexOf(field.type) > -1) {cbAtt = 'ng-click';}else {cbAtt = 'ng-change';}
-										newElement.attr(cbAtt, field.callback);
-									}
-								}
-							}
-							if (angular.isDefined(field.label)) {
-								if (["image", "hidden"].indexOf(field.type) > -1) {
-									angular.noop();
-								}else if (["fieldset"].indexOf(field.type) > -1) {
-									newElement.prepend(angular.element($document[0].createElement('legend')).html(field.label));
-								}else if (["button", "legend", "reset", "submit"].indexOf(field.type) > -1) {
-									newElement.html(field.label);
-								}else {
-									newElement = newElement.wrap('<label></label>').parent();
-									newElement.prepend(document.createTextNode(field.label + ' '));
-								}
-							}
-							if (angular.isDefined(field.attributes)) {
-								angular.forEach(field.attributes, function (val, attr) {
-									newElement.attr(attr, val);
-								});
-							}
-							this.append(newElement);
-							newElement = null;
-						}
-					};
-					angular.forEach(template, buildFields, element);
-					while (!angular.equals(iterElem.parent(), $document) && !angular.equals(iterElem[0], $document[0].documentElement)) {
-						if (['form','ngForm','dynamicForm'].indexOf(attrs.$normalize(angular.lowercase(iterElem.parent()[0].nodeName))) > -1) {
-							foundOne = true;
-							break;
-						}
-						iterElem = iterElem.parent();
-					}
-					if (foundOne) {
-						newElement = angular.element($document[0].createElement('ng-form'));
-					}else {
-						newElement = angular.element("<form></form>");
-					}
-					angular.forEach(attrs.$attr, function(attName, attIndex) {
-						newElement.attr(attName, attrs[attIndex]);
-					});
-					newElement.attr('model', attrs.ngModel);
-					newElement.removeAttr('ng-model');
-					angular.forEach(element[0].classList, function(clsName) {
-						newElement[0].classList.add(clsName);
-					});
-					newElement.addClass('dynamic-form');
-					newElement.append(element.contents());
-					newElement.data('$_cleanModel', angular.copy(model));
-					newElement.bind('reset', function () {
-						$timeout(function () {
-							$scope.$broadcast('reset', arguments);
-						}, 0);
-					});
-					$scope.$on('reset', function () {
-						$scope.$apply(function () {
-							$scope[attrs.ngModel] = {};
-						});
-						$scope.$apply(function () {
-							$scope[attrs.ngModel] = angular.copy(newElement.data('$_cleanModel'));
-						});
-					});
-					$compile(newElement)($scope);
-					element.replaceWith(newElement);
-				});//then
-			}
-		}
-	};
-}])
 .directive("collapseNav",["$window",function($window){
 	return{
 		restrict:"A",

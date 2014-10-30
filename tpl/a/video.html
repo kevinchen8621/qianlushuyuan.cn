@@ -1,0 +1,43 @@
+<div class="aside" tabindex="-1" role="dialog">
+	<div class="aside-dialog">
+		<div class="aside-content">
+			<div class="aside-header">
+				<button type="button" class="close" ng-click="$hide()">&times;</button>
+				<h4 class="aside-title" ng-show="video._id">编辑视频</h4>
+				<h4 class="aside-title" ng-hide="video._id">新增视频</h4>
+			</div>
+			<div class="aside-body">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right"> 名称 </label>
+						<div class="col-sm-10">
+							<input type="text" placeholder="名称" ng-model="video.title">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right"> 封面 </label>
+						<div class="col-sm-10">
+							<input type="text" placeholder="推荐七牛云存储 qiniu.com" ng-model="video.face">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right"> 效果 </label>
+						<div class="col-sm-10">
+							<img ng-src="{{video.face}}" width="180px" height="100px" class="img-thumbnail">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right"> 介绍 </label>
+						<div class="col-sm-10">
+							<textarea class="form-control" rows="8" ng-model="video.description"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="aside-footer">
+				<button type="button" class="btn btn-default" ng-click="$hide()">关闭</button>
+				<button type="button" class="btn btn-primary" ng-click="set_video()">提交</button>
+			</div>
+		</div>
+	</div>
+</div>

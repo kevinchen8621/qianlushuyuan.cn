@@ -25,15 +25,15 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		.state("b.buyvip", {url:'/buyvip',  templateUrl: 'tpl/b/buyvip', controller:"BBuyvipCtl"})
 		.state("b.gcode", {url:'/gcode',  templateUrl: 'tpl/b/gcode', controller:"BGcodeCtl"})
 		.state("b.data", {abstract:true, url:'/data',  templateUrl: 'tpl/b/data', controller:"BDataCtl"})
-		.state("b.data.finance", {url:'/finance',  templateUrl: 'tpl/b/data.finance', controller:"BDataCtl"})
-		.state("b.data.member", {url:'/member',  templateUrl: 'tpl/b/data.member', controller:"BDataCtl"})
-		.state("b.data.vip", {url:'/vip',  templateUrl: 'tpl/b/data.vip', controller:"BDataCtl"})
-		.state("b.data.promotion", {url:'/promotion',  templateUrl: 'tpl/b/data.promotion', controller:"BDataCtl"})
+		.state("b.data.finance", {url:'/finance',  templateUrl: 'tpl/b/data.finance', controller:"BDataFinanceCtl"})
+		.state("b.data.user", {url:'/user',  templateUrl: 'tpl/b/data.user', controller:"BDataUserCtl"})
+		.state("b.data.vip", {url:'/vip',  templateUrl: 'tpl/b/data.vip', controller:"BDataVipCtl"})
+		.state("b.data.ecoupon", {url:'/ecoupon',  templateUrl: 'tpl/b/data.ecoupon', controller:"BDataEcouponCtl"})
 		.state("b.site", {abstract:true, url:'/site',  templateUrl: 'tpl/b/site', controller:"BSiteCtl"})
 		.state("b.site.home", {url:'/home',  templateUrl: 'tpl/b/site.home', controller:"BSiteCtl"})
 		.state("b.site.cat", {url:'/cat',  templateUrl: 'tpl/b/site.cat', controller:"BSiteCatCtl"})
 		.state("b.site.video", {url:'/video',  templateUrl: 'tpl/b/site.video', controller:"BSiteVideoCtl"})
-		.state("b.site.d3", {url:'/d3',  templateUrl: 'tpl/b/site.d3', controller:"BSiteCtl"})
+		.state("b.site.article", {url:'/article',  templateUrl: 'tpl/b/site.article', controller:"BSiteArticleCtl"})
 	$httpProvider.interceptors.push('authInterceptor');
 }])
 .controller("AppCtl",["$scope", "$state", function($scope, $state){
@@ -224,103 +224,12 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 .controller("BGcodeCtl",["$scope","$rootScope","$state", function($scope,$rootScope,$state){
 }])
 .controller("BDataCtl",["$scope","$rootScope","$state", "$rest", function($scope,$rootScope,$state,$rest){
-	$scope.pmt_types = ["vip"]; //promotion
-	$scope.pmt_type = "";
-	$scope.pmt_fors = []; 
-	$scope.pmt_for_idx = -1;
-
-
-	servPay.get_gcodes(function(data){
-		$scope.pmt_gcodes = data;
-	});
-	servVip.get_vips(function(data){
-		$scope.vips = data;
-	})
-	servUser.get_users(function(data){
-		$scope.mems = data;
-	})
-	servPay.get_pays(function(data){
+}])
+.controller("BDataFinanceCtl",["$scope","$rootScope","$state", "$rest", function($scope,$rootScope,$state,$rest){
+	$rest.get_pays(function(data){
 		$scope.pays = data;
 	})
-	
-	$scope.$watch("pmt_type", function(newVal){
-		if(newVal == "vip"){
-			servVip.get_vips(function(data){$scope.pmt_fors = data;});
-		}
-	});
 
-	$scope.pmt_new = function(){
-		$scope.pmt_gcode = {gcode : "",fee_back: 0,username:"",deadline:Date.now()};
-		$scope.pmt_type = "";
-		$scope.pmt_for_idx = -1;
-	}
-	$scope.pmt_edit = function(item){
-		$scope.pmt_gcode = item;
-		$scope.pmt_type = item.type;
-		$scope.pmt_for_idx = -1;
-	}
-	$scope.pmt_del = function(item){
-		servPay.del_gcode(item, function(result){
-			var idx = _.findIndex($scope.pmt_gcodes, function(it){return it._id == item._id}); 
-			$scope.pmt_gcodes.splice(idx,1);
-		});
-	}
-	$scope.pmt_save = function(){
-		$scope.pmt_gcode.type = $scope.pmt_type;
-		$scope.pmt_gcode.ref_id = $scope.pmt_fors[$scope.pmt_for_idx]._id;
-		$scope.pmt_gcode.title = $scope.pmt_fors[$scope.pmt_for_idx].title + " 折扣码";
-		servPay.set_gcode($scope.pmt_gcode, function(result){
-			console.log(result);
-			var idx = _.findIndex($scope.pmt_gcodes, function(it){return it._id == result._id}); 
-			if(idx > -1){
-				$scope.pmt_gcodes.splice(idx,1,result);
-			}else{
-				$scope.pmt_gcodes.unshift(result);
-			}
-			$scope.pmt_new();
-		});
-	}
-	$scope.vip_new = function(){
-		$scope.vip = {title:"", subtitle:"", description:"", span:0, fee_now: 0, fee_origin:0,priority:50};
-	}
-	$scope.vip_edit = function(item){
-		$scope.vip = item;
-	}
-	$scope.vip_del = function(item){
-		servVip.del_vip(item, function(result){
-			var idx = _.findIndex($scope.vips, function(it){return it._id == item._id}); 
-			$scope.vips.splice(idx,1);
-		});
-	}
-	$scope.vip_save = function(){
-		console.log($scope.vip);
-		servVip.set_vip($scope.vip, function(result){
-			console.log(result);
-			var idx = _.findIndex($scope.vips, function(it){return it._id == result._id}); 
-			console.log(idx);
-			console.log($scope.vips);
-			if(idx > -1){
-				$scope.vips.splice(idx,1,result);
-			}else{
-				$scope.vips.unshift(result);
-			}
-			console.log($scope.vips);
-			$scope.vip_new();
-			console.log($scope.vips);
-		});
-	}
-	$scope.mem_edit = function(item){
-		$scope.mem = item;
-	}
-	$scope.mem_setrole = function(){
-		var idx = _.indexOf($scope.mem.roles, $scope.mem_role);
-		if(idx == -1){
-			$scope.mem.roles.push($scope.mem_role);
-		}else{
-			$scope.mem.roles.splice(idx,1);
-		}
-		servUser.set_roles($scope.mem);
-	}
 	$scope.pay_edit = function(item){
 		$scope.pay = item;
 	}
@@ -329,60 +238,184 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		$scope.pay.fee_back = +$scope.pay.fee_back || 0;
 		$scope.pay.fee_actual = $scope.pay.fee_origin - $scope.pay.fee_back;
 		if($scope.pay.fee_actual == 0){$scope.pay.status = "finished";}
-		servPay.set_fee($scope.pay);
+		$rest.set_fee($scope.pay);
+	}
+}])
+.controller("BDataUserCtl",["$scope","$rootScope","$state", "$rest", function($scope,$rootScope,$state,$rest){
+	$rest.get_users(function(data){
+		$scope.users = data;
+	});
+	$scope.user_edit = function(item){
+		$scope.cur = item;
+	}
+	$scope.user_setrole = function(){
+		var idx = _.indexOf($scope.cur.roles, $scope.user_role);
+		if(idx == -1){
+			$scope.cur.roles.push($scope.user_role);
+		}else{
+			$scope.cur.roles.splice(idx,1);
+		}
+		$rest.set_user_roles($scope.cur);
+	}
+}])
+.controller("BDataVipCtl",["$scope","$rootScope","$state", "$rest", function($scope,$rootScope,$state,$rest){
+	$rest.get_vips(function(data){
+		$scope.vips = data;
+	});
+	$scope.vip_new = function(){
+		$scope.vip = {title:"", subtitle:"", description:"", span:0, fee_now: 0, fee_origin:0,priority:50};
+	}
+	$scope.vip_edit = function(item){
+		$scope.vip = item;
+	}
+	$scope.vip_del = function(item){
+		$rest.del_vip_by_id(item._id, function(result){
+			var idx = _.findIndex($scope.vips, function(it){return it._id == item._id}); 
+			$scope.vips.splice(idx,1);
+		});
+	}
+	$scope.vip_save = function(){
+		$rest.set_vip($scope.vip, function(result){
+			var idx = _.findIndex($scope.vips, function(it){return it._id == result._id}); 
+			if(idx > -1){
+				$scope.vips.splice(idx,1,result);
+			}else{
+				$scope.vips.unshift(result);
+			}
+			$scope.vip_new();
+		});
+	}
+}])
+.controller("BDataEcouponCtl",["$scope","$rootScope","$state", "$rest", function($scope,$rootScope,$state,$rest){
+	$scope.ecoupon_types = ["vip"]; //promotion
+	$scope.ecoupon_type = "";
+	$scope.ecoupon_fors = []; 
+	$scope.ecoupon_for_idx = -1;
+	
+	$scope.$watch("ecoupon_type", function(newVal){
+		if(newVal == "vip"){
+			$rest.get_vips(function(data){$scope.ecoupon_fors = data;});
+		}
+	});
+
+	$scope.ecoupon_new = function(){
+		$scope.ecoupon = {gcode : "",fee_back: 0,username:"",deadline:Date.now()};
+		$scope.ecoupon_type = "";
+		$scope.ecoupon_for_idx = -1;
+	}
+	$scope.ecoupon_edit = function(item){
+		$scope.ecoupon = item;
+		$scope.ecoupon_type = item.type;
+		$scope.ecoupon_for_idx = -1;
+	}
+	$scope.ecoupon_del = function(item){
+		$rest.del_gcode(item, function(result){
+			var idx = _.findIndex($scope.ecoupons, function(it){return it._id == item._id}); 
+			$scope.ecoupon_gcodes.splice(idx,1);
+		});
+	}
+	$scope.ecoupon_save = function(){
+		$scope.ecoupon.type = $scope.ecoupon_type;
+		$scope.ecoupon.node_id = $scope.ecoupon_fors[$scope.ecoupon_for_idx]._id;
+		$scope.ecoupon.title = $scope.ecoupon_fors[$scope.ecoupon_for_idx].title + " 折扣码";
+		$rest.set_ecoupon($scope.ecoupon, function(result){
+			var idx = _.findIndex($scope.ecoupons, function(it){return it._id == result._id}); 
+			if(idx > -1){
+				$scope.ecoupons.splice(idx,1,result);
+			}else{
+				$scope.ecoupons.unshift(result);
+			}
+			$scope.ecoupon_new();
+		});
 	}
 }])
 .controller("BSiteCtl",["$scope","$rootScope","$window", function($scope,$rootScope,$window){
 }])
-.controller("BSiteCatCtl",["$scope","$rootScope","$window","$rest", function($scope,$rootScope,$window,$rest){
-	$scope.ctypes = ["video","article"];
-	$scope.sel_ctype = function(t){
-		$scope.ctype = t;
-		$scope.data = _.filter($rootScope.cats, function(item){return item.type == $scope.ctype;});
-		$scope.add_top();
+.controller("BSiteCatCtl",["$scope","$rootScope","$window","$rest", "$aside", "utils", function($scope,$rootScope,$window,$rest, $aside, utils){
+	var catAside = $aside({scope: $scope, template: 'tpl/a/cat', show: false});
+	$rest.get_cats(function(data){
+		$scope.cats = data;
+	});
+	$scope.edit_cat = function(item){
+		$scope.cat = item || { type: "video", key: "", face: "", title: "", description: ""};
+		catAside.$promise.then(function() {catAside.show();});
 	}
-	$scope.add_top = function(){
-		$scope.cat = {hostname: $rootScope.site._id,type: $scope.ctype, key:"", pkey:"", title: "",face: "/img/0101.jpg",priority: 50,description:""};
-		$scope.cat_tip = "作为顶级分类";
+	$scope.set_cat = function(){
+		$rest.set_cat($scope.cat, function(obj){
+			utils.applyToSet($scope.cats, obj);
+			catAside.hide();
+		});
 	}
-	$scope.sel_ctype('video');
-	$scope.add_sub = function(cat){
-		$scope.cat = {hostname: $rootScope.site._id,type: $scope.ctype, pkey: cat.key, title: "",face: "/img/0101.jpg",priority: 50,description:""};
-		$scope.cat_tip = "作为 [" + cat.title + "] 的子类";
-	}
-	$scope.edit = function(item){ $scope.cat = item; }
-	$scope.set = function(){
-		servCat.save($scope.cat, function(){$scope.add_top();});
-
-	}
-	$scope.del = function(item){
-		servCat.del(item, function(){$scope.add_top();}); 
+	$scope.del_cat = function(item){
+		$rest.del_cat_by_id(item._id, function(){
+			utils.delFromSet($scope.cats, item._id);
+		}); 
 	}
 }])
-.controller("BSiteVideoCtl",["$scope","$rootScope","$window","$rest", function($scope,$rootScope,$window,$rest){
-	$scope.cat = null;
-	$scope.sel_cat = function(ckey){
-		if(ckey){
-			$scope.cat_videos = _.filter($rootScope.videos, function(item){ return _.indexOf(item.cats, key) > -1; });
+.controller("BSiteVideoCtl",["$scope","$rootScope","$window","$rest", "$aside", "utils", function($scope,$rootScope,$window,$rest, $aside, utils){
+	var videoAside = $aside({scope: $scope, template: 'tpl/a/video', show: false});
+	$scope.cat = "";
+	$rest.get_cats_by_type("video", function(data){
+		$scope.videocats = data;
+	});
+	$scope.$watch("cat", function(newVal){
+		if(newVal){
+			$rest.get_videos_by_catid(newVal, function(data){ $scope.videos = data; });
 		}else{
-			$scope.cat_videos = _.filter($rootScope.videos, function(item){ return item.cats.length == 0; });
+			$rest.get_videos(function(data){ $scope.videos = data; });
 		}
+	});
+
+	$scope.edit_video = function(item){
+		item = item || { cats: [$scope.cat], key: "", face: "", title: "", description: ""};
+		if(item.cats.length == 0){return;}
+		$scope.video = item;
+		videoAside.$promise.then(function() {videoAside.show();});
 	}
-	$scope.new = function(){
-		$scope.video = {hostname:$rootScope.site._id,title:"", url:"",cats:[],face: "/img/0202.jpg",visits: 50,create_at: Date.now(),description:""}; 
-		if($scope.cat){ $scope.video.cats.push(cat); }
+	$scope.set_video = function(){
+		if(!_.contains($scope.video.cats, $scope.cat)){ $scope.video.cats.push($scope.cat); }
+		$rest.set_video($scope.video, function(obj){
+			utils.applyToSet($scope.videos, obj);
+			videoAside.hide();
+		});
 	}
-	$scope.edit = function(item){$scope.video = item;}
-	$scope.save = function(){ $rest.set_video($scope.video, function(){toastr.info("视频信息已保存！");});}
-	$scope.del = function(){$rest.del_video_by_id($scope.video._id, function(){toastr.info("视频信息已删除！");}); $scope.new();}
-	$scope.set_cat = function(ckey){
-		var idx = _.indexOf($scope.video.cats, ckey);
-		if(idx == -1){
-			$scope.video.cats.push(key);
+	$scope.del_video = function(item){
+		$rest.del_video_by_id(item._id, function(){
+			utils.delFromSet($scope.videos, item._id);
+		}); 
+	}
+}])
+.controller("BSiteArticleCtl",["$scope","$rootScope","$window","$rest", "$aside", "utils", function($scope,$rootScope,$window,$rest, $aside, utils){
+	$scope.cat = "";
+	$rest.get_cats_by_type("article", function(data){
+		$scope.articlecats = data;
+	});
+	$scope.$watch("cat", function(newVal){
+		if(newVal){
+			$rest.get_articles_by_catid(newVal, function(data){ $scope.articles = data; });
 		}else{
-			$scope.curVideo.cats.splice(idx,1);	
+			$rest.get_articles(function(data){ $scope.articles = data; });
 		}
-		$scope.save();
+		$scope.isEdit = false;
+	});
+
+	$scope.edit_article = function(item){
+		item = item || { cats: [$scope.cat], key: "", face: "", title: "", content: ""};
+		if(item.cats && item.cats.length == 0){return;}
+		$scope.article = item;
+		$scope.isEdit = true;
+	}
+	$scope.set_article = function(){
+		if(!_.contains($scope.article.cats, $scope.cat)){ $scope.article.cats.push($scope.cat); }
+		$rest.set_article($scope.article, function(obj){
+			utils.applyToSet($scope.articles, obj);
+			$scope.isEdit = false;
+		});
+	}
+	$scope.del_article = function(item){
+		$rest.del_article_by_id(item._id, function(){
+			utils.delFromSet($scope.articles, item._id);
+		}); 
 	}
 }])
 .run(['$rootScope', '$location', '$modal', '$window','$state', '$rest', function ($rootScope, $location, $modal, $window, $state, $rest) {
