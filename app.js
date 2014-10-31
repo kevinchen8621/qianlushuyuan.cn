@@ -20,6 +20,7 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 		.state("b.faq.answer", {url:'/answer',  templateUrl: 'tpl/b/faq.answer', controller:"BFaqCtl"})
 		.state("b.account", {url:'/account',  templateUrl: 'tpl/b/account', controller:"BAccountCtl"})
 		.state("b.profile", {url:'/profile',  templateUrl: 'tpl/b/profile', controller:"BProfileCtl"})
+		.state("b.verify", {url:'/verify',  templateUrl: 'tpl/b/verify', controller:"BVerifyCtl"})
 		.state("b.uppwd", {url:'/uppwd',  templateUrl: 'tpl/b/uppwd', controller:"BUppwdCtl"})
 		.state("b.getvip", {url:'/getvip',  templateUrl: 'tpl/b/getvip', controller:"BGetvipCtl"})
 		.state("b.buyvip", {url:'/buyvip',  templateUrl: 'tpl/b/buyvip', controller:"BBuyvipCtl"})
