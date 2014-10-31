@@ -332,6 +332,9 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 .controller("BSiteCtl",["$scope","$rootScope","$window", function($scope,$rootScope,$window){
 }])
 .controller("BSiteCatCtl",["$scope","$rootScope","$window","$rest", "$aside", "utils", function($scope,$rootScope,$window,$rest, $aside, utils){
+	$scope.activeTab = 0;
+
+
 	var catAside = $aside({scope: $scope, template: 'tpl/a/cat', show: false});
 	$rest.get_cats(function(data){
 		$scope.cats = data;
