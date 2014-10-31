@@ -377,7 +377,9 @@ mo.config(['$stateProvider', '$urlRouterProvider','$httpProvider', function ($st
 	}
 	$scope.set_video = function(){
 		if(!_.contains($scope.video.cats, $scope.cat)){ $scope.video.cats.push($scope.cat); }
+		console.log($scope.video);
 		$rest.set_video($scope.video, function(obj){
+			console.log(obj);
 			utils.applyToSet($scope.videos, obj);
 			videoAside.hide();
 		});

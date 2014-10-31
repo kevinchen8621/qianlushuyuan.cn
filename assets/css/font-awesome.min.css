@@ -269,7 +269,7 @@ a .icon-rotate-90:before,a .icon-rotate-180:before,a .icon-rotate-270:before,a .
 .icon-h-sign:before{content:"\f0fd";}
 .icon-plus-sign-alt:before{content:"\f0fe";}
 .icon-double-angle-left:before{content:"\f100";}
-.icon-double-angle-right:before{content:"\f101";}
+.fa fa-angle-double-right :before{content:"\f101";}
 .icon-double-angle-up:before{content:"\f102";}
 .icon-double-angle-down:before{content:"\f103";}
 .icon-angle-left:before{content:"\f104";}
