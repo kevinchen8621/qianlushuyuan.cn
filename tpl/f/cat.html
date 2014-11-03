@@ -29,7 +29,7 @@
 				<thead><tr><th>序</th><th>课程名称</th><th class="hidden-xs">内容概述</th><th>视频播放</th><tr></thead>
 				<tbody>
 					<tr ng-repeat="item in videos | orderBy: 'create_at'">
-						<td>{{$index}}</td>
+						<td>{{$index + 1}}</td>
 						<td>{{item.title}}</td>
 						<td class="hidden-xs">{{item.description}}</td>
 						<td><a class="btn" href="#/video/{{item._id}}">播放</a></td>
